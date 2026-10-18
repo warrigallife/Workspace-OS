@@ -206,3 +206,38 @@ Liam now explicitly explains that bridge token identity, capability grants and w
 `python3 scripts/liam-ada/adapter-check.py` verifies five returned excerpts, nine invalid requests, missing backend behavior, unchanged Ada directory inventory and unchanged content hashes of all 15 approved source files. The evidence/grant/bridge regression selection passed all 46 tests across five files under Electron's runtime, preserving the installed native ABI. Electron emitted task_name_for_pid diagnostics in the restricted environment; the tests completed successfully. Detailed results are retained in `source-expansion-checks.json`; the demonstration question and retrieval response are in `source-expansion-response.json`. Neither new evidence file is automatically added to retrieval.
 
 Recovery for this limited change: extract `pre-source-expansion-recovery.tar.gz` to a separate directory, verify its manifest hashes, and restore the listed service/profile/docs originals after checking for intervening edits. This restores the six-source service without removing the previously verified bridge integration. No recovery archive is indexed. Changes are checkpointed locally; nothing is pushed.
+
+## User-facing unknown-action diagnosis and routing fix — 19 October 2026
+
+The user reported `{ "ok": false, "error": "unknown action: evidence.query" }`. Earlier isolated tests did not establish that the installed application used by the user contained the integration. Diagnosis resumed from the existing two-socket finding; the integration and source expansion were not restarted.
+
+### Cause and chain of evidence
+
+- Failed Claude session: `ebc4ea2d-ea53-4492-9e40-b24ef09953fc`; exact tool error recorded at `2026-10-18T04:41:50.958Z`, cwd `~/Desktop/WARRIGAL RESEARCH SUITE`.
+- The normal app-data conversation map binds `dock-convo-agent-1792298299009-2` to that session. No matching entry exists in the persistent local Liam map. Thus the failed run belongs to the normal installed-app session, not the local verification instance.
+- Installed app PID at diagnosis: 48826, `/Applications/Workspace OS.app/Contents/MacOS/Workspace OS`; app bundle `/Applications/Workspace OS.app/Contents/Resources/app.asar`. Its extracted main bundle has no evidence.query string/handler. SHA256: `113dfceae8cb8c13a0184cbb7baa2e8913cc8fdb0b65ca14b17ce578239df549`.
+- Its socket owner was PID 48826 at `~/Library/Application Support/workspace-os/wos-agent.sock`. A read-only socket context request confirmed Agents surface and Warrigal workspace. Normal app data: `~/Library/Application Support/workspace-os`.
+- Local app PID at diagnosis: 48190, repository Electron executable, project-directory app path, `.workspace-os/liam-app-data/wos-agent.sock`, scratch workspace `.workspace-os/liam-workspace`. Its compiled main contained evidence.query. The prior local main hash was `e9f0a50f2e54c26630b223d21b0f2406ef37ce9c87bce5a8db26e0909fd03fa1`.
+- Both apps could display the global Liam profile. That does not add a main-process handler to the older installed bundle. The unknown-action reply was therefore caused by launching the wrong app/build, not by Ada sources, models, missing credentials or the verified local handler.
+
+### Fix and preservation
+
+Added executable `~/Desktop/Workspace-OS/Liam Workspace OS.command`, delegating to the existing `scripts/liam-ada/launch.sh`. The launcher still builds the local source and uses the same persistent local app-data directory. It prints the target and sets a local-launch flag. That flag labels the actual window `Workspace OS — Liam (Local)` and gives its Dock icon a Liam badge. The normal installed app is not modified, replaced, redirected or claimed to support Ada. Normal app data and conversations are not migrated or edited. No providers, models, integrations or bridge privileges were added.
+
+Before changes, selected source/docs originals were preserved with SHA256 manifest in `pre-routing-fix-recovery.tar.gz`. Existing local app data was also copied privately to `.workspace-os/liam-routing-recovery` (transient sockets/caches excluded); it is ignored by Git and not indexed. The existing local Electron instance was quit gracefully to restart it with the new label; the installed app remained untouched.
+
+### Actual user-facing acceptance, not just IPC harness
+
+`node scripts/liam-ada/user-run.mjs` executed the exact named launcher with the existing persistent `.workspace-os/liam-app-data`. It clicked the startup Enter button, Settings → Safe → Close, Agents → Liam → Run, filled the real dock prompt (`Ask the agent — @ file, / skill…`) and pressed Enter. No direct agent.run call, fake CLI, temporary userData, token minting or provider override was used. Playwright supplied temporary inspector flags solely for UI automation; ordinary launcher use does not enable them.
+
+Verified process PID: 53097. Actual app path: `~/Desktop/Workspace-OS`; title: `Workspace OS — Liam (Local)`; socket: `.workspace-os/liam-app-data/wos-agent.sock`; workspace: `.workspace-os/liam-workspace`. Verified main-bundle SHA256: `6b244858abe6b4761d68713177a33706b33f830c479370a5a584779f1fa42f37`.
+
+User-facing run `dockrun-1792346604053-132554`, conversation `dock-convo-agent-1792346604010-2`, Claude session `87459acd-084d-4a30-bd79-b88a88302ce0` completed with code 0. The transcript's actual tool response returned five excerpts with VERIFIED_MATCH, null answer, RETRIEVAL_ONLY and UNRESOLVED. Every excerpt was independently compared to its source lines. Sources included the saved profile, README and implementation log, addressing bridge grants versus broader Write/Edit access. Provider-reported metadata: two turns, 23.690 seconds, $0.2133166, claude-haiku-4-5-20251001 + claude-sonnet-5. These are reported labels, not a backend-vendor audit.
+
+Sanitized identity/correlation report: `routing-verification.json`. Actual evidence reply: `user-run-bridge-response.json`. Private screenshot, UI output, identity and conversation correlation artifacts are in `.workspace-os/liam-user-run`. Neither new report is added to Ada's allowlist. No tokens or credentials are recorded in the retained reports.
+
+Initial UI-driver attempts stopped before a provider call: one did not click the splash Enter button; one looked for the legacy console's prompt rather than the current dock's prompt. The successful driver uses the real current controls. The roster dock takes its mode from Settings, so Safe was selected there; the saved profile supplies Claude/Sonnet. This corrects earlier ambiguous instructions about a per-tab Safe/model selector.
+
+Build succeeded through the actual launcher. Typecheck still passes against the unchanged baseline (70 existing errors, baseline 75). Shell/JavaScript syntax checks and diff whitespace checks passed. Existing adapter/permission tests were not rerun unnecessarily because the handler, grants and retrieval code were unchanged; the end-to-end user-facing evidence response is the acceptance for this routing change.
+
+Unambiguous launch: open `~/Desktop/Workspace-OS/Liam Workspace OS.command`; use the window titled `Workspace OS — Liam (Local)`, then Enter → Agents → Liam → Run. Safe is now selected in this local app's Settings. Do not use the installed `/Applications/Workspace OS.app` for Liam–Ada; it remains the older build. All earlier source-boundary, writable Safe-mode and dependency limitations remain. This fix is checkpointed locally without pushing.

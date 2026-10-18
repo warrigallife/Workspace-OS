@@ -11,4 +11,7 @@ import path from "node:path";
 const file=".workspace-os/liam-app-data/workspace-root.json";
 if(!fs.existsSync(file)) fs.writeFileSync(file, JSON.stringify({root:path.resolve(".workspace-os/liam-workspace")}));
 '
-exec ./node_modules/.bin/electron . --user-data-dir="$PWD/.workspace-os/liam-app-data"
+echo "Opening Workspace OS — Liam (Local), not /Applications/Workspace OS.app"
+echo "App data: $PWD/.workspace-os/liam-app-data"
+export WOS_LIAM_LOCAL=1
+exec ./node_modules/.bin/electron . --user-data-dir="$PWD/.workspace-os/liam-app-data" "$@"

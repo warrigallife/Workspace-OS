@@ -1,0 +1,57 @@
+{
+  "cause": "Failed session ran the unchanged installed bundle, which has no evidence.query handler; global Liam profile availability did not install that handler.",
+  "failed": {
+    "pidAtDiagnosis": 48826,
+    "executable": "/Applications/Workspace OS.app/Contents/MacOS/Workspace OS",
+    "bundle": "/Applications/Workspace OS.app/Contents/Resources/app.asar",
+    "mainSha256": "113dfceae8cb8c13a0184cbb7baa2e8913cc8fdb0b65ca14b17ce578239df549",
+    "hasEvidenceHandler": false,
+    "appData": "/Users/liammcilmurray/Library/Application Support/workspace-os",
+    "socket": "/Users/liammcilmurray/Library/Application Support/workspace-os/wos-agent.sock",
+    "workspace": "/Users/liammcilmurray/Desktop/WARRIGAL RESEARCH SUITE",
+    "conversationId": "dock-convo-agent-1792298299009-2",
+    "claudeSessionId": "ebc4ea2d-ea53-4492-9e40-b24ef09953fc",
+    "toolResultTimestamp": "2026-10-18T04:41:50.958Z",
+    "error": "unknown action: evidence.query"
+  },
+  "verified": {
+    "launcher": "/Users/liammcilmurray/Desktop/Workspace-OS/Liam Workspace OS.command",
+    "flow": [
+      "Enter",
+      "Settings",
+      "Safe",
+      "Close",
+      "Agents",
+      "Liam Run",
+      "prompt box",
+      "Enter"
+    ],
+    "pid": 53097,
+    "executable": "/Users/liammcilmurray/Desktop/Workspace-OS/node_modules/electron/dist/Electron.app/Contents/MacOS/Electron",
+    "appPath": "/Users/liammcilmurray/Desktop/Workspace-OS",
+    "userData": "/Users/liammcilmurray/Desktop/Workspace-OS/.workspace-os/liam-app-data",
+    "title": "Workspace OS \u2014 Liam (Local)",
+    "workspace": "/Users/liammcilmurray/Desktop/Workspace-OS/.workspace-os/liam-workspace",
+    "socket": "/Users/liammcilmurray/Desktop/Workspace-OS/.workspace-os/liam-app-data/wos-agent.sock",
+    "mainSha256": "6b244858abe6b4761d68713177a33706b33f830c479370a5a584779f1fa42f37",
+    "runId": "dockrun-1792346604053-132554",
+    "conversation": [
+      "dock-convo-agent-1792346604010-2",
+      "claude:87459acd-084d-4a30-bd79-b88a88302ce0"
+    ],
+    "exitCode": 0,
+    "providerReportedMeta": {
+      "costUsd": 0.21331660000000002,
+      "turns": 2,
+      "durationMs": 23690,
+      "model": "claude-haiku-4-5-20251001 + claude-sonnet-5"
+    },
+    "actualEvidenceReply": true,
+    "sourceExcerptsChecked": 5,
+    "temporaryUserData": false,
+    "directAgentRunInvocation": false,
+    "fakeCli": false,
+    "providerOverride": false,
+    "normalAppDataMovedOrEdited": false
+  }
+}

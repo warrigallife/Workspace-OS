@@ -2,16 +2,15 @@
 
 Verified 18 October 2026. This is the bounded local integration, not broader deployment or adoption of the draft governance/specification.
 
-From Terminal:
+Open **`~/Desktop/Workspace-OS/Liam Workspace OS.command`** (double-click in Finder), or run that exact launcher from Terminal:
 
 ```sh
-cd ~/Desktop/Workspace-OS
-sh scripts/liam-ada/launch.sh
+"$HOME/Desktop/Workspace-OS/Liam Workspace OS.command"
 ```
 
-This builds the local source, checks the Electron native modules, and opens Electron **at the project directory**. It keeps app data in `.workspace-os/liam-app-data` and starts with `.workspace-os/liam-workspace` as a scratch workspace. Both are ignored by Git. Quit this instance normally before restarting it. The installed application is unchanged. Do not launch `out/main/index.js` directly: resource lookup then misses the bridge CLI.
+This builds the local source, checks the Electron native modules, and opens Electron **at the project directory**. It keeps app data in `.workspace-os/liam-app-data` and starts with `.workspace-os/liam-workspace` as a scratch workspace. Both are ignored by Git. Quit this instance normally before restarting it. The installed `/Applications/Workspace OS.app` is unchanged and does **not** contain the Ada handler; launching it can show Liam from the shared profile but returns `unknown action: evidence.query`. Its normal app data and conversations are separate and preserved. Do not launch `out/main/index.js` directly: resource lookup then misses the bridge CLI.
 
-Select **Liam** in the specialist roster, use **Safe** mode and **Claude / Sonnet**, and start a new conversation. Ask: `What are the governance permissions and approval boundaries? Give source paths and line ranges, separate exact quotations from paraphrases, and preserve Ada's limitations.` The saved profile defaults to `claude:sonnet`; an explicit UI model selection overrides it. Do not select Codex for this verified route. A fresh conversation is needed for updated persona instructions. The scratch workspace does not change Ada's explicit source allowlist (six original sources plus nine integration records).
+In the window titled **Workspace OS — Liam (Local)** (Dock badge **Liam**), click **Enter**. Set **Settings → Default agent mode → Safe**, close Settings, then click **Agents → Liam → Run**. The saved Liam profile supplies **Claude / Sonnet**. Ask: `What are the governance permissions and approval boundaries? Give source paths and line ranges, separate exact quotations from paraphrases, and preserve Ada's limitations.` The saved profile defaults to `claude:sonnet`; an explicit UI model selection overrides it. Do not select Codex for this verified route. A fresh conversation is needed for updated persona instructions. The scratch workspace does not change Ada's explicit source allowlist (six original sources plus nine integration records).
 
 Verified: raw bridge response in `live-bridge-response.json`, actual launcher metadata in `live-launch.json`, actual permission probe in `launcher-permissions.json`, and corrected quotation/paraphrase example in `live-liam-response.md`. The quoted sentence was compared with Constitution line 40. Older chat output is historical and has not been rewritten; its paraphrases must not be treated as verbatim quotations.
 
@@ -46,3 +45,11 @@ New excerpts include `record_kind` and `record_note` provenance labels. Drafts r
 Bridge token, grant and workspace checks are technically enforced. Safe mode's separate Write/Edit tools remain writable; bridge grants do not impose a read-only filesystem sandbox. Start a fresh Liam conversation to receive the revised profile.
 
 Run `python3 -B scripts/liam-ada/source-check.py` to verify the exact allowlist, new-record retrieval, preserved old-source sections and rankings when scoped to those six sources, provenance labels, and read-only observations. `pre-source-expansion-recovery.tar.gz` preserves the service, profile, README and both log copies before expansion, with source paths and SHA256 hashes. Restoring its service/profile originals removes this expansion without reverting the earlier bridge integration.
+
+## Launch-route diagnosis
+
+The failed session `ebc4ea2d-ea53-4492-9e40-b24ef09953fc` is recorded in the normal app-data conversation map (`dock-convo-agent-1792298299009-2`), not the persistent Liam map. Its transcript records the exact unknown-action error and Warrigal workspace. At diagnosis, installed app PID 48826 served `~/Library/Application Support/workspace-os/wos-agent.sock`; local PID 48190 served `Workspace-OS/.workspace-os/liam-app-data/wos-agent.sock`. The installed bundle had no `evidence.query` string or handler; the local bundle had both. This was a different-app/build route, not a missing Ada source or a provider problem.
+
+The named `.command` launcher delegates to `scripts/liam-ada/launch.sh`, builds the local app, uses the existing persistent Liam data, and labels its window/Dock. It never redirects the installed app's socket or moves normal conversations. A local app-data backup is kept privately under `.workspace-os/liam-routing-recovery`; selected source/docs originals are in `pre-routing-fix-recovery.tar.gz`. Neither is indexed. Test-only inspector flags are supplied by Playwright during verification; ordinary launches do not enable a debugging port.
+
+`node scripts/liam-ada/user-run.mjs` tests this exact launcher and persistent data: clicks Enter → Settings → Safe → Close → Agents → Liam → Run, fills the normal prompt box, and presses Enter. It does not invoke `agent.run` directly or use a temporary profile. It reads the resulting Claude transcript to require actual Ada evidence, verifies all returned excerpt lines, and retains private artifacts under `.workspace-os/liam-user-run`. Quit the local instance before this diagnostic (it uses the same single-instance data); the installed app can stay open. The diagnostic uses the existing Claude authentication and incurs provider usage.

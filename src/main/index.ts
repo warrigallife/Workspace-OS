@@ -94,6 +94,13 @@ function createWindow(): BrowserWindow {
     },
   })
 
+  // Distinguish the verified local Liam route from the unchanged installed app.
+  if (process.env['WOS_LIAM_LOCAL'] === '1') {
+    win.setTitle('Workspace OS — Liam (Local)')
+    win.on('page-title-updated', (event) => event.preventDefault())
+    app.dock?.setBadge('Liam')
+  }
+
   // Navigation, new-window, and webview hardening (see security.ts).
   hardenWindow(win)
 
