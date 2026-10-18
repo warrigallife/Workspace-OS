@@ -1,4 +1,4 @@
-import { evidenceAction } from './evidenceAction'
+import { evidenceAction, evidenceLookupAction } from './evidenceAction'
 import net from 'net'
 import fs from 'fs'
 import path from 'path'
@@ -128,14 +128,14 @@ export async function handleRequest(
         return { ok: false, error: `not granted: ${id} is outside what this agent was given` }
       }
     }
-    if (id === 'evidence.query') {
+    if (id === 'evidence.query' || id === 'evidence.lookup') {
       if (!deps.grants) return { ok: false, error: 'evidence requires run authorization' }
       const grant = deps.grants(req.token)
       if (!grant) return { ok: false, error: 'no run identity' }
       if (!ctx.root || grant.root !== ctx.root) {
         return { ok: false, error: 'evidence requires the matching open workspace' }
       }
-      return evidenceAction(req.args)
+      return id === 'evidence.lookup' ? evidenceLookupAction(req.args) : evidenceAction(req.args)
     }
     if (id === 'document.data' && deps.data) return deps.data(req.args)
     if (id === 'document.generate' && deps.documents) return deps.documents(id, req.args)

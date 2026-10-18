@@ -53,3 +53,41 @@ The failed session `ebc4ea2d-ea53-4492-9e40-b24ef09953fc` is recorded in the nor
 The named `.command` launcher delegates to `scripts/liam-ada/launch.sh`, builds the local app, uses the existing persistent Liam data, and labels its window/Dock. It never redirects the installed app's socket or moves normal conversations. A local app-data backup is kept privately under `.workspace-os/liam-routing-recovery`; selected source/docs originals are in `pre-routing-fix-recovery.tar.gz`. Neither is indexed. Test-only inspector flags are supplied by Playwright during verification; ordinary launches do not enable a debugging port.
 
 `node scripts/liam-ada/user-run.mjs` tests this exact launcher and persistent data: clicks Enter → Settings → Safe → Close → Agents → Liam → Run, fills the normal prompt box, and presses Enter. It does not invoke `agent.run` directly or use a temporary profile. It reads the resulting Claude transcript to require actual Ada evidence, verifies all returned excerpt lines, and retains private artifacts under `.workspace-os/liam-user-run`. Quit the local instance before this diagnostic (it uses the same single-instance data); the installed app can stay open. The diagnostic uses the existing Claude authentication and incurs provider usage.
+
+## Approved-record lookup and reporting rule
+
+After restarting the local launcher and starting a fresh Liam conversation, the same `evidence` capability supports a deterministic lookup without keyword ranking:
+
+```sh
+wos-action run evidence.lookup '{"record_id":"implementation-log","start_line":145,"end_line":160}'
+```
+
+Run this inside a Workspace OS agent run (Liam can execute it); it requires that run's token and matching open workspace. It includes implementation-log line 152 and returns the exact numbered excerpt, resolved approved source path, stable `record_id`, `total_lines`, snapshot `source_sha256`, integrity and applicable provenance labels. `question` is null, the `lookup` object echoes the request, and `answer: null`, `UNRESOLVED`, `RETRIEVAL_ONLY` remain unchanged. `VERIFIED_MATCH` for lookup refers to the bounded file snapshot read, not semantic validation or a guarantee the file cannot change afterward. The original keyword action is unchanged except that current query sources now include `record_id`.
+
+Exactly three fields are accepted: `record_id`, `start_line`, `end_line`. Line numbers are inclusive integers from 1 through 100000, with at most 80 lines and 32768 UTF-8 bytes of numbered excerpt. Lookup reads at most 2 MiB of source content; larger sources fail. Requests remain capped at 8192 bytes, subprocess output at 256 KiB, and runtime at 10 seconds. No caller path, URL or command is accepted. A 1–1 lookup returns `total_lines`; request subsequent bounded ranges without exceeding it. Out-of-bounds ranges fail rather than silently clipping.
+
+| Stable record ID | Existing approved record |
+| --- | --- |
+| `governance-constitution` | governance/GOVERNANCE_CONSTITUTION_v0.1_DRAFT.md |
+| `agent-contract` | governance/AGENT_CONTRACT_v0.1_DRAFT.md |
+| `operational-handover` | governance/OPERATIONAL_HANDOVER_PROTOCOL_v0.1_DRAFT.md |
+| `workforce-findings` | WORKFORCE_FINDINGS.md |
+| `dev-team-status` | dev-team/STATUS.md |
+| `warrigal-reconciliation` | Existing Warrigal reconciliation report |
+| `integration-spec` | Ada integration specification draft |
+| `evidence-contract` | Ada evidence interface contract draft |
+| `implementation-log` | This directory's authoritative implementation-log.md |
+| `integration-readme` | This README |
+| `liam-profile` | Saved ~/.claude/agents/liam.md |
+| `launcher-permissions` | launcher-permissions.json |
+| `live-launch` | live-launch.json |
+| `live-bridge-response` | live-bridge-response.json |
+| `live-liam-response` | live-liam-response.md |
+
+These are exactly the existing 15 paths. Registry/allowlist mismatch fails closed. The existing `evidence.` prefix already authorizes the lookup action, so grants and baseline permissions were not changed; `memory.remember` is still denied. Token, grant and workspace checks run before lookup dispatch. Legacy `all` access remains nonexclusive.
+
+Failures distinguish `UNKNOWN_RECORD` (ID not approved, not proof a document does not exist), `INVALID_RANGE`, `RANGE_OUT_OF_BOUNDS`, `SOURCE_UNAVAILABLE`, `SOURCE_TOO_LARGE`, `EXCERPT_TOO_LARGE`, and `REGISTRY_MISMATCH`. Process failures still return a bounded generic error. Missing/unreadable sources are not evidence that a completion result never existed. The adapter is read-only in observed behavior, not a filesystem sandbox; inherited parent-symlink/race limitations remain.
+
+Liam's persistent profile rule now says incomplete/empty/top-five retrieval does not establish nonexistence. He must seek relevant targeted ranges and later dated results before claiming there is no record or completion result, and retain uncertainty when coverage is incomplete or lookup fails. This is a saved instruction, not conversational memory or new memory-write access.
+
+Repeatable checks: `python3 -B scripts/liam-ada/record-lookup-check.py`, the existing adapter/source checks, Electron agent regressions, and `node scripts/liam-ada/lookup-bridge.mjs` after building. The last uses a deterministic child probe through the built app's real launcher and Unix socket; it makes no paid model call. Its app data is temporary, so it does not disturb existing user sessions. Restart the normal named launcher to load the new main-process action; the older installed app still does not support it.

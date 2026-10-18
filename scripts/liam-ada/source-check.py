@@ -64,7 +64,10 @@ for path, question in zip(new, queries):
     response = service.research(question)
     wire = subprocess.run(['/Library/Frameworks/Python.framework/Versions/3.14/bin/python3', '-B', '-E', '-s', str(ADA / 'ada_workspace_adapter_v01.py')], input=json.dumps({'question':question}), text=True, capture_output=True, timeout=12)
     assert wire.returncode == 0, wire.stderr
-    assert json.loads(wire.stdout) == response, 'Installed adapter changed the retrieval response'
+    wire_response = json.loads(wire.stdout)
+    for source in wire_response['sources']:
+        assert isinstance(source.pop('record_id'), str)
+    assert wire_response == response, 'Installed adapter changed the retrieval response beyond adding record IDs'
     assert response['answer'] is None and response['semantic_support'] == 'UNRESOLVED'
     assert response['status'] == 'RETRIEVAL_ONLY' and response['schema'] == 'ada.evidence_response.v0.1'
     assert any(Path(s['path']) == path for s in response['sources']), (path.name, [s['path'] for s in response['sources']])

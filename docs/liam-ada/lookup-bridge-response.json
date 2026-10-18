@@ -1,0 +1,56 @@
+{
+  "verification": {
+    "route": "built app IPC -> actual Liam launcher -> socket",
+    "modelCall": false,
+    "diskMatch": true,
+    "line152Verified": true,
+    "negativeChecks": [
+      "unknown record",
+      "range limit",
+      "caller path",
+      "memory.remember",
+      "missing token",
+      "workspace mismatch"
+    ]
+  },
+  "response": {
+    "ok": true,
+    "result": {
+      "schema": "ada.evidence_response.v0.1",
+      "question": null,
+      "lookup": {
+        "record_id": "implementation-log",
+        "start_line": 145,
+        "end_line": 160
+      },
+      "sources": [
+        {
+          "id": 1,
+          "record_id": "implementation-log",
+          "path": "/Users/liammcilmurray/Desktop/Workspace-OS/docs/liam-ada/implementation-log.md",
+          "lines": [
+            145,
+            160
+          ],
+          "excerpt": "145: - Real subprocess timeout killed the 30-second fixture with SIGKILL at the production 10-second deadline. Actual output overflow reported ERR_CHILD_PROCESS_STDIO_MAXBUFFER. Missing script failed safely. Fixtures were isolated; production Ada was not replaced.\n146: - Python adapter check passed nine invalid inputs, an isolated missing backend, five exact source/line comparisons, and retrieval-only contract assertions. Ada directory hashes and all six approved source content hashes stayed unchanged across the checks. This is observed behavior, not a filesystem sandbox guarantee. No parent symlinks were present for returned sources; source containment and TOCTOU prevention remain unresolved.\n147: - Real Electron UI IPC loaded saved Liam and launched Claude with the exact Safe allowlist: Read, Glob, Grep, Write, Edit, Bash(wos-gen:*), Bash(wos-action:*). Token/socket presence and cwd were captured without recording the token.\n148: - A deterministic child probe through that actual launcher/socket successfully queried evidence, rejected a missing token, denied browser.navigate, and rejected the same token after the workspace context changed. Report: launcher-permissions.json.\n149: - Live Claude run succeeded: two turns, CLI-reported models claude-sonnet-5 and claude-haiku-4-5-20251001, cost metadata $0.1719384, code 0. Raw bridge JSON independently extracted and retained in live-bridge-response.json; all five excerpts independently matched their referenced files/lines. answer=null, RETRIEVAL_ONLY and UNRESOLVED preserved.\n150: - New live response used the exact sentence from Constitution line 40 as a quotation and labelled subsequent prose as a paraphrase. Retained in live-liam-response.md. This corrects the presentation going forward; old chat history remains historical, not verified quotation evidence.\n151: - Missing grant, revoked token, wrong workspace, no open workspace, no authorization dependency, unbound token and legacy all behavior are covered by permission tests. Legacy all access remains available to workspace-bound runs; Liam is not exclusive. memory.search remains an existing baseline permission.\n152: - Rollback demonstrated in an isolated source copy using preserved originals, including original profile and adapter removal in the copy; 15 original bridge/grant tests passed. Live files were not rolled back. Repeated using committed recovery archives, not reliance on temporary recovery paths.\n153: - Build and macro validation passed. Typecheck: 70 known errors / baseline 75; no new regressions, not type-error-free. git diff --check clean.\n154: \n155: ### Test harness corrections and launch verification\n156: Initial sandbox socket tests failed with EPERM; rerun with socket access passed. An early backup beneath the repository was accidentally discovered as a test suite; it was moved out and archived before the clean run. Live harness initially assumed ~/.local/bin/claude; actual binary is /opt/homebrew/bin/claude. Canonicalized macOS /var versus /private/var paths in the harness. Direct launch of out/main/index.js missed resource installation, causing wos-action command-not-found; corrected to launch the project directory. A first permission probe half-closed its socket too early; fixed to wait for the asynchronous response. These failed harness attempts are not counted as successful acceptance.\n157: \n158: Verified repeatable launch: `cd ~/Desktop/Workspace-OS && sh scripts/liam-ada/launch.sh`. The script built successfully, loaded Electron native modules and opened the local app using separate `.workspace-os/liam-app-data` and `.workspace-os/liam-workspace`. Updater reported disabled for unpackaged development. Select Liam, Safe, Claude/Sonnet, and start a fresh chat. Detailed instructions and commands: Workspace-OS/docs/liam-ada/README.md.\n159: \n160: ### Provider and maintenance limitations",
+          "total_lines": 260,
+          "source_sha256": "2859fa03789a397fe1e618247495ad27dbfab7289ebfbc820ae12abf7531b455",
+          "integrity": {
+            "status": "VERIFIED_MATCH",
+            "source": "/Users/liammcilmurray/Desktop/Workspace-OS/docs/liam-ada/implementation-log.md",
+            "lines": [
+              145,
+              160
+            ],
+            "basis": "bounded_source_snapshot"
+          },
+          "record_kind": "implementation_record",
+          "record_note": "Authoritative integration implementation-log copy; distinguish dated historical entries from later updates. Recorded claims are not semantic validation."
+        }
+      ],
+      "answer": null,
+      "semantic_support": "UNRESOLVED",
+      "status": "RETRIEVAL_ONLY"
+    }
+  }
+}

@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 vi.mock('child_process', () => ({ execFile: vi.fn() }))
 import { execFile } from 'child_process'
-import { evidenceAction } from './evidenceAction'
+import { evidenceAction, evidenceLookupAction } from './evidenceAction'
 
 const question = 'What are the governance permissions?'
 const response = {
@@ -74,4 +74,54 @@ describe('Ada action adapter', () => {
     backend(JSON.stringify(value))
     expect((await evidenceAction({ question })).ok).toBe(false)
   })
+})
+
+
+describe('bounded approved-record action', () => {
+  const input = { record_id: 'implementation-log', start_line: 145, end_line: 160 }
+  const source = { record_id: input.record_id, path: '/approved/implementation-log.md', lines: [145, 160], total_lines: 200, excerpt: '145: record', integrity: { status: 'VERIFIED_MATCH' } }
+  const reply = { ...response, question: null, lookup: input, sources: [source] }
+  beforeEach(() => { vi.clearAllMocks(); stdin = vi.fn(); backend(JSON.stringify(reply)) })
+
+  it('uses the same bounded fixed process and preserves lookup identity', async () => {
+    expect(await evidenceLookupAction(input)).toEqual({ ok: true, result: reply })
+    expect(stdin).toHaveBeenCalledWith(JSON.stringify(input))
+    expect(options).toMatchObject({ shell: false, timeout: 10000, maxBuffer: 262144 })
+  })
+
+  it.each([
+    null, [], {}, { ...input, path: '/etc/passwd' }, { ...input, question: 'extra' },
+    { ...input, record_id: '../../etc/passwd' }, { ...input, record_id: 'x'.repeat(65) },
+    { ...input, record_id: '' }, { ...input, record_id: 1 },
+    { ...input, start_line: 0 }, { ...input, start_line: -1 },
+    { ...input, start_line: true }, { ...input, start_line: '145' },
+    { ...input, start_line: 145.5 }, { ...input, end_line: 144 },
+    { ...input, end_line: 225 }, { ...input, end_line: Infinity },
+    { ...input, start_line: 100001, end_line: 100001 },
+  ])('rejects invalid input before spawning: %j', async (value) => {
+    expect((await evidenceLookupAction(value)).ok).toBe(false)
+    expect(execute).not.toHaveBeenCalled()
+  })
+
+  it.each([
+    { ...reply, question: 'invented' }, { ...reply, answer: 'synthesized' },
+    { ...reply, lookup: { ...input, record_id: 'other' } },
+    { ...reply, lookup: { ...input, end_line: 161 } },
+    { ...reply, sources: [] }, { ...reply, sources: [source, source] },
+    { ...reply, sources: [{ ...source, record_id: 'other' }] },
+    { ...reply, sources: [{ ...source, lines: [145, 161] }] },
+    { ...reply, sources: [{ ...source, total_lines: 159 }] },
+    { ...reply, sources: [{ ...source, excerpt: 'é'.repeat(16385) }] },
+    { ...reply, sources: [{ ...source, integrity: { status: 'MISMATCH' } }] },
+  ])('rejects miscorrelated or oversized results', async (value) => {
+    backend(JSON.stringify(value))
+    expect((await evidenceLookupAction(input)).ok).toBe(false)
+  })
+
+  it.each(['UNKNOWN_RECORD', 'INVALID_RANGE', 'SOURCE_UNAVAILABLE', 'SOURCE_TOO_LARGE', 'RANGE_OUT_OF_BOUNDS', 'EXCERPT_TOO_LARGE', 'REGISTRY_MISMATCH'])(
+    'returns a fixed failure code: %s', async (code) => {
+      backend(JSON.stringify({ schema: 'ada.evidence_error.v0.1', code }))
+      expect(await evidenceLookupAction(input)).toEqual({ ok: false, error: `Ada lookup failed: ${code}` })
+    },
+  )
 })
