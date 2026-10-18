@@ -1,0 +1,38 @@
+# Liam–Ada local integration
+
+Verified 18 October 2026. This is the bounded local integration, not broader deployment or adoption of the draft governance/specification.
+
+From Terminal:
+
+```sh
+cd ~/Desktop/Workspace-OS
+sh scripts/liam-ada/launch.sh
+```
+
+This builds the local source, checks the Electron native modules, and opens Electron **at the project directory**. It keeps app data in `.workspace-os/liam-app-data` and starts with `.workspace-os/liam-workspace` as a scratch workspace. Both are ignored by Git. Quit this instance normally before restarting it. The installed application is unchanged. Do not launch `out/main/index.js` directly: resource lookup then misses the bridge CLI.
+
+Select **Liam** in the specialist roster, use **Safe** mode and **Claude / Sonnet**, and start a new conversation. Ask: `What are the governance permissions and approval boundaries? Give source paths and line ranges, separate exact quotations from paraphrases, and preserve Ada's limitations.` The saved profile defaults to `claude:sonnet`; an explicit UI model selection overrides it. Do not select Codex for this verified route. A fresh conversation is needed for updated persona instructions. The scratch workspace does not change Ada's fixed six-source allowlist.
+
+Verified: raw bridge response in `live-bridge-response.json`, actual launcher metadata in `live-launch.json`, actual permission probe in `launcher-permissions.json`, and corrected quotation/paraphrase example in `live-liam-response.md`. The quoted sentence was compared with Constitution line 40. Older chat output is historical and has not been rewritten; its paraphrases must not be treated as verbatim quotations.
+
+Liam uses the existing Claude CLI/authentication. Ada is local Python retrieval and has no provider SDK or credential requirement. No OpenAI dependency or credential was added. Provider neutrality does not mean all providers were tested: the live run reported `claude-sonnet-5` and `claude-haiku-4-5-20251001`; these are CLI-reported identities, not an independent audit of the serving vendor. Existing Codex text helpers strip `WOS_AGENT_TOKEN`; the existing interactive path has a structured `workspace_action` callback with grant checks. Its unit checks passed, but live Codex–Ada access was not exercised and is not a supported route in this handoff.
+
+Safe mode allows Read, Glob, Grep, **Write, Edit**, `Bash(wos-gen:*)`, and `Bash(wos-action:*)`. Liam's action scope is `evidence.` plus the existing baseline `memory.search`; browser/write actions outside that scope are denied by the bridge. This does not make the agent itself read-only. Legacy workspace-bound `all` runs can also query Ada. Current source-parent symlinks were absent for returned sources, but Ada does not enforce parent containment or prevent filesystem races. No source hardening or source expansion was added. Ada's `VERIFIED_MATCH` means text matching, never semantic truth or draft adoption.
+
+Repeatable checks (keep native modules built for Electron):
+
+```sh
+ELECTRON_RUN_AS_NODE=1 ./node_modules/.bin/electron node_modules/vitest/vitest.mjs run src/main/agent src/main/agent-permissions.test.ts src/main/memory
+python3 scripts/liam-ada/adapter-check.py
+python3 scripts/liam-ada/rollback-check.py
+node scripts/liam-ada/permissions.mjs
+node scripts/liam-ada/live.mjs
+npm run typecheck
+git diff --check
+```
+
+The live check uses existing Claude authentication and incurs provider usage. It launches an isolated Electron instance and retains its test artifacts in a temporary directory; no token is written to its reports. Permission checks use a deterministic child probe instead of a model call. Real timeout/overflow/missing-process checks use temporary backend fixtures while retaining production subprocess limits. Run socket/Electron checks outside restricted sandboxes that prohibit local socket binding. Do not run `rebuild:node`; this installation is configured for Electron. If a later unrelated task changes the ABI, use the existing `npm run rebuild:electron` before launch.
+
+Recovery: both `pre-integration-recovery.tar.gz` and `pre-continuation-recovery.tar.gz` contain selected originals and manifests. Extract to a separate directory first and review intervening changes. The first snapshot restores capabilityCatalog.ts, grants.ts, actionBridge.ts and the original Liam profile. The second also preserves launchRun.ts and typecheck.mjs before this continuation. Remove only the newly introduced evidence handler/tests and installed Ada adapter when deliberately reverting the integration; keep Ada services, checker, contracts and checkpoints. The rollback script demonstrates these operations only in disposable copies and reruns the original 15 bridge/grant tests. Dependency installs/native rebuilds are environment changes and are not undone by file rollback. Git contains the adapter/profile copies so the external integration files can be recovered along with the application source.
+
+Known maintenance limits: typecheck has 70 existing errors against an unchanged baseline of 75. The installed React plugin 4.7.0 declares Vite support through 7, while Vite is 8.0.16; builds pass with warnings. The previous installation reported 44 vulnerabilities (14 moderate, 29 high, 1 critical); these were not remediated. An offline audit returning zero is not evidence they disappeared. `ignore-scripts=false`; lockfile install scripts include better-sqlite3, node-pty, esbuild and fsevents. This continuation did not reinstall, upgrade or reapprove dependencies. These issues and source-boundary limitations remain constraints on broader deployment, not claims of production readiness.

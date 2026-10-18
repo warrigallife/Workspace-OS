@@ -183,7 +183,7 @@ export async function launchRun(o: LaunchRunOptions): Promise<{ child: ChildProc
       [AGENT_SOCK_ENV]: agentSockPath(),
       // Per-run identity for the bridge: the CLI forwards this token; main
       // refuses any action outside this run's grant. Minted here, never logged.
-      [AGENT_TOKEN_ENV]: grants.issue(id, o.capabilities, agent?.name ?? id, provider === 'codex' ? getWorkspaceRoot() ?? undefined : undefined),
+      [AGENT_TOKEN_ENV]: grants.issue(id, o.capabilities, agent?.name ?? id, getWorkspaceRoot() ?? undefined),
     } as Record<string, string>
 
     // MCP connectors: for every enabled connector whose secret(s) are present,

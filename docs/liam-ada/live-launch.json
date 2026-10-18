@@ -1,0 +1,22 @@
+{
+  "cwd": "/private/var/folders/bf/kshqt9954z14m1lbsrxt9t8w0000gn/T/liam-live-oEeDdK/workspace",
+  "tokenPresent": true,
+  "socketPresent": true,
+  "allowedTools": [
+    "Read",
+    "Glob",
+    "Grep",
+    "Write",
+    "Edit",
+    "Bash(wos-gen:*)",
+    "Bash(wos-action:*)"
+  ],
+  "requestedProvider": "claude",
+  "requestedModel": "sonnet",
+  "reportedMeta": {
+    "costUsd": 0.1719384,
+    "turns": 2,
+    "durationMs": 20011,
+    "model": "claude-haiku-4-5-20251001 + claude-sonnet-5"
+  }
+}

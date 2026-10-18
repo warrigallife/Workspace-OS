@@ -1,0 +1,97 @@
+{
+  "ok": true,
+  "result": {
+    "schema": "ada.evidence_response.v0.1",
+    "question": "What are the governance permissions and approval boundaries?",
+    "sources": [
+      {
+        "id": 1,
+        "path": "/Users/liammcilmurray/Desktop/ruflo-test/governance/GOVERNANCE_CONSTITUTION_v0.1_DRAFT.md",
+        "lines": [
+          37,
+          54
+        ],
+        "excerpt": "37: \n38: ### 1.2 Reserved Decisions\n39: \n40: The following require explicit human approval:\n41: \n42: - Adoption or amendment of this Constitution.\n43: - Modification of governing permissions or security policies.\n44: - Promotion of research findings into the authoritative knowledge archive.\n45: - Destructive or materially disruptive changes to protected projects.\n46: - Installation or integration of new software where not previously authorized.\n47: - External publication, transmission or disclosure of protected information.\n48: - Expansion of agent privileges beyond approved boundaries.\n49: \n50: ### 1.3 Human Intervention\n51: \n52: The project owner may suspend, redirect, restrict or terminate agent operations.\n53: \n54: Agents must respect stop instructions and must not independently resume suspended work.",
+        "integrity": {
+          "status": "VERIFIED_MATCH",
+          "source": "/Users/liammcilmurray/Desktop/ruflo-test/governance/GOVERNANCE_CONSTITUTION_v0.1_DRAFT.md",
+          "lines": [
+            37,
+            54
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "path": "/Users/liammcilmurray/Desktop/ruflo-test/governance/GOVERNANCE_CONSTITUTION_v0.1_DRAFT.md",
+        "lines": [
+          385,
+          402
+        ],
+        "excerpt": "385: ### 10.1 Draft Status\n386: \n387: Version 0.1 is a proposed governance specification.\n388: \n389: It does not presently constitute an implemented or technically enforced control system.\n390: \n391: ### 10.2 Adoption Requirements\n392: \n393: Before adoption, the project owner should review:\n394: \n395: - Authority and permission boundaries.\n396: - Compatibility with existing agents.\n397: - Knowledge staging and approval procedures.\n398: - Security and audit requirements.\n399: - Operational feasibility.\n400: - Versioning and rollback procedures.\n401: \n402: ### 10.3 Incremental Implementation",
+        "integrity": {
+          "status": "VERIFIED_MATCH",
+          "source": "/Users/liammcilmurray/Desktop/ruflo-test/governance/GOVERNANCE_CONSTITUTION_v0.1_DRAFT.md",
+          "lines": [
+            385,
+            402
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "path": "/Users/liammcilmurray/Desktop/ruflo-test/governance/GOVERNANCE_CONSTITUTION_v0.1_DRAFT.md",
+        "lines": [
+          217,
+          234
+        ],
+        "excerpt": "217: \n218: ## ARTICLE V \u2014 SECURITY, PERMISSIONS AND SYSTEM INTEGRITY\n219: \n220: ### 5.1 Least Privilege\n221: \n222: Agents shall receive only the permissions required for their assigned tasks.\n223: \n224: ### 5.2 Protected Operations\n225: \n226: Operations affecting system configuration, software installation, credentials, protected source code, external communications or destructive file changes require explicit authorization unless a narrowly defined prior authorization exists.\n227: \n228: ### 5.3 Execution Boundaries\n229: \n230: Where applicable, technical controls should include:\n231: \n232: - Filesystem access restrictions.\n233: - Network access controls.\n234: - Sandboxed execution.",
+        "integrity": {
+          "status": "VERIFIED_MATCH",
+          "source": "/Users/liammcilmurray/Desktop/ruflo-test/governance/GOVERNANCE_CONSTITUTION_v0.1_DRAFT.md",
+          "lines": [
+            217,
+            234
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "path": "/Users/liammcilmurray/Desktop/ruflo-test/governance/AGENT_CONTRACT_v0.1_DRAFT.md",
+        "lines": [
+          1,
+          18
+        ],
+        "excerpt": "1: # WARRIGAL AI WORKFORCE\n2: ## Agent Operating Contract \u2014 Version 0.1\n3: \n4: **Classification:** Foundational Operational Governance  \n5: **Status:** DRAFT \u2014 FOR HUMAN REVIEW  \n6: **Date:** 17 October 2026  \n7: **Governing document:** Warrigal Governance Constitution v0.1 (Draft)  \n8: **Authority:** Human Project Owner  \n9: **Implementation:** Not activated or technically enforced\n10: \n11: ---\n12: \n13: ## ARTICLE 1 \u2014 PURPOSE AND SCOPE\n14: \n15: ### 1.1 Purpose\n16: \n17: This contract defines the responsibilities, permissions, evidence requirements, operational boundaries and accountability standards for agents participating in the Warrigal AI Workforce.\n18: ",
+        "integrity": {
+          "status": "VERIFIED_MATCH",
+          "source": "/Users/liammcilmurray/Desktop/ruflo-test/governance/AGENT_CONTRACT_v0.1_DRAFT.md",
+          "lines": [
+            1,
+            18
+          ]
+        }
+      },
+      {
+        "id": 5,
+        "path": "/Users/liammcilmurray/Desktop/ruflo-test/governance/AGENT_CONTRACT_v0.1_DRAFT.md",
+        "lines": [
+          193,
+          210
+        ],
+        "excerpt": "193: Only the human project owner may approve promotion of findings into Warrigal's authoritative archive under the initial governance model.\n194: \n195: ### 5.6 Disputed Findings\n196: \n197: Disputed or inconclusive findings may remain in the research archive as unresolved records.\n198: \n199: Disagreement must not be erased merely to produce a unified conclusion.\n200: \n201: ### 5.7 Corrections\n202: \n203: Subsequent corrections to approved findings must preserve provenance, prior versions and the reasons for revision.\n204: \n205: ---\n206: \n207: ## ARTICLE 6 \u2014 PERMISSIONS AND OPERATIONAL BOUNDARIES\n208: \n209: ### 6.1 Default Permissions\n210: ",
+        "integrity": {
+          "status": "VERIFIED_MATCH",
+          "source": "/Users/liammcilmurray/Desktop/ruflo-test/governance/AGENT_CONTRACT_v0.1_DRAFT.md",
+          "lines": [
+            193,
+            210
+          ]
+        }
+      }
+    ],
+    "answer": null,
+    "semantic_support": "UNRESOLVED",
+    "status": "RETRIEVAL_ONLY"
+  }
+}

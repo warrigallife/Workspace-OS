@@ -31,6 +31,7 @@ import { getCapability } from './capabilityCatalog'
 
 /** Action-id prefixes each capability may run. */
 const SURFACE_PREFIXES: Record<string, readonly string[]> = {
+  evidence: ['evidence.'],
   research: ['browser.'],
   documents: ['files.', 'document.'],
   webpage: ['files.', 'document.'],
@@ -48,7 +49,7 @@ const BASELINE: readonly string[] = ['memory.search']
 export type GrantScope = 'all' | ReadonlySet<string>
 
 export interface Grant {
-  /** Codex runs stay bound to the workspace where they were launched. */
+  /** Runs stay bound to the workspace where they were launched. */
   root?: string
   runId: string
   scope: GrantScope

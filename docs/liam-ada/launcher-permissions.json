@@ -1,0 +1,28 @@
+{
+  "cwd": "/private/var/folders/bf/kshqt9954z14m1lbsrxt9t8w0000gn/T/liam-grants-HinQNU/workspace",
+  "allowedTools": [
+    "Read",
+    "Glob",
+    "Grep",
+    "Write",
+    "Edit",
+    "Bash(wos-gen:*)",
+    "Bash(wos-action:*)"
+  ],
+  "authorized": {
+    "ok": true,
+    "status": "RETRIEVAL_ONLY"
+  },
+  "outsideGrant": {
+    "ok": false,
+    "error": "not granted: browser.navigate is outside what this agent was given"
+  },
+  "missingToken": {
+    "ok": false,
+    "error": "no run identity \u2014 wos-action only works inside an agent run started by Workspace OS"
+  },
+  "otherWorkspace": {
+    "ok": false,
+    "error": "This run belongs to a different workspace. Start a new run here."
+  }
+}

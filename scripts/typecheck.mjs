@@ -25,10 +25,13 @@ const BASELINE = 'scripts/typecheck-baseline.json'
 /** Every error line for one project, as `file: code` — line numbers shift too easily. */
 function errorsIn(project) {
   try {
-    execFileSync('npx', ['tsc', '--noEmit', '-p', project], { encoding: 'utf-8', stdio: 'pipe' })
+    execFileSync(process.execPath, ['node_modules/typescript/bin/tsc', '--noEmit', '-p', project], { encoding: 'utf-8', stdio: 'pipe' })
     return []
   } catch (e) {
     const out = `${e.stdout ?? ''}${e.stderr ?? ''}`
+    if (e.status !== 2 || !out.includes('error TS')) {
+      throw new Error(`TypeScript could not check ${project}: ${out || e.message}`)
+    }
     return out
       .split('\n')
       .filter((l) => l.includes('error TS'))
