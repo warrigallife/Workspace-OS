@@ -1,0 +1,62 @@
+{
+  "originalSources": 6,
+  "newSources": 9,
+  "exactAllowlist": true,
+  "sensitivePatternScan": "no matches; supplemented by manual review",
+  "originalSectionsIdentical": 116,
+  "oldSourcesRetrievable": 6,
+  "sourceContentsUnchanged": true,
+  "installedAdapterNewRecordChecks": 9,
+  "newRetrieval": [
+    {
+      "file": "/Users/liammcilmurray/Desktop/ruflo-test/ada/ADA_WORKSPACE_OS_INTEGRATION_SPEC_v0.1_DRAFT.md",
+      "question": "integration specification dedicated specialist capability evidence grant prefix",
+      "retrieved": true
+    },
+    {
+      "file": "/Users/liammcilmurray/Desktop/ruflo-test/ada/ADA_WORKSPACE_OS_EVIDENCE_CONTRACT_v0.1_DRAFT.md",
+      "question": "evidence contract request_id requested_by source_scope proposed future request",
+      "retrieved": true
+    },
+    {
+      "file": "/Users/liammcilmurray/Desktop/Workspace-OS/docs/liam-ada/implementation-log.md",
+      "question": "implementation log continuation defects corrected compiler execution failure",
+      "retrieved": true
+    },
+    {
+      "file": "/Users/liammcilmurray/Desktop/Workspace-OS/docs/liam-ada/README.md",
+      "question": "README launch.sh scratch workspace separate app data",
+      "retrieved": true
+    },
+    {
+      "file": "/Users/liammcilmurray/.claude/agents/liam.md",
+      "question": "Liam profile bridge grants technically enforced Safe Write Edit read-only",
+      "retrieved": true
+    },
+    {
+      "file": "/Users/liammcilmurray/Desktop/Workspace-OS/docs/liam-ada/launcher-permissions.json",
+      "question": "launcher permissions outsideGrant missingToken otherWorkspace",
+      "retrieved": true
+    },
+    {
+      "file": "/Users/liammcilmurray/Desktop/Workspace-OS/docs/liam-ada/live-launch.json",
+      "question": "live launch requestedProvider requestedModel reportedMeta costUsd",
+      "retrieved": true
+    },
+    {
+      "file": "/Users/liammcilmurray/Desktop/Workspace-OS/docs/liam-ada/live-bridge-response.json",
+      "question": "live bridge response schema ada.evidence_response.v0.1 integrity sources",
+      "retrieved": true
+    },
+    {
+      "file": "/Users/liammcilmurray/Desktop/Workspace-OS/docs/liam-ada/live-liam-response.md",
+      "question": "live Liam response paraphrase my summary not quotation unresolved question",
+      "retrieved": true
+    }
+  ],
+  "electronRegression": {
+    "files": 5,
+    "tests": 46,
+    "passed": true
+  }
+}

@@ -1,6 +1,7 @@
 # Ada–Workspace OS Implementation Log
 Date: 18 October 2026 — Australia/Brisbane
-Status: Bounded local integration acceptance completed; broader deployment limitations remain.
+Status: Bounded local integration accepted; limited 15-file retrieval expansion verified. Broader deployment limitations remain.
+Authoritative copy: ~/Desktop/Workspace-OS/docs/liam-ada/implementation-log.md. Ada-directory copy is a non-indexed mirror.
 The initial implementation record below is historical; see continuation results at the end.
 Original integration specification remains DRAFT — NOT ADOPTED.
 
@@ -165,3 +166,43 @@ Dependency review: installed @vitejs/plugin-react 4.7.0 supports Vite 4–7; ins
 
 ### Local checkpoint
 All source changes, repeatable checks, corrected profile/adapter copies, raw response evidence and recovery archives are included in the local Git checkpoint titled `Complete bounded Liam-Ada integration and acceptance checks`. No push. The external log mirrors this record; use Git history to identify the checkpoint hash, avoiding a self-referential hash in its own contents.
+
+## Limited source expansion — 18 October 2026
+
+The user explicitly authorized adding existing Liam–Ada integration records to retrieval. This supersedes the earlier six-source-only scope for this limited change. It does not authorize additional agents, broader tool privileges, whole-directory indexing, or archive writes. The authoritative integration implementation-log copy is `~/Desktop/Workspace-OS/docs/liam-ada/implementation-log.md`; the Ada-directory file is a maintained mirror and is NOT indexed.
+
+Preserved recoverable originals before editing: service v0.3, saved Liam profile, README, profile copy and both implementation-log copies, with source paths and SHA256 hashes in `pre-source-expansion-recovery.tar.gz`. The updated external service has a Git-tracked recovery/deployment copy at `docs/liam-ada/ada_evidence_service_v03.py`. Existing Ada checkpoints, v0.4 retrieval algorithm, checker, specification, contract and all six original source files were left unchanged.
+
+### Exact added paths and provenance
+
+Paths relative to `~/Desktop/ruflo-test/ada/`:
+- ADA_WORKSPACE_OS_INTEGRATION_SPEC_v0.1_DRAFT.md — draft_specification.
+- ADA_WORKSPACE_OS_EVIDENCE_CONTRACT_v0.1_DRAFT.md — draft_contract.
+
+Paths relative to `~/Desktop/Workspace-OS/docs/liam-ada/`:
+- implementation-log.md — implementation_record (one authoritative copy).
+- README.md — operating_instructions.
+- launcher-permissions.json — test_observation.
+- live-launch.json — test_observation.
+- live-bridge-response.json — test_observation, a historical raw response, not a fresh source query.
+- live-liam-response.md — agent_interpretation, observed model output, not independently validated claims.
+
+Saved profile: `~/.claude/agents/liam.md` — saved_profile. The profile copy in docs is NOT indexed.
+
+The original six paths remain first in the allowlist, followed by these nine files, for 15 distinct files. No globs, directory scans, archives, source-code files, credentials, tokens, duplicate log/profile copies, or new acceptance-report files are indexed. Historical bridge response excerpts repeat earlier source text as test evidence; provenance labels prevent treating that record as a fresh observation of those documents.
+
+### Sensitive-content review and meaning of records
+
+Reviewed the candidate Markdown and structured JSON files before inclusion. Acceptance JSON contains local paths, permission names, model/usage metadata and boolean tokenPresent/socketPresent fields, but no token values, credentials, raw environment dumps or private keys. Pattern checks for credential assignments, bearer values and common private-key/token formats also found no matches. This is a bounded review of these records, not a guarantee against future sensitive edits. These files remain live on-disk sources; review content before adding future secrets to them.
+
+New-source entries have additive `record_kind` and `record_note` provenance fields. Existing original-source entries and top-level schema are unchanged. Labels distinguish historical unadopted drafts, dated implementation claims, instructions, test observations and model interpretations. They do not establish truth or make old test results current. The draft contract remains a historical interface proposal; its old statement that integration is unimplemented is not silently updated or adopted. Later dated implementation records report the implemented behavior.
+
+Liam now explicitly explains that bridge token identity, capability grants and workspace binding are technically enforced, while Safe mode's independent Write/Edit tools remain writable. Persona no-write instructions are behavioral constraints, not a technical filesystem sandbox. A fresh conversation loads the updated profile. Existing provider limitations remain unchanged; no OpenAI dependency or credential was introduced.
+
+### Validation
+
+`python3 -B scripts/liam-ada/source-check.py` verifies the exact 15-path list, distinct resolved paths, sensitive-pattern scan, retrieval of each of the nine additions through the installed Python adapter, provenance metadata, retrieval-only invariants, all six original files still retrievable from the expanded corpus, and 116 byte-identical original excerpt sections with unchanged rankings when restricted to the original six-source corpus. All approved content hashes remain unchanged across the checks. Expanded-corpus top-five rankings can differ; no claim of identical global ranking is made.
+
+`python3 scripts/liam-ada/adapter-check.py` verifies five returned excerpts, nine invalid requests, missing backend behavior, unchanged Ada directory inventory and unchanged content hashes of all 15 approved source files. The evidence/grant/bridge regression selection passed all 46 tests across five files under Electron's runtime, preserving the installed native ABI. Electron emitted task_name_for_pid diagnostics in the restricted environment; the tests completed successfully. Detailed results are retained in `source-expansion-checks.json`; the demonstration question and retrieval response are in `source-expansion-response.json`. Neither new evidence file is automatically added to retrieval.
+
+Recovery for this limited change: extract `pre-source-expansion-recovery.tar.gz` to a separate directory, verify its manifest hashes, and restore the listed service/profile/docs originals after checking for intervening edits. This restores the six-source service without removing the previously verified bridge integration. No recovery archive is indexed. Changes are checkpointed locally; nothing is pushed.
