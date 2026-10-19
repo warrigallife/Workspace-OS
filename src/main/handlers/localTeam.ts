@@ -38,7 +38,7 @@ export function registerLocalTeam(ipc: IpcMain): void {
     if (typeof id !== 'string' || !/^bg-[a-z0-9-]{3,40}$/.test(id) || !localQueue().get(id)) throw new Error('Unknown attempt')
     const directory = path.join(app.getPath('userData'), 'local-team', id)
     const sections: string[] = []
-    for (const name of ['handover.md','candidate.py','execution.json','review.json','state.json']) {
+    for (const name of ['handover.md','candidate.py','validation.json','execution.json','review.json','state.json']) {
       const file = path.join(directory, name)
       if (fs.existsSync(file) && !fs.lstatSync(file).isSymbolicLink() && fs.statSync(file).size <= 64000) sections.push(name+'\n'+fs.readFileSync(file, 'utf8'))
     }

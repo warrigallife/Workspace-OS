@@ -1,0 +1,3 @@
+{
+  "code": "def solve(value):\n    seen = set()\n    result = []\n    for item in value:\n        if item not in seen:\n            result.append(item)\n            seen.add(item)\n    return result\n"
+}

@@ -4,10 +4,6 @@ import builtins
 import json
 import resource
 import sys
-resource.setrlimit(resource.RLIMIT_CPU, (2, 2))
-resource.setrlimit(resource.RLIMIT_FSIZE, (0, 0))
-resource.setrlimit(resource.RLIMIT_NOFILE, (32, 32))
-# macOS RLIMIT_AS is not reliable; parent also bounds time, input/output and AST size.
 SAFE = {k: getattr(builtins, k) for k in ('abs','all','any','bool','dict','enumerate','float','int','len','list','max','min','range','reversed','round','set','sorted','str','sum','tuple','zip')}
 METHODS = {'lower','upper','strip','replace','split','join','append','count','items','keys','values','get','isdigit','isalnum','isalpha','startswith','endswith'}
 ALLOWED = (ast.Module, ast.FunctionDef, ast.arguments, ast.arg, ast.Return, ast.Assign,
@@ -20,24 +16,68 @@ ALLOWED = (ast.Module, ast.FunctionDef, ast.arguments, ast.arg, ast.Return, ast.
            ast.Not, ast.And, ast.Or, ast.Eq, ast.NotEq, ast.Lt, ast.LtE, ast.Gt, ast.GtE,
            ast.In, ast.NotIn, ast.Is, ast.IsNot)
 
-def evaluate(code, value):
-    tree = ast.parse(code)
-    if len(list(ast.walk(tree))) > 500: raise ValueError('Candidate AST too large')
-    if len(tree.body) != 1 or not isinstance(tree.body[0], ast.FunctionDef): raise ValueError('Exactly one solve function required')
-    fn = tree.body[0]
-    if fn.name != 'solve' or fn.decorator_list or fn.returns or fn.args.defaults or fn.args.kw_defaults or fn.args.vararg or fn.args.kwarg or fn.args.kwonlyargs or fn.args.posonlyargs or len(fn.args.args) != 1 or fn.args.args[0].annotation:
-        raise ValueError('Expected def solve(value) without annotations/defaults/decorators')
+class CandidateInvalid(ValueError):
+    def __init__(self, diagnostics):
+        self.diagnostics = diagnostics
+        super().__init__(json.dumps(diagnostics))
+
+def policy_prompt():
+    return ("WORKER CONTRACT (authoritative, generated from its allowlists):\n"
+            "Write valid Python, exactly one top-level def solve(value) with one positional argument; "
+            "no annotations, defaults, decorators, nested functions or top-level expressions.\n"
+            "Callable builtins: " + ', '.join(sorted(SAFE)) + ".\n"
+            "Permitted methods: " + ', '.join(sorted(METHODS)) + ". No other calls or attributes. "
+            "In particular .add(), .remove(), .sort(), dict.fromkeys(), print(), imports and recursion are denied. "
+            "set() is available but set.add() is not. List membership (in/not in) and list.append() are available.\n"
+            "Permitted AST constructs/operators: " + ', '.join(n.__name__ for n in ALLOWED) + ".\n"
+            "Names starting with _ and assignments to builtin names are denied. Maximum 12000 source characters / 500 AST nodes. "
+            "No while, try, with, classes, lambda, I/O or shell. Do not output JavaScript/C braces or pseudocode. "
+            "Return a JSON object with one code string containing the entire function, using normal newline escaping.")
+
+def validate(code):
+    def diagnostic(kind, message, node=None, line=None, column=None):
+        return {'kind':kind,'message':message,'line':line or getattr(node,'lineno',None),
+                'column':column or (getattr(node,'col_offset',-1)+1 or None)}
+    if not isinstance(code,str) or not code.strip() or len(code)>12000:
+        return [diagnostic('SOURCE_LIMIT','Expected nonempty Python source, at most 12000 characters')]
+    try:
+        tree=ast.parse(code)
+    except SyntaxError as exc:
+        return [diagnostic('SYNTAX',exc.msg+'; supply a complete valid Python def solve(value).',line=exc.lineno,column=exc.offset)]
+    if len(list(ast.walk(tree)))>500:return [diagnostic('AST_LIMIT','At most 500 AST nodes')]
+    if len(tree.body)!=1 or not isinstance(tree.body[0],ast.FunctionDef):
+        return [diagnostic('FUNCTION_STRUCTURE','Exactly one top-level def solve(value) is required')]
+    fn=tree.body[0]
+    if fn.name!='solve' or fn.decorator_list or fn.returns or fn.args.defaults or fn.args.kw_defaults or fn.args.vararg or fn.args.kwarg or fn.args.kwonlyargs or fn.args.posonlyargs or len(fn.args.args)!=1 or fn.args.args[0].annotation:
+        return [diagnostic('FUNCTION_STRUCTURE','Expected solve with one positional argument, no annotations/defaults/decorators',fn)]
+    errors=[]
     for n in ast.walk(tree):
-        if not isinstance(n, ALLOWED): raise ValueError('Unsupported Python construct: '+type(n).__name__)
-        if isinstance(n, ast.FunctionDef) and n is not fn: raise ValueError('Nested functions denied')
-        if isinstance(n, ast.Name) and (n.id.startswith('_') or isinstance(n.ctx, ast.Store) and n.id in SAFE): raise ValueError('Reserved name')
-        if isinstance(n, ast.Attribute) and n.attr not in METHODS: raise ValueError('Attribute denied')
-        if isinstance(n, ast.Call) and not (isinstance(n.func, ast.Name) and n.func.id in SAFE or isinstance(n.func, ast.Attribute) and n.func.attr in METHODS): raise ValueError('Call denied')
-    scope = {'__builtins__': SAFE}
-    exec(compile(tree, '<candidate>', 'exec'), scope)
+        kind=message=None
+        if not isinstance(n,ALLOWED):kind,message='SYNTAX_POLICY','Unsupported Python construct: '+type(n).__name__
+        elif isinstance(n,ast.FunctionDef) and n is not fn:kind,message='FUNCTION_STRUCTURE','Nested functions denied'
+        elif isinstance(n,ast.Name) and (n.id.startswith('_') or isinstance(n.ctx,ast.Store) and n.id in SAFE):kind,message='NAME_POLICY','Reserved name: '+n.id
+        elif isinstance(n,ast.Attribute) and n.attr not in METHODS:kind,message='ATTRIBUTE_POLICY','Attribute denied: .'+n.attr
+        elif isinstance(n,ast.Call) and not (isinstance(n.func,ast.Name) and n.func.id in SAFE or isinstance(n.func,ast.Attribute) and n.func.attr in METHODS):
+            kind,message='CALL_POLICY','Call denied: '+ast.unparse(n.func)+'; permitted builtins: '+', '.join(sorted(SAFE))+'; methods: '+', '.join(sorted(METHODS))
+        if kind:errors.append(diagnostic(kind,message,n))
+        if len(errors)>=8:break
+    if not errors:
+        try:compile(tree,'<candidate>','exec')
+        except SyntaxError as exc:errors.append(diagnostic('SYNTAX',exc.msg,line=exc.lineno,column=exc.offset))
+    return errors
+
+def evaluate(code, value):
+    errors=validate(code)
+    if errors:raise CandidateInvalid(errors)
+    scope={'__builtins__':SAFE}
+    exec(compile(code,'<candidate>','exec'),scope)
     return scope['solve'](value)
 
 if __name__ == '__main__':
+    resource.setrlimit(resource.RLIMIT_CPU, (2, 2))
+    resource.setrlimit(resource.RLIMIT_FSIZE, (0, 0))
+    resource.setrlimit(resource.RLIMIT_NOFILE, (32, 32))
+    # No hard RSS/address-space cap is claimed on macOS.
     data=json.loads(sys.stdin.read(24577))
     result=evaluate(data['code'],data['input'])
     raw=json.dumps(result,allow_nan=False)

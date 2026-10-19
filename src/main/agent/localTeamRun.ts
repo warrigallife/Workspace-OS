@@ -80,11 +80,11 @@ export async function launchLocalTeam(o: LaunchRunOptions): Promise<{ child: Chi
     let checkpointId = initial.id
     try { checkpointId = (await cp.createCheckpoint('Local team: execution, review and handover evidence')).id }
     catch { successful = false; o.sink.output('FAILED: final evidence checkpoint could not be saved\n') }
-    const artifacts = ['handover.md', 'candidate.py', 'execution.json', 'review.json', 'state.json']
+    const artifacts = ['handover.md', 'candidate.py', 'validation.json', 'execution.json', 'review.json', 'state.json']
       .map(name => ({ path: path.join(directory, name), name, type: 'other' as const }))
       .filter(a => fs.existsSync(a.path))
     o.sink.artifacts(artifacts)
-    o.sink.meta({ costUsd: 0, costKnown: true, turns: ['specialist','review','handover'].filter(s => fs.existsSync(path.join(directory, s+'.raw.json'))).length, durationMs: Date.now()-startedAt })
+    o.sink.meta({ costUsd: 0, costKnown: true, turns: (fs.existsSync(path.join(directory, 'attempts')) ? fs.readdirSync(path.join(directory, 'attempts')).filter(a => /^attempt-[0-2]$/.test(a) && fs.existsSync(path.join(directory, 'attempts', a, 'specialist.raw.json'))).length : 0) + ['review','handover'].filter(s => fs.existsSync(path.join(directory, s+'.raw.json'))).length, durationMs: Date.now()-startedAt })
     o.sink.output(`Evidence: ${directory}\nCheckpoint: ${checkpointId}\n`)
     o.sink.done(successful ? 0 : 1, checkpointId)
   }

@@ -41,9 +41,9 @@ class Checks(unittest.TestCase):
         r.ledger('task_update',{'taskId':task_id,'status':'in_progress'})
         r.ledger('task_complete',{'taskId':task_id,'result':{'evidence':'fixture'}})
         self.assertEqual(r.ledger('task_status',{'taskId':task_id})['result'],{'evidence':'fixture'})
-    def fixture(self,stage,persona,prompt):
+    def fixture(self,stage,persona,prompt,directory=Path('.')):
         values={'specialist':{'code':'def solve(value):\n    return sum(value)'},'review':{'decision':self.decision,'reason':'Fixture independent review'},'handover':{'summary':'Fixture handover','limitations':'Supplied checks only'}}
-        result=values[stage];r.atomic(stage+'.raw.json',{'fixture':True,'response':json.dumps(result)});r.atomic(stage+'.json',result)
+        result=values[stage];r.atomic(directory/(stage+'.raw.json'),{'fixture':True,'response':json.dumps(result)});r.atomic(directory/(stage+'.json'),result)
         return result
     def attempt(self,decision='approve',expected=6):
         self.decision=decision
@@ -65,5 +65,46 @@ class Checks(unittest.TestCase):
     def test_unavailable_model_no_fallback(self):
         with patch.object(r,'local_request',return_value={'models':[]}),patch.object(r,'generate') as model:
             self.assertEqual(r.run({'task':{},'profiles':{}}),1);model.assert_not_called()
+
+    def test_precise_saved_failure_diagnostics(self):
+        saved=self.previous/'.workspace-os/liam-app-data/local-team'
+        first=(saved/'bg-mvey334q-dwptl6/candidate.py').read_text()
+        latest=(saved/'bg-mvey7aeh-dl4ln8/candidate.py').read_text()
+        errors=r.POLICY.validate(first)
+        self.assertTrue(any(e['kind']=='CALL_POLICY' and 'seen.add' in e['message'] and e['line']==7 for e in errors))
+        self.assertEqual(r.POLICY.validate(latest)[0]['kind'],'SYNTAX')
+        self.assertEqual(r.POLICY.validate('print(1)')[0]['kind'],'FUNCTION_STRUCTURE')
+        with patch.object(r.subprocess,'Popen') as process:
+            self.assertFalse(r.execute(first,[{'input':[],'expected':[]}])['executed'])
+            process.assert_not_called()
+
+    def test_two_repairs_preserve_every_candidate(self):
+        self.decision='approve';calls=[]
+        candidates=['l=[[];', 'def solve(value):\n    return set(value).add(1)', 'def solve(value):\n    return sum(value)']
+        def model(stage,persona,prompt,directory=Path('.')):
+            if stage!='specialist':return self.fixture(stage,persona,prompt,directory)
+            code=candidates[len(calls)];calls.append(prompt)
+            r.atomic(directory/'specialist.raw.json',{'fixture':True,'response':code})
+            return {'code':code}
+        with patch.object(r,'generate',side_effect=model),patch.object(r,'local_request',return_value={'models':[{'name':r.MODEL,'digest':r.DIGEST}]}):
+            result=r.run({'task':{'description':'Sum list','cases':[{'input':[1,2,3],'expected':6}],'reviewCriteria':''},'profiles':{k:{'persona':k} for k in ['specialist','reviewer','continuity']}})
+        self.assertEqual(result,0);self.assertEqual(len(calls),3)
+        self.assertIn('SYNTAX',calls[1]);self.assertIn('CALL_POLICY',calls[2])
+        for i,code in enumerate(candidates):self.assertEqual(Path(f'attempts/attempt-{i}/candidate.py').read_text(),code)
+        self.assertFalse(Path('attempts/attempt-0/execution.json').exists())
+        self.assertEqual(json.loads(Path('state.json').read_text())['accepted_attempt'],2)
+
+    def test_repair_budget_and_cancellation(self):
+        request={'task':{'description':'Sum','cases':[{'input':[1],'expected':1}],'reviewCriteria':''},'profiles':{k:{'persona':k} for k in ['specialist','reviewer','continuity']}}
+        def invalid(stage,persona,prompt,directory=Path('.')):
+            self.assertEqual(stage,'specialist');return {'code':'print(1)'}
+        with patch.object(r,'generate',side_effect=invalid) as model,patch.object(r,'local_request',return_value={'models':[{'name':r.MODEL,'digest':r.DIGEST}]}):
+            self.assertEqual(r.run(request),1);self.assertEqual(model.call_count,3)
+        self.assertFalse(Path('review.json').exists());self.assertEqual(len(list(Path('attempts').iterdir())),3)
+        with tempfile.TemporaryDirectory() as fresh:
+            os.chdir(fresh)
+            with patch.object(r,'generate',side_effect=KeyboardInterrupt()) as model,patch.object(r,'local_request',return_value={'models':[{'name':r.MODEL,'digest':r.DIGEST}]}):
+                self.assertEqual(r.run(request),1);self.assertEqual(model.call_count,1)
+                self.assertEqual(json.loads(Path('state.json').read_text())['status'],'cancelled')
 
 if __name__=='__main__':unittest.main(verbosity=2)
