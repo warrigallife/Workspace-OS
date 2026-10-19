@@ -1,3 +1,4 @@
+import { LIMITS, fieldErrors, textErrors } from './researchContract'
 /** Run-specific approved records and outputs. No model-controlled paths or global profile grants. */
 import fs from 'fs'
 import path from 'path'
@@ -52,10 +53,11 @@ export class ResearchScope {
     fs.writeFileSync(file, typeof value==='string'?value:JSON.stringify(value,null,2),{mode:0o600,flag:'wx'})
   }
   lookup(role: 'dana'|'nora', input: any): unknown {
-    if (!input || Object.keys(input).sort().join(',')!=='end_line,record_id,start_line') throw new Error('Only record ID and line range allowed')
+    const errors=fieldErrors(input,['record_id','start_line','end_line'],'lookup');if(errors.length)throw new Error(errors.join('; '))
     const {record_id,start_line,end_line}=input, source=this.sources[record_id]
-    if (typeof record_id!=='string'||!Object.hasOwn(this.sources,record_id)) throw new Error('Unknown approved record ID')
-    if (!Number.isInteger(start_line)||!Number.isInteger(end_line)||start_line<1||end_line<start_line||end_line-start_line>=80||end_line>source.lines.length) throw new Error('Invalid range: 1–80 existing lines')
+    if (typeof record_id!=='string'||!Object.hasOwn(this.sources,record_id)) throw new Error('lookup.record_id: must be one of '+Object.keys(this.sources).join(', '))
+    if (!Number.isInteger(start_line)||start_line<1)throw new Error('lookup.start_line: positive integer required')
+    if (!Number.isInteger(end_line)||end_line<start_line||end_line-start_line>=80||end_line>source.lines.length)throw new Error(`lookup.end_line: must be >= start_line, span at most 80 lines, and be <= ${source.lines.length}`)
     this.assertSources()
     const excerpt=source.lines.slice(start_line-1,end_line).join('\n')
     if (Buffer.byteLength(excerpt)>32768) throw new Error('Excerpt too large')
@@ -63,28 +65,43 @@ export class ResearchScope {
     return {record_id,start_line,end_line,total_lines:source.lines.length,sha256:source.hash,excerpt}
   }
   checkCitation(c: Citation, role: 'dana'|'nora'): void {
-    if (!c || Object.keys(c).sort().join(',')!=='end_line,quote,record_id,start_line') throw new Error('Invalid citation shape')
+    const errors=fieldErrors(c,['record_id','start_line','end_line','quote'],'citation');if(errors.length)throw new Error(errors.join('; '))
     const source=this.sources[c.record_id]
-    if (typeof c.record_id!=='string'||!Object.hasOwn(this.sources,c.record_id)||!Number.isInteger(c.start_line)||!Number.isInteger(c.end_line)||c.start_line<1||c.end_line<c.start_line||c.end_line-c.start_line>=80||c.end_line>source.lines.length) throw new Error('Invalid citation range')
-    if (typeof c.quote!=='string'||c.quote.length<12||c.quote.length>2000||!source.lines.slice(c.start_line-1,c.end_line).join('\n').includes(c.quote)) throw new Error('Citation quote must match source verbatim')
+    if (typeof c.record_id!=='string'||!Object.hasOwn(this.sources,c.record_id)||!Number.isInteger(c.start_line)||!Number.isInteger(c.end_line)||c.start_line<1||c.end_line<c.start_line||c.end_line-c.start_line>=80||c.end_line>source.lines.length) throw new Error('citation.record_id/start_line/end_line: require an approved ID and 1–80 existing inclusive lines')
+    const quoteErrors=textErrors(c.quote,'citation.quote',LIMITS.quote);if(quoteErrors.length)throw new Error(quoteErrors.join('; '))
+    if (!source.lines.slice(c.start_line-1,c.end_line).join('\n').includes(c.quote)) throw new Error('citation.quote: must match source verbatim')
     if (!this.reads[role].some(r=>r.record_id===c.record_id&&r.start_line<=c.start_line&&r.end_line>=c.end_line)) throw new Error('Citation not independently retrieved by '+role)
   }
+  missingRecords(role:'dana'|'nora'):string[] {
+    return Object.keys(this.sources).filter(id=>!this.reads[role].some(r=>r.record_id===id))
+  }
   save(role:'dana'|'nora', input: any): unknown {
+    const missing=this.missingRecords(role)
+    if(missing.length)throw new Error('Records not independently retrieved: '+missing.join(', ')+'. Call lookup for each before save.')
     this.assertSources()
     if (role==='dana') {
       if (this.draft) throw new Error('Draft already saved')
-      if (!input||Object.keys(input).sort().join(',')!=='findings,limitations'||!Array.isArray(input.findings)||input.findings.length<3||input.findings.length>8||typeof input.limitations!=='string'||input.limitations.length<20||input.limitations.length>2000) throw new Error('Supply 3–8 findings and limitations')
-      for (const f of input.findings) {
-        if (Object.keys(f).sort().join(',')!=='citation,statement'||typeof f.statement!=='string'||f.statement.length<10||f.statement.length>2000) throw new Error('Invalid finding')
-        this.checkCitation(f.citation,'dana')
+      const errors=fieldErrors(input,['findings','limitations'],'save')
+      if(!Array.isArray(input?.findings)||input.findings.length<LIMITS.findings[0]||input.findings.length>LIMITS.findings[1])errors.push('save.findings: require 3–8 findings')
+      errors.push(...textErrors(input?.limitations,'save.limitations',LIMITS.limitations))
+      if(errors.length)throw new Error(errors.join('; '))
+      for (const [i,f] of input.findings.entries()) {
+        const fields=fieldErrors(f,['citation','statement'],`save.findings[${i}]`)
+        fields.push(...textErrors(f?.statement,`save.findings[${i}].statement`,LIMITS.statement))
+        if(fields.length)throw new Error(fields.join('; '))
+        try{this.checkCitation(f.citation,'dana')}catch(e){throw new Error(`save.findings[${i}].${(e as Error).message}`)}
       }
       if (new Set(input.findings.map((f:Finding)=>f.citation.record_id)).size!==2) throw new Error('Cite both approved records')
       this.write('draft.json',input);this.draft=input
     } else {
       if (this.review||!this.draft) throw new Error('Review stage unavailable')
-      if (!input||Object.keys(input).sort().join(',')!=='checked_citations,decision,reason'||!['approve','reject'].includes(input.decision)||typeof input.reason!=='string'||input.reason.length<20||input.reason.length>4000||!Array.isArray(input.checked_citations)) throw new Error('Invalid review')
+      const errors=fieldErrors(input,['checked_citations','decision','reason'],'save')
+      if(!['approve','reject'].includes(input?.decision))errors.push('save.decision: must be approve or reject')
+      errors.push(...textErrors(input?.reason,'save.reason',LIMITS.reason))
+      if(!Array.isArray(input?.checked_citations)||input.checked_citations.some((v:unknown)=>!Number.isInteger(v)))errors.push('save.checked_citations: expected array of integer finding indices')
+      if(errors.length)throw new Error(errors.join('; '))
       if (input.decision==='approve') {
-        if (JSON.stringify([...input.checked_citations].sort((a,b)=>a-b))!==JSON.stringify(this.draft.findings.map((_,i)=>i))) throw new Error('Review every citation index')
+        if (JSON.stringify([...input.checked_citations].sort((a,b)=>a-b))!==JSON.stringify(this.draft.findings.map((_,i)=>i))) throw new Error('save.checked_citations: approval requires exactly indices '+this.draft.findings.map((_,i)=>i).join(', '))
         for (const f of this.draft.findings) this.checkCitation(f.citation,'nora')
       }
       this.write('review.json',input);this.review=input

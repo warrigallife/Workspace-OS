@@ -1,0 +1,23 @@
+{
+  "status": "failed",
+  "sourcePaths": [
+    "/Users/liammcilmurray/Desktop/JUFE/docs/reports/JUFE_Full_Collection_Coverage_Audit_2026-10-11.md",
+    "/Users/liammcilmurray/Desktop/JUFE/docs/reports/JUFE_Schedule_and_Source31_Coverage_Review_2026-10-11.md"
+  ],
+  "sourceHashes": [
+    "eaa5a95fc910bf016c03f899e2ec7d283d9eb56b9c35ad88aa3a5ba569f4b96d",
+    "e281c7def2fc5461202f84422771adc6a32300260ee1d2a0928416830fee4772"
+  ],
+  "identity": {
+    "appPath": "/Users/liammcilmurray/Desktop/Workspace-OS",
+    "userData": "/Users/liammcilmurray/Desktop/Workspace-OS/.workspace-os/liam-app-data"
+  },
+  "jobId": "bg-mvfrniva-d7d502",
+  "queueStatus": "error",
+  "checkpointId": "a0361a8c08afcea3742b8866732c606c96025756",
+  "turns": 2,
+  "sourceFilesUnchanged": true,
+  "previousFailureUnchanged": true,
+  "displayedHandover": true,
+  "error": "Model returned prose without required tool execution/save"
+}

@@ -6,11 +6,14 @@ import os from 'node:os'
 import assert from 'node:assert/strict'
 import {createHash} from 'node:crypto'
 const root=process.cwd(),base=path.join(root,'.workspace-os/liam-workspace/JUFE-staging')
-const target=path.join(root,'docs/jufe-route-assessment/live-verification')
+const target=path.join(root,'docs/jufe-route-assessment/retrieval-first-verification')
 fs.mkdirSync(target,{recursive:false})
 const sourcePaths=['JUFE_Full_Collection_Coverage_Audit_2026-10-11.md','JUFE_Schedule_and_Source31_Coverage_Review_2026-10-11.md'].map(n=>path.join(os.homedir(),'Desktop/JUFE/docs/reports',n))
 const digest=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex')
 const hashes=sourcePaths.map(digest)
+const prior=path.join(base,'bg-mvfjwjrp-jrzvu0')
+function files(dir){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?files(path.join(dir,e.name)):[path.join(dir,e.name)])}
+const priorHashes=Object.fromEntries(files(prior).map(p=>[p,digest(p)]))
 let app,report={status:'infrastructure-failed',sourcePaths,sourceHashes:hashes,modelCallsClaimed:0}
 try {
  app=await electron.launch({executablePath:path.join(os.homedir(),'Desktop/Workspace OS — Local Python Pilot.command'),cwd:root,timeout:60000})
@@ -30,7 +33,8 @@ try {
  await win.getByTestId('research-job').filter({hasText:job.id}).getByRole('button',{name:'View research report and handover'}).click()
  const displayed=await win.getByTestId('research-result').innerText();assert(displayed.includes('handover.md'))
  assert.deepEqual(sourcePaths.map(digest),hashes)
- report={...report,status:state.status,jobId:job.id,queueStatus:job.status,checkpointId:job.checkpointId,turns:state.turns,sourceFilesUnchanged:true,displayedHandover:true,error:state.error??null}
+ for(const [file,sha] of Object.entries(priorHashes))assert.equal(digest(file),sha,'Previous failure changed')
+ report={...report,status:state.status,jobId:job.id,queueStatus:job.status,checkpointId:job.checkpointId,turns:state.turns,sourceFilesUnchanged:true,previousFailureUnchanged:true,displayedHandover:true,error:state.error??null}
  delete report.modelCallsClaimed
  if(state.status==='completed'){
   assert.equal(job.status,'pending');assert(job.checkpointId);assert(displayed.includes('report.md'))
