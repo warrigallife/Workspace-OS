@@ -1,3 +1,4 @@
+import { registerLocalTeam, shutdownLocalTeam } from './handlers/localTeam'
 import { app, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { registerFsHandlers } from './handlers/fs'
@@ -96,9 +97,9 @@ function createWindow(): BrowserWindow {
 
   // Distinguish the verified local Liam route from the unchanged installed app.
   if (process.env['WOS_LIAM_LOCAL'] === '1') {
-    win.setTitle('Workspace OS — Liam (Local)')
+    win.setTitle(process.env['WOS_LOCAL_TEAM'] === '1' ? 'Workspace OS — Local Team + Liam' : 'Workspace OS — Liam (Local)')
     win.on('page-title-updated', (event) => event.preventDefault())
-    app.dock?.setBadge('Liam')
+    app.dock?.setBadge(process.env['WOS_LOCAL_TEAM'] === '1' ? 'Local' : 'Liam')
   }
 
   // Navigation, new-window, and webview hardening (see security.ts).
@@ -215,6 +216,7 @@ app.whenReady().then(() => {
   registerConnectionsHandlers(ipcMain)
   registerNotifyHandlers(ipcMain)
   registerRunsHandlers(ipcMain)
+  registerLocalTeam(ipcMain)
   registerRoutinesHandlers(ipcMain)
   // Routines catch up once and arm — after every handler exists, since a fire
   // enqueues a background run that streams through them.
@@ -268,7 +270,7 @@ app.on('before-quit', async (event) => {
   try {
     shutdownAgents()
     stopRoutines()
-    shutdownRunQueue()
+    shutdownRunQueue(); shutdownLocalTeam()
     stopActionBridge()
     await shutdownSearch()
     shutdownHistory()

@@ -1,0 +1,10 @@
+{
+  "launcher": "/Users/liammcilmurray/Desktop/Workspace OS — Local Python Pilot.command",
+  "mode": "755",
+  "appPath": "/Users/liammcilmurray/Desktop/Workspace-OS",
+  "userData": "/Users/liammcilmurray/Desktop/Workspace-OS/.workspace-os/liam-app-data",
+  "title": "Workspace OS — Local Team + Liam",
+  "pilotPanel": true,
+  "liamPresent": true,
+  "modelCalls": 0
+}

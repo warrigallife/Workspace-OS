@@ -955,6 +955,14 @@ export interface WorkspaceApi {
     onUpdated: (callback: (routines: Routine[]) => void) => () => void
   }
   /** Background runs — main-owned, survive the window; stream rides agent.* by job id. */
+  localTeam: {
+    result: (id: string) => Promise<string>
+    enqueue: (task: { description: string; cases: { input: unknown; expected: unknown }[]; reviewCriteria: string }) => Promise<BackgroundJob>
+    list: () => Promise<BackgroundJob[]>
+    cancel: (id: string) => Promise<{ ok: boolean }>
+    retry: (id: string) => Promise<BackgroundJob>
+    onUpdated: (callback: (job: BackgroundJob) => void) => () => void
+  }
   runs: {
     enqueue: (input: { prompt: string; label?: string; agentName?: string | null; origin?: 'routine' | 'background'; contextFiles?: string[] }) => Promise<BackgroundJob>
     list: () => Promise<BackgroundJob[]>

@@ -1,3 +1,4 @@
+import { LocalTeam } from './LocalTeam'
 import { useCallback, useEffect, useState } from 'react'
 import { AgentCard, type AgentCardData } from './AgentCard'
 import { AgentDetail } from './AgentDetail'
@@ -43,6 +44,7 @@ export function AgentRoster(): JSX.Element {
 
   return (
     <section className={styles.surface} data-testid="agent-roster">
+      <LocalTeam />
       {agents.length === 0 ? (
         <div className={styles.empty}>
           <div className={styles.emptyHero}>

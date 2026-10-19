@@ -1,0 +1,38 @@
+{
+  "sandbox": "macOS Seatbelt: no user files/write/network/fork",
+  "code_sha256": "f994a61f10d8581910762292d781d52f7ed322b04a37f9366fe8a6b77cdd3206",
+  "checks": [
+    {
+      "input": [
+        1,
+        2,
+        3
+      ],
+      "expected": 6,
+      "actual": 6,
+      "exit_code": 0,
+      "passed": true,
+      "error": ""
+    },
+    {
+      "input": [],
+      "expected": 0,
+      "actual": 0,
+      "exit_code": 0,
+      "passed": true,
+      "error": ""
+    },
+    {
+      "input": [
+        -2,
+        5
+      ],
+      "expected": 3,
+      "actual": 3,
+      "exit_code": 0,
+      "passed": true,
+      "error": ""
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,51 @@
+{
+  "route": "actual Agents > Local team UI",
+  "model": "llama3.2:latest",
+  "data": "/private/var/folders/bf/kshqt9954z14m1lbsrxt9t8w0000gn/T/wos-local-team-live-NHBnmF/data",
+  "cloudCalls": 0,
+  "records": [
+    {
+      "label": "intentional-failure",
+      "id": "bg-mveufo3h-nay7b7",
+      "status": "error",
+      "checkpointId": "0e0e5630eaf1c8f899781b819071b0292925e9f8",
+      "state": "failed"
+    },
+    {
+      "label": "review-rejection",
+      "id": "bg-mveufrx6-sxevis",
+      "status": "error",
+      "checkpointId": "5cdf04ebcefeae385964ea9834386f81a07f8cc0",
+      "state": "rejected"
+    },
+    {
+      "label": "cancelled",
+      "id": "bg-mveufus6-x0w9on",
+      "status": "cancelled",
+      "checkpointId": null,
+      "state": "cancelled"
+    },
+    {
+      "label": "interrupted",
+      "id": "bg-mveufwuy-5z1p3i",
+      "status": "interrupted",
+      "checkpointId": null,
+      "state": "running"
+    },
+    {
+      "label": "recovered",
+      "id": "bg-mveufzsn-dmf6qn",
+      "status": "pending",
+      "checkpointId": "0e95f67ee7505eb205cc3eb660739eb2aeb94491",
+      "state": "completed"
+    }
+  ],
+  "priorSuccessfulPilot": {
+    "id": "bg-mven9dk6-nm3yzz",
+    "status": "pending",
+    "checkpointId": "aa11268b7fe59b28fab138c5a1cd1988d2d54491",
+    "code": 0,
+    "evidence": "success",
+    "state": "completed"
+  }
+}

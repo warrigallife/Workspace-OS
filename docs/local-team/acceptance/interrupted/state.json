@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "status": "running",
+  "stage": "execute",
+  "model": "llama3.2:latest",
+  "provider": "ollama-local",
+  "recoveredFrom": null,
+  "tasks": {
+    "execute": "task-1792389520084-rybt66",
+    "review": "task-1792389520139-etsixr",
+    "handover": "task-1792389520193-gzsyfy"
+  },
+  "dependencies": {
+    "review": [
+      "task-1792389520084-rybt66"
+    ],
+    "handover": [
+      "task-1792389520139-etsixr"
+    ]
+  },
+  "evidence": {},
+  "model_digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+  "environment_keys": [
+    "HOME",
+    "LANG",
+    "PATH",
+    "PYTHONDONTWRITEBYTECODE",
+    "__CF_USER_TEXT_ENCODING"
+  ],
+  "worker_permissions": {
+    "specialist": "candidate text only; generated function in Seatbelt",
+    "reviewer": "evidence input only; no tools",
+    "continuity": "evidence input only; no tools"
+  }
+}

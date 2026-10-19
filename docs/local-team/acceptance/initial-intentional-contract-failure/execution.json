@@ -1,0 +1,15 @@
+{
+  "sandbox": "macOS Seatbelt: no user files/write/network/fork",
+  "code_sha256": "d287bb7f9d15abdc5b6e98536263815744b6ef21c8f3c839fc434ca70d8efe99",
+  "checks": [
+    {
+      "input": 0,
+      "expected": 2,
+      "actual": null,
+      "exit_code": 1,
+      "passed": false,
+      "error": "Traceback (most recent call last):\n  File \"/Users/liammcilmurray/Desktop/Workspace-OS/scripts/local-team/worker.py\", line 42, in <module>\n    result=evaluate(data['code'],data['input'])\n  File \"/Users/liammcilmurray/Desktop/Workspace-OS/scripts/local-team/worker.py\", line 26, in evaluate\n    if len(tree.body) != 1 or not isinstance(tree.body[0], ast.FunctionDef): raise ValueError('Exactly one solve function required')\n                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: Exactly one solve function required\n"
+    }
+  ],
+  "passed": false
+}

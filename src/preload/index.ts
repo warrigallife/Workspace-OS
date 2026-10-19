@@ -741,6 +741,19 @@ contextBridge.exposeInMainWorld('workspace', {
     },
   },
 
+  localTeam: {
+    result: (id: string) => ipcRenderer.invoke(IPC.LOCAL_TEAM_RESULT, id),
+    enqueue: (task: unknown) => ipcRenderer.invoke(IPC.LOCAL_TEAM_ENQUEUE, task),
+    list: () => ipcRenderer.invoke(IPC.LOCAL_TEAM_LIST),
+    cancel: (id: string) => ipcRenderer.invoke(IPC.LOCAL_TEAM_CANCEL, id),
+    retry: (id: string) => ipcRenderer.invoke(IPC.LOCAL_TEAM_RETRY, id),
+    onUpdated: (callback: (job: unknown) => void) => {
+      const handler = (_e: Electron.IpcRendererEvent, job: unknown) => callback(job)
+      ipcRenderer.on(IPC.LOCAL_TEAM_UPDATED, handler)
+      return () => ipcRenderer.removeListener(IPC.LOCAL_TEAM_UPDATED, handler)
+    },
+  },
+
   // Background runs — owned by main, streamed on the agent:* channels by job id.
   runs: {
     enqueue: (input: { prompt: string; label?: string; agentName?: string | null; origin?: 'routine' | 'background'; contextFiles?: string[] }) =>

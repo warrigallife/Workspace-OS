@@ -1,3 +1,5 @@
+import { launchLocalTeam } from './localTeamRun'
+import type { LocalTeamOptions } from '../runs/localTeamTask'
 import { app } from 'electron'
 import { spawn, ChildProcess, execFileSync } from 'child_process'
 import fs from 'fs'
@@ -72,6 +74,7 @@ export interface RunSink {
 }
 
 export interface LaunchRunOptions {
+  localTeam?: LocalTeamOptions
   runId: string
   prompt: string
   contextFiles: string[]
@@ -124,6 +127,7 @@ export function resolveClaudeBinary(): string {
 }
 
 export async function launchRun(o: LaunchRunOptions): Promise<{ child: ChildProcess; checkpointId: string | null }> {
+    if (o.localTeam) return launchLocalTeam(o)
     const { prompt, contextFiles, activeFile, safeMode, agent, resumeId, sink } = o
     const id = o.runId
     const cwd = getWorkspaceRoot() ?? os.homedir()

@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "status": "failed",
+  "stage": "execute",
+  "model": "llama3.2:latest",
+  "provider": "ollama-local",
+  "recoveredFrom": null,
+  "tasks": {
+    "execute": "task-1792377462773-5k1xbd",
+    "review": "task-1792377462832-k8zip8",
+    "handover": "task-1792377462890-jou75c"
+  },
+  "dependencies": {
+    "review": [
+      "task-1792377462773-5k1xbd"
+    ],
+    "handover": [
+      "task-1792377462832-k8zip8"
+    ]
+  },
+  "evidence": {},
+  "model_digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+  "environment_keys": [
+    "HOME",
+    "LANG",
+    "PATH",
+    "PYTHONDONTWRITEBYTECODE",
+    "__CF_USER_TEXT_ENCODING"
+  ],
+  "worker_permissions": {
+    "specialist": "candidate text only; generated function in Seatbelt",
+    "reviewer": "evidence input only; no tools",
+    "continuity": "evidence input only; no tools"
+  },
+  "error": "Execution failed independent checks; review cannot approve completion"
+}

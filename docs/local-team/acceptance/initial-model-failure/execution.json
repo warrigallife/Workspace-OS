@@ -1,0 +1,38 @@
+{
+  "sandbox": "macOS Seatbelt: no user files/write/network/fork",
+  "code_sha256": "6a6cf164ccb6b5b0c434a72c13e43537819bf2a86b0d5702ecaeae8000f37981",
+  "checks": [
+    {
+      "input": [
+        1,
+        2,
+        3
+      ],
+      "expected": 6,
+      "actual": null,
+      "exit_code": 1,
+      "passed": false,
+      "error": "Traceback (most recent call last):\n  File \"/Users/liammcilmurray/Desktop/Workspace-OS/scripts/local-team/worker.py\", line 42, in <module>\n    result=evaluate(data['code'],data['input'])\n  File \"/Users/liammcilmurray/Desktop/Workspace-OS/scripts/local-team/worker.py\", line 38, in evaluate\n    return scope['solve'](value)\n           ~~~~~~~~~~~~~~^^^^^^^\n  File \"<candidate>\", line 4, in solve\nAttributeError: 'int' object has no attribute 'isdigit'\n"
+    },
+    {
+      "input": [],
+      "expected": 0,
+      "actual": 0,
+      "exit_code": 0,
+      "passed": true,
+      "error": ""
+    },
+    {
+      "input": [
+        -2,
+        5
+      ],
+      "expected": 3,
+      "actual": null,
+      "exit_code": 1,
+      "passed": false,
+      "error": "Traceback (most recent call last):\n  File \"/Users/liammcilmurray/Desktop/Workspace-OS/scripts/local-team/worker.py\", line 42, in <module>\n    result=evaluate(data['code'],data['input'])\n  File \"/Users/liammcilmurray/Desktop/Workspace-OS/scripts/local-team/worker.py\", line 38, in evaluate\n    return scope['solve'](value)\n           ~~~~~~~~~~~~~~^^^^^^^\n  File \"<candidate>\", line 4, in solve\nAttributeError: 'int' object has no attribute 'isdigit'\n"
+    }
+  ],
+  "passed": false
+}

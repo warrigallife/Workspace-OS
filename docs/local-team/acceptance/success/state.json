@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "status": "completed",
+  "stage": "done",
+  "model": "llama3.2:latest",
+  "provider": "ollama-local",
+  "recoveredFrom": null,
+  "tasks": {
+    "execute": "task-1792377457910-h7o4x8",
+    "review": "task-1792377457981-5u089f",
+    "handover": "task-1792377458054-tltad4"
+  },
+  "dependencies": {
+    "review": [
+      "task-1792377457910-h7o4x8"
+    ],
+    "handover": [
+      "task-1792377457981-5u089f"
+    ]
+  },
+  "evidence": {
+    "candidate.py": "f994a61f10d8581910762292d781d52f7ed322b04a37f9366fe8a6b77cdd3206",
+    "execution.json": "3f613139da3bff5b2a05ec5da9ef63bb81e60505f4040f8430378c5a3d420168",
+    "specialist.raw.json": "38cae5685655517df0863cebcef3a9ecbf3f0feaaeb347a74efdeab61250d116",
+    "review.json": "ad9cc099183141e7591b6eae21ea869ccf46ad201c6fc4bc997e7d44e73bfb5a",
+    "review.raw.json": "143539a52fabfb9b2fe386adaaf70659dcd6aa2628c051e576e90d2cd3f14783",
+    "handover.md": "907e308f3caa0485a65d5ceb7cea0c120ff5f41f3cba3541d629b17de39a23dc",
+    "handover.json": "48141336ec97790e678aa71d23d74acf384374b535b6014f2dfd9265d640b2db",
+    "handover.raw.json": "a564a8e592a686142436bfeb6afbd8a7fce2a9d928adf43ee7a261203cc5dd40"
+  },
+  "model_digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+  "environment_keys": [
+    "HOME",
+    "LANG",
+    "PATH",
+    "PYTHONDONTWRITEBYTECODE",
+    "__CF_USER_TEXT_ENCODING"
+  ],
+  "worker_permissions": {
+    "specialist": "candidate text only; generated function in Seatbelt",
+    "reviewer": "evidence input only; no tools",
+    "continuity": "evidence input only; no tools"
+  }
+}

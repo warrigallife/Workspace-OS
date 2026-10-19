@@ -306,6 +306,12 @@ export const IPC = {
   // Background runs — main-owned agent runs that survive the window (routines,
   // unattended work). Safe mode only, idle timeout. Their stream rides the
   // agent:* channels keyed by job id; UPDATED carries the persisted job record.
+  LOCAL_TEAM_ENQUEUE: 'local-team:enqueue',
+  LOCAL_TEAM_RESULT: 'local-team:result',
+  LOCAL_TEAM_LIST: 'local-team:list',
+  LOCAL_TEAM_CANCEL: 'local-team:cancel',
+  LOCAL_TEAM_RETRY: 'local-team:retry',
+  LOCAL_TEAM_UPDATED: 'local-team:updated',
   RUNS_ENQUEUE: 'runs:enqueue',
   RUNS_LIST: 'runs:list',
   RUNS_CANCEL: 'runs:cancel',

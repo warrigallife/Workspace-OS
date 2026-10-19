@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "status": "rejected",
+  "stage": "review",
+  "model": "llama3.2:latest",
+  "provider": "ollama-local",
+  "recoveredFrom": null,
+  "tasks": {
+    "execute": "task-1792389513701-7wdjk0",
+    "review": "task-1792389513756-unfb6q",
+    "handover": "task-1792389513809-lekgt5"
+  },
+  "dependencies": {
+    "review": [
+      "task-1792389513701-7wdjk0"
+    ],
+    "handover": [
+      "task-1792389513756-unfb6q"
+    ]
+  },
+  "evidence": {
+    "candidate.py": "f994a61f10d8581910762292d781d52f7ed322b04a37f9366fe8a6b77cdd3206",
+    "execution.json": "3f613139da3bff5b2a05ec5da9ef63bb81e60505f4040f8430378c5a3d420168",
+    "specialist.raw.json": "544bd9634f86942e57bee9a91b3c9219d9b9fe4558f0ca4de0ab279dc6c6191d"
+  },
+  "model_digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+  "environment_keys": [
+    "HOME",
+    "LANG",
+    "PATH",
+    "PYTHONDONTWRITEBYTECODE",
+    "__CF_USER_TEXT_ENCODING"
+  ],
+  "worker_permissions": {
+    "specialist": "candidate text only; generated function in Seatbelt",
+    "reviewer": "evidence input only; no tools",
+    "continuity": "evidence input only; no tools"
+  },
+  "error": "Reviewer rejected: This is an intentional rejection test. The candidate's implementation does not handle the case where the input list contains non-numeric values, which could lead to a TypeError when trying to sum the list. The required review decision is reject even if execution checks pass."
+}

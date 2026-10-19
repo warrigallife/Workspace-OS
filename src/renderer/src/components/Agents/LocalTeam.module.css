@@ -1,0 +1,8 @@
+.panel { margin: 16px 0; padding: 18px; border: 1px solid var(--border, #555); border-radius: 10px; }
+.panel summary { cursor: pointer; font-weight: 600; font-size: 16px; }
+.panel p { margin: 10px 0; line-height: 1.5; }
+.panel label { display: block; margin: 12px 0; }
+.panel textarea { display: block; width: 100%; min-height: 65px; margin-top: 6px; padding: 8px; color: inherit; background: transparent; border: 1px solid var(--border, #666); border-radius: 6px; }
+.panel button { padding: 8px 12px; margin: 6px 8px 6px 0; cursor: pointer; }
+.panel article { padding: 12px 0; border-top: 1px solid var(--border, #555); margin-top: 14px; }
+.panel pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 460px; overflow-y: auto; font-size: 12px; }

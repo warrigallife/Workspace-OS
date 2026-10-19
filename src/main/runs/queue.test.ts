@@ -112,3 +112,33 @@ describe('RunQueue', () => {
     expect(new RunQueue(file, fakeLauncher().launch).list()).toEqual([])
   })
 })
+
+describe('local team restart and shutdown', () => {
+  it('marks running and queued local attempts interrupted, without executing on read', async () => {
+    const f = fakeLauncher()
+    const q = new RunQueue(file, f.launch, { concurrency: 1 })
+    const localTeam = { task: { description: 'sum', cases: [{ input:[1], expected:1 }], reviewCriteria:'' } }
+    const a = q.enqueue({ prompt:'sum', localTeam })
+    const b = q.enqueue({ prompt:'sum', localTeam })
+    await tick();q.flush()
+    const recovered = new RunQueue(file, async () => { throw new Error('must not auto-start') })
+    expect(recovered.get(a.id)?.status).toBe('interrupted')
+    expect(recovered.get(b.id)?.status).toBe('interrupted')
+    q.shutdown()
+  })
+  it('late child completion cannot overwrite interrupted state or start queued work', async () => {
+    const f = fakeLauncher()
+    const q = new RunQueue(file, f.launch, { concurrency:1 })
+    const a = q.enqueue({prompt:'a'});const b = q.enqueue({prompt:'b'})
+    await tick();q.shutdown();f.sinks.get(a.id)!.done(0,'cp')
+    await tick()
+    expect(q.get(a.id)?.status).toBe('interrupted')
+    expect(f.sinks.has(b.id)).toBe(false)
+  })
+})
+
+it('refuses to overwrite a corrupt strict local queue', () => {
+  fs.writeFileSync(file, '{broken')
+  expect(() => new RunQueue(file, fakeLauncher().launch, { strictPersistence:true })).toThrow(/cannot be read/)
+  expect(fs.readFileSync(file,'utf8')).toBe('{broken')
+})

@@ -1,3 +1,4 @@
+import type { LocalTeamOptions } from './localTeamTask'
 import fs from 'fs'
 import path from 'path'
 
@@ -31,6 +32,7 @@ export interface JobArtifact {
 }
 
 export interface BackgroundJob {
+  localTeam?: LocalTeamOptions
   id: string
   /** A short human label — "Morning sift", or the prompt's first line. */
   label: string
@@ -63,6 +65,7 @@ export interface BackgroundJob {
 }
 
 export interface JobInput {
+  localTeam?: LocalTeamOptions
   prompt: string
   label?: string
   agentName?: string | null
@@ -90,6 +93,7 @@ const TAIL_MAX = 4000
 const KEEP_MAX = 100
 
 export class RunQueue {
+  private stopping = false
   private jobs: BackgroundJob[] = []
   private live = new Map<string, { kill: () => void }>()
   private readonly concurrency: number
@@ -99,7 +103,7 @@ export class RunQueue {
   constructor(
     private readonly file: string,
     private readonly launch: JobLauncher,
-    private readonly opts: { concurrency?: number; onEvent?: (ev: QueueEvent) => void; now?: () => number } = {},
+    private readonly opts: { concurrency?: number; strictPersistence?: boolean; onEvent?: (ev: QueueEvent) => void; now?: () => number } = {},
   ) {
     this.concurrency = Math.max(1, opts.concurrency ?? 2)
     this.now = opts.now ?? Date.now
@@ -110,11 +114,12 @@ export class RunQueue {
   private load(): void {
     try {
       const parsed = JSON.parse(fs.readFileSync(this.file, 'utf-8')) as unknown
-      if (!Array.isArray(parsed)) return
+      if (!Array.isArray(parsed)) { if (this.opts.strictPersistence) throw new Error('Invalid queue file'); return }
       this.jobs = parsed
         .filter((j): j is BackgroundJob => typeof (j as BackgroundJob)?.id === 'string' && typeof (j as BackgroundJob)?.prompt === 'string')
-        .map((j) => (j.status === 'running' ? { ...j, status: 'interrupted' as const, finishedAt: j.finishedAt ?? this.now() } : j))
+        .map((j) => ((j.status === 'running' || (j.localTeam && j.status === 'queued')) ? { ...j, status: 'interrupted' as const, finishedAt: j.finishedAt ?? this.now() } : j))
     } catch {
+      if (this.opts.strictPersistence && fs.existsSync(this.file)) throw new Error('Local queue cannot be read; preserve the file and recover it before running')
       this.jobs = []
     }
   }
@@ -128,15 +133,17 @@ export class RunQueue {
   }
 
   /** Writes now. Called on shutdown so an interrupted mark hits disk. */
-  flush(): void {
+  flush(required = false): void {
     if (this.saveTimer) {
       clearTimeout(this.saveTimer)
       this.saveTimer = null
     }
     try {
       fs.mkdirSync(path.dirname(this.file), { recursive: true })
-      fs.writeFileSync(this.file, JSON.stringify(this.jobs.slice(0, KEEP_MAX), null, 2), { encoding: 'utf-8', mode: 0o600 })
+      fs.writeFileSync(this.file + '.tmp', JSON.stringify(this.jobs.slice(0, KEEP_MAX), null, 2), { encoding: 'utf-8', mode: 0o600 })
+      fs.renameSync(this.file + '.tmp', this.file)
     } catch {
+      if (required) throw new Error('Could not persist local queue; execution withheld')
       /* best-effort — the in-memory list is still authoritative for this session */
     }
   }
@@ -160,6 +167,7 @@ export class RunQueue {
       id: `bg-${this.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
       label: (input.label ?? prompt.split('\n')[0]).trim().slice(0, 80) || 'Background run',
       prompt,
+      ...(input.localTeam ? { localTeam: input.localTeam } : {}),
       agentName: input.agentName ?? null,
       origin: input.origin ?? 'background',
       contextFiles: input.contextFiles ?? [],
@@ -180,6 +188,7 @@ export class RunQueue {
     this.jobs = [job, ...this.jobs].slice(0, KEEP_MAX)
     this.save()
     this.emit('updated', job)
+    if (input.localTeam) this.flush(true)
     void this.pump()
     return job
   }
@@ -221,13 +230,14 @@ export class RunQueue {
 
   /** Starts queued jobs while there is room. Never throws. */
   private async pump(): Promise<void> {
-    while (this.runningCount() < this.concurrency) {
+    while (!this.stopping && this.runningCount() < this.concurrency) {
       const next = [...this.jobs].reverse().find((j) => j.status === 'queued')
       if (!next) return
       const started = this.patch(next.id, { status: 'running', startedAt: this.now() })
       if (!started) return
       this.emit('opened', started)
       try {
+        if (started.localTeam) this.flush(true)
         const handle = await this.launch(started, this.sinkFor(started.id))
         if (this.get(started.id)?.status === 'running') this.live.set(started.id, handle)
         else handle.kill()
@@ -256,7 +266,7 @@ export class RunQueue {
   private finish(id: string, code: number | null, checkpointId: string | null, note = ''): void {
     this.live.delete(id)
     const job = this.get(id)
-    if (!job) return
+    if (!job || this.stopping || job.status === 'interrupted') return
     // A cancelled job keeps its status; everything else lands by exit code.
     const status: JobStatus = job.status === 'cancelled' ? 'cancelled' : code === 0 ? 'pending' : 'error'
     this.patch(id, {
@@ -271,6 +281,8 @@ export class RunQueue {
 
   /** App quit: end what is running, mark it interrupted, write to disk now. */
   shutdown(): void {
+    this.stopping = true
+    this.jobs = this.jobs.map(j => j.status === 'running' ? { ...j, status: 'interrupted', finishedAt: this.now() } : j)
     for (const [id, h] of this.live) {
       try {
         h.kill()
