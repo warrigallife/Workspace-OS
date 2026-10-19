@@ -1,0 +1,46 @@
+{
+  "baseCheckpoint": "f2f5e69",
+  "date": "2026-10-20",
+  "outcome": "blocked_before_execution",
+  "modelMetadata": {
+    "endpoint": "http://127.0.0.1:11434/api/show",
+    "model": "llama3.2:latest",
+    "capabilities": [
+      "completion",
+      "tools"
+    ],
+    "parameter_size": "3.2B",
+    "quantization_level": "Q4_K_M"
+  },
+  "installedVersions": {
+    "ruflo": "3.42.5",
+    "agentic-kit": "4.0.0-alpha.54"
+  },
+  "configurationFacts": {
+    "hostAdapters": [],
+    "providersModels": [],
+    "routeHosts": [
+      "claude",
+      "codex"
+    ],
+    "builtInExecutionAdapters": [
+      "claude",
+      "codex",
+      "opencode"
+    ],
+    "opencodeOnPath": false
+  },
+  "inferenceCalls": 0,
+  "jufeChanges": 0,
+  "runtimeChanges": 0,
+  "sourceHashes": {
+    "src/main/agent/modelPick.ts": "5cfd6aec91051c147f0a7342d5eda80aee8b65028576a142b5138d9f3cd1ede1",
+    "src/main/agent/launchRun.ts": "fb2c6165858a13032b8579b54ac875973afca86927ab2616a40d147df6a4b75c",
+    "scripts/local-team/worker.py": "c5d40de97bb328af1b2dceadab75f0369bf03cbb575882cb2e00185c9cea1e13",
+    "/opt/homebrew/lib/node_modules/@pacphi/agentic-kit/src/lib/execution/adapters.mjs": "d5a3f6f5b89442f9dfc6986a25ae6567817f29a03ada58856605e472d0fb8a25",
+    "/opt/homebrew/lib/node_modules/ruflo/node_modules/@claude-flow/cli/dist/src/mcp-tools/agent-execute-core.js": "357200c8b4b87424875cc537a51382a9124daf79450ce93f9f923f43384c15bb",
+    "/opt/homebrew/lib/node_modules/ruflo/node_modules/agentic-flow/dist/agents/directApiAgent.js": "d2bff3a7344e0a5b34f916be33d720e41ae21c6d03be582a54387baae0d0257c",
+    "/Users/liammcilmurray/Desktop/ruflo-test/dev-team/STATUS.md": "e6c741fd4ed7ef5a4ae8be8ff76133f697fa6a754551e4748f18fe92b4fdea91",
+    "/Users/liammcilmurray/Desktop/ruflo-test/local-runner/ollama_worker.sh": "90fb7e09546f7ba1eb5f8c2308f3fbb84b70008efa26cf65f9707a8378108da1"
+  }
+}

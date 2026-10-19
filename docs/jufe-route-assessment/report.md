@@ -1,0 +1,22 @@
+# JUFE local team route assessment — 2026-10-20
+
+**Blocked before execution.** Continued from f2f5e69; no Python-pilot extension. No specialist was run against JUFE, no independent research review occurred, and no cited outstanding-research report was produced. This folder stages the route assessment only. JUFE originals were not modified or indexed.
+
+## Verified route findings
+
+- **Workspace OS:** ordinary specialist execution accepts only Claude/Codex provider selections. `src/main/agent/modelPick.ts:6` defines those two providers; `src/main/agent/launchRun.ts:130` branches to the restricted Python pilot before selecting the normal provider binaries at line 153. The pilot cannot read JUFE records or execute research tools. Its existing success is not evidence for this new task.
+- **Agentic Kit 4.0.0-alpha.54:** installed `src/lib/execution/adapters.mjs` registers Claude, Codex and OpenCode execution adapters. Current `~/.config/agentic-kit/kit.json` routes activities to Claude/Codex cloud models; `hostAdapters` and `providers.models` are empty. OpenCode is not on the current PATH and is absent from `/opt/homebrew/bin`, `/usr/local/bin`, `~/.local/bin` and `~/.opencode/bin`. No host was launched, installed, reconfigured or granted access. This does not claim the framework cannot support local execution after configuration/install changes; it establishes the missing installed/configured route now.
+- **Ruflo 3.42.5:** task assignment/status persists coordination records; it is not tool execution. Installed `@claude-flow/cli/dist/src/mcp-tools/agent-execute-core.js:142` supports an explicit self-hosted Ollama endpoint without a paid key. This corrects the older `ruflo-test/dev-team/STATUS.md` section 6 assertion that Ollama must be hosted. However, the local request at lines 249–285 sends messages without tools and consumes message content; it does not dispatch filesystem/tools or iterate tool results.
+- **Bundled Agentic Flow:** its Ollama provider advertises tools and can encode/decode tool calls, but that transport alone is not a bounded agent executor. Installed `dist/agents/directApiAgent.js:34` selects Gemini/OpenRouter/ONNX or defaults to Anthropic; its active router branch at line 241 handles Gemini/OpenRouter, not local Ollama. `claudeAgent.js` likewise does not select Ollama. Rewiring these paths and adding enforcement is new integration work, not an existing working route.
+- **Installed local model:** a metadata-only localhost `/api/show` check reports llama3.2:latest, 3.2B Q4_K_M, capabilities `completion` and `tools`. No inference was requested. Therefore this inspection does **not** establish that Llama cannot perform research or tool use. The blocker is missing end-to-end execution wiring and enforceable research boundaries, not proven model incapacity.
+- **Existing prototypes:** reused `ruflo-test/WORKFORCE_FINDINGS.md`, `dev-team/STATUS.md`, `dev-team/README.md` and `local-runner/ollama_worker.sh`. The standalone shell runner saves generated text; the development prototype generates/tests Python. Neither provides the requested Workspace OS research-tool workflow.
+
+## Exact blocker and stopping point
+
+There is no verified installed/configured route connecting a Workspace OS specialist to local Ollama tool execution with read-only JUFE access, staging-only writes, a separate reviewer, persistent progress and a handover. The available normal routes are cloud-configured; invoking them would violate this task's local/no-paid-call constraint. Installing OpenCode, changing provider routing, or writing a new tool executor would move beyond reusing an established working route. Per the user's explicit instruction, stop before building that infrastructure.
+
+No new permission was requested or granted; no paid call, model download, archive change, push or runtime edit occurred. Liam–Ada, existing profiles, app data, Python pilot and previous checkpoints are unchanged. Source hashes and sanitized configuration facts are in evidence.json. Only this assessment and the implementation-log update were saved.
+
+## User workflow status
+
+There are **no verified clicks for the requested JUFE workflow**. The existing Desktop launcher opens Workspace OS, but neither ordinary specialist Run nor Run local team is verified to perform this task locally. Do not use the Python-pilot button as a substitute. A later integration would require an explicit choice to configure/install a local tool-capable host or authorize a bounded local executor; neither was done here.

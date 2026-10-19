@@ -70,3 +70,11 @@ Verification: 12 Python tests passed, including actual sandbox execution, None r
 The acceptance script hashes all files in the two original failed workflows and the f8a9dae failed workflow before/after; all remained unchanged. New evidence is under `set-add-verification/`, with prior `duplicate-removal-verification/` untouched. No resubmission, cloud fallback, downloads, installed-app replacement, profile/grant changes or push occurred. Liam–Ada code and authorization remain intact.
 
 Limits: only the four supplied cases are established. This set-based solution requires hashable items; it is not a general-purpose agent team. Same-model review is not provider diversity. Existing CPU/wall/output limits remain, with no hard memory cap. The raw continuity note incorrectly refers to code_sha256 as a commit ID; it is the candidate content hash, not a commit. Preserved that labeled model-authored observation unchanged; the verified final checkpoint above is authoritative.
+
+## JUFE execution-route gate — 2026-10-20
+
+Continued from f2f5e69 without extending the Python pilot. Reused existing inspection/prototype records and inspected installed execution adapters and provider selection. Saved a detailed assessment and source hashes in `docs/jufe-route-assessment/`, preserving this log before editing.
+
+Stopped before implementation: Workspace OS normal Run supports Claude/Codex; Agentic Kit's configured activities use cloud models, no external host adapters or local provider models are registered, and its OpenCode binary is absent at the checked locations/PATH. Ruflo can call self-hosted Ollama (correcting an older inspection), but its agent_execute local path returns completion text without tool dispatch. A bundled provider's tool-call transport is not an execution loop. Existing local prototypes remain text generation/Python artifact workflows.
+
+Metadata-only localhost verification confirms installed Llama 3.2 advertises completion and tools. No model-inability claim is justified; the blocker is the missing configured end-to-end local research executor with enforced source/staging boundaries and review. No inference or specialist research run was made, no JUFE report or verified UI clicks are claimed, and no JUFE files/runtime/profile/grants were changed. Per the user's gate, no further infrastructure was built.
