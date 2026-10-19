@@ -1,3 +1,4 @@
+import { researchAction } from './researchScope'
 import { evidenceAction, evidenceLookupAction } from './evidenceAction'
 import net from 'net'
 import fs from 'fs'
@@ -123,10 +124,15 @@ export async function handleRequest(
       // A run bound to a workspace may not act on another one; with no workspace
       // open (fresh launch, Close Workspace) there is nothing to protect.
       if (grant.root && ctx.root && grant.root !== ctx.root) return { ok: false, error: 'This run belongs to a different workspace. Start a new run here.' }
-      if (!allows(grant.scope, id)) {
+      if (grant.exactActions ? !grant.exactActions.includes(id) : !allows(grant.scope, id)) {
         console.warn(`[action-bridge] refused ${id} for run ${grant.label}: outside its grant`)
         return { ok: false, error: `not granted: ${id} is outside what this agent was given` }
       }
+    }
+    if (id.startsWith('researchRecords.') || id.startsWith('researchReport.')) {
+      const grant=deps.grants?.(req.token)
+      if (!grant?.exactActions || !ctx.root || grant.root!==ctx.root) return {ok:false,error:'Research requires an exact grant and matching workspace'}
+      return researchAction(grant.runId,id,req.args)
     }
     if (id === 'evidence.query' || id === 'evidence.lookup') {
       if (!deps.grants) return { ok: false, error: 'evidence requires run authorization' }

@@ -1,3 +1,4 @@
+import { launchOllamaResearch } from './ollamaResearchRun'
 import { launchLocalTeam } from './localTeamRun'
 import type { LocalTeamOptions } from '../runs/localTeamTask'
 import { app } from 'electron'
@@ -74,6 +75,7 @@ export interface RunSink {
 }
 
 export interface LaunchRunOptions {
+  research?: { recoveredFrom?: string }
   localTeam?: LocalTeamOptions
   runId: string
   prompt: string
@@ -127,6 +129,7 @@ export function resolveClaudeBinary(): string {
 }
 
 export async function launchRun(o: LaunchRunOptions): Promise<{ child: ChildProcess; checkpointId: string | null }> {
+    if (o.research) return launchOllamaResearch(o)
     if (o.localTeam) return launchLocalTeam(o)
     const { prompt, contextFiles, activeFile, safeMode, agent, resumeId, sink } = o
     const id = o.runId

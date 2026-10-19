@@ -32,6 +32,7 @@ export interface JobArtifact {
 }
 
 export interface BackgroundJob {
+  research?: { recoveredFrom?: string }
   localTeam?: LocalTeamOptions
   id: string
   /** A short human label — "Morning sift", or the prompt's first line. */
@@ -65,6 +66,7 @@ export interface BackgroundJob {
 }
 
 export interface JobInput {
+  research?: { recoveredFrom?: string }
   localTeam?: LocalTeamOptions
   prompt: string
   label?: string
@@ -117,7 +119,7 @@ export class RunQueue {
       if (!Array.isArray(parsed)) { if (this.opts.strictPersistence) throw new Error('Invalid queue file'); return }
       this.jobs = parsed
         .filter((j): j is BackgroundJob => typeof (j as BackgroundJob)?.id === 'string' && typeof (j as BackgroundJob)?.prompt === 'string')
-        .map((j) => ((j.status === 'running' || (j.localTeam && j.status === 'queued')) ? { ...j, status: 'interrupted' as const, finishedAt: j.finishedAt ?? this.now() } : j))
+        .map((j) => ((j.status === 'running' || ((j.localTeam || j.research) && j.status === 'queued')) ? { ...j, status: 'interrupted' as const, finishedAt: j.finishedAt ?? this.now() } : j))
     } catch {
       if (this.opts.strictPersistence && fs.existsSync(this.file)) throw new Error('Local queue cannot be read; preserve the file and recover it before running')
       this.jobs = []
@@ -167,6 +169,7 @@ export class RunQueue {
       id: `bg-${this.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
       label: (input.label ?? prompt.split('\n')[0]).trim().slice(0, 80) || 'Background run',
       prompt,
+      ...(input.research ? {research:input.research} : {}),
       ...(input.localTeam ? { localTeam: input.localTeam } : {}),
       agentName: input.agentName ?? null,
       origin: input.origin ?? 'background',
@@ -188,7 +191,7 @@ export class RunQueue {
     this.jobs = [job, ...this.jobs].slice(0, KEEP_MAX)
     this.save()
     this.emit('updated', job)
-    if (input.localTeam) this.flush(true)
+    if (input.localTeam || input.research) this.flush(true)
     void this.pump()
     return job
   }
@@ -237,7 +240,7 @@ export class RunQueue {
       if (!started) return
       this.emit('opened', started)
       try {
-        if (started.localTeam) this.flush(true)
+        if (started.localTeam || started.research) this.flush(true)
         const handle = await this.launch(started, this.sinkFor(started.id))
         if (this.get(started.id)?.status === 'running') this.live.set(started.id, handle)
         else handle.kill()

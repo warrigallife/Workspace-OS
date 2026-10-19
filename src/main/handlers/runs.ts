@@ -1,3 +1,6 @@
+import fs from 'fs'
+import { RESEARCH_TASK } from '../agent/ollamaResearchRun'
+import { RESEARCH_ROOT, runDirectory, safePath } from '../agent/researchScope'
 import { app, type IpcMain } from 'electron'
 import path from 'path'
 import { IPC } from '../ipc-channels'
@@ -38,7 +41,7 @@ let queue: RunQueue | null = null
 function getQueue(): RunQueue {
   if (!queue) {
     queue = new RunQueue(path.join(app.getPath('userData'), 'runs-queue.json'), launcher, {
-      concurrency: 2,
+      concurrency: 2, strictPersistence: true,
       onEvent: (ev) => {
         if (ev.type === 'output') sendToWindow(IPC.AGENT_OUTPUT, ev.job.id, ev.text ?? '')
         else {
@@ -56,6 +59,7 @@ async function launcher(job: BackgroundJob, sink: JobSink): Promise<{ kill: () =
   const routinePick = parseModelPick(agent?.model && isValidModelAlias(agent.model) ? agent.model : getDefaultAgentModel())
   const { child } = await launchRun({
     runId: job.id,
+    research: job.research,
     prompt: job.prompt,
     contextFiles: sanitizeContextFiles(job.contextFiles),
     activeFile: null,
@@ -119,6 +123,29 @@ export function shutdownRunQueue(): void {
 }
 
 export function registerRunsHandlers(ipcMain: IpcMain): void {
+  ipcHandle(ipcMain, IPC.RESEARCH_ENQUEUE, (event, previousId?: unknown) => {
+    assertMainFrame(event)
+    if (getWorkspaceRoot()!==RESEARCH_ROOT) throw new Error('Open the approved local workspace')
+    if (getQueue().list().some(j=>j.research && ['running','queued'].includes(j.status))) throw new Error('Wait for the active research run')
+    let recoveredFrom: string|undefined
+    if (previousId!==undefined) {
+      if (typeof previousId!=='string') throw new Error('Invalid retry')
+      const old=getQueue().get(previousId)
+      if (!old?.research || !['error','interrupted','cancelled'].includes(old.status)) throw new Error('Only incomplete research runs can be retried')
+      recoveredFrom=old.id
+    }
+    return getQueue().enqueue({prompt:RESEARCH_TASK,label:'JUFE local research: Dana → Nora',agentName:'Dana — JUFE Runtime Keeper',root:RESEARCH_ROOT,capabilities:[],research:{recoveredFrom}})
+  })
+  ipcHandle(ipcMain, IPC.RESEARCH_RESULT, (event,id: unknown) => {
+    assertMainFrame(event)
+    if(typeof id!=='string'||!getQueue().get(id)?.research)throw new Error('Unknown research run')
+    const dir=runDirectory(id)
+    return ['report.md','review.json','handover.md','state.json'].flatMap(name=>{
+      const file=path.join(dir,name);safePath(file)
+      return fs.existsSync(file)&&fs.statSync(file).size<=100000?[name+'\n'+fs.readFileSync(file,'utf8')]:[]
+    }).join('\n\n')
+  })
+
   ipcHandle(ipcMain, IPC.RUNS_ENQUEUE, (event, input: unknown) => {
     assertMainFrame(event)
     const i = (input ?? {}) as Record<string, unknown>

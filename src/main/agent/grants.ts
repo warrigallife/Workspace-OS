@@ -50,6 +50,7 @@ export type GrantScope = 'all' | ReadonlySet<string>
 
 export interface Grant {
   /** Runs stay bound to the workspace where they were launched. */
+  exactActions?: readonly string[]
   root?: string
   runId: string
   scope: GrantScope
@@ -86,6 +87,13 @@ export class GrantTable {
     const scope: GrantScope = capabilities === 'all' ? 'all' : prefixesFor(capabilities)
     this.byToken.set(token, { runId, scope, label, ...(root ? { root } : {}) })
     this.byRun.set(runId, token)
+    return token
+  }
+
+  /** Main-only ephemeral exact grants, never profile capabilities. */
+  issueExact(runId: string, actions: readonly string[], label: string, root: string): string {
+    const token=this.issue(runId, [], label, root)
+    this.byToken.get(token)!.exactActions=[...actions]
     return token
   }
 

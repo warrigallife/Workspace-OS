@@ -741,6 +741,10 @@ contextBridge.exposeInMainWorld('workspace', {
     },
   },
 
+  research: {
+    enqueue: (previousId?: string) => ipcRenderer.invoke(IPC.RESEARCH_ENQUEUE, previousId),
+    result: (id: string) => ipcRenderer.invoke(IPC.RESEARCH_RESULT, id),
+  },
   localTeam: {
     result: (id: string) => ipcRenderer.invoke(IPC.LOCAL_TEAM_RESULT, id),
     enqueue: (task: unknown) => ipcRenderer.invoke(IPC.LOCAL_TEAM_ENQUEUE, task),

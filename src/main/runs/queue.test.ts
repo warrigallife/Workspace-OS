@@ -142,3 +142,13 @@ it('refuses to overwrite a corrupt strict local queue', () => {
   expect(() => new RunQueue(file, fakeLauncher().launch, { strictPersistence:true })).toThrow(/cannot be read/)
   expect(fs.readFileSync(file,'utf8')).toBe('{broken')
 })
+
+describe('approved local research queue persistence',()=>{
+  it('persists research before launch and never auto-resumes queued/running research after restart',async()=>{
+    const f=fakeLauncher(),q=new RunQueue(file,f.launch,{concurrency:1,strictPersistence:true})
+    const a=q.enqueue({prompt:'research',research:{}}),b=q.enqueue({prompt:'research queued',research:{recoveredFrom:'old'}})
+    await tick();const saved=JSON.parse(fs.readFileSync(file,'utf8'));expect(saved.find((j:BackgroundJob)=>j.id===a.id).research).toEqual({})
+    const recovered=new RunQueue(file,f.launch,{strictPersistence:true});expect(recovered.get(a.id)?.status).toBe('interrupted');expect(recovered.get(b.id)?.status).toBe('interrupted')
+    q.cancel(a.id);expect(f.killed).toContain(a.id);q.shutdown();recovered.shutdown()
+  })
+})
