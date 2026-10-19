@@ -71,16 +71,39 @@ class Checks(unittest.TestCase):
         first=(saved/'bg-mvey334q-dwptl6/candidate.py').read_text()
         latest=(saved/'bg-mvey7aeh-dl4ln8/candidate.py').read_text()
         errors=r.POLICY.validate(first)
-        self.assertTrue(any(e['kind']=='CALL_POLICY' and 'seen.add' in e['message'] and e['line']==7 for e in errors))
+        self.assertEqual(errors,[]) # Approved exact-set operation; old failure artifacts remain unchanged.
         self.assertEqual(r.POLICY.validate(latest)[0]['kind'],'SYNTAX')
         self.assertEqual(r.POLICY.validate('print(1)')[0]['kind'],'FUNCTION_STRUCTURE')
         with patch.object(r.subprocess,'Popen') as process:
-            self.assertFalse(r.execute(first,[{'input':[],'expected':[]}])['executed'])
+            self.assertFalse(r.execute(latest,[{'input':[],'expected':[]}])['executed'])
             process.assert_not_called()
+
+    def test_exact_set_add_boundary(self):
+        code='def solve(value):\n    seen=set()\n    result=seen.add(value)\n    return [list(seen), result]'
+        self.assertTrue(r.execute(code,[{'input':3,'expected':[[3],None]}])['passed'])
+        for expression in ['[].add(1)','{}.add(1)','"x".add(1)','set.add(1)']:
+            code='def solve(value):\n    return '+expression
+            self.assertEqual(r.POLICY.validate(code),[])
+            result=r.execute(code,[{'input':0,'expected':None}])
+            self.assertFalse(result['passed']);self.assertIn('SET_ADD_RECEIVER',result['checks'][0]['error'])
+        for expression in ['set().add','set().add()','set().add(1,2)','set().add(item=1)',
+                           'set().add(*value)','set().add(**value)','set().remove(1)',
+                           '_checked_set_add(set(),1)','getattr(set(),"add")(1)']:
+            self.assertTrue(r.POLICY.validate('def solve(value):\n    return '+expression),expression)
+        class Pretender:
+            def add(self,item):raise AssertionError('Must not dispatch custom add')
+        class Subset(set):pass
+        for obj in [Pretender(),Subset()]:
+            with self.assertRaisesRegex(ValueError,'SET_ADD_RECEIVER'):r.POLICY._checked_set_add(obj,1)
+        # Side effects prove receiver and item expressions are each evaluated once.
+        code='def solve(value):\n    sets=[set()]\n    marks=[]\n    result=sets[marks.append(1) or 0].add(marks.append(2))\n    return [marks,len(sets[0]),result]'
+        self.assertTrue(r.execute(code,[{'input':0,'expected':[[1,2],1,None]}])['passed'])
+        code='def solve(value):\n    method=set().add\n    return method(value)'
+        self.assertTrue(r.POLICY.validate(code))
 
     def test_two_repairs_preserve_every_candidate(self):
         self.decision='approve';calls=[]
-        candidates=['l=[[];', 'def solve(value):\n    return set(value).add(1)', 'def solve(value):\n    return sum(value)']
+        candidates=['l=[[];', 'def solve(value):\n    return set(value).remove(1)', 'def solve(value):\n    return sum(value)']
         def model(stage,persona,prompt,directory=Path('.')):
             if stage!='specialist':return self.fixture(stage,persona,prompt,directory)
             code=candidates[len(calls)];calls.append(prompt)

@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "status": "completed",
+  "stage": "done",
+  "model": "llama3.2:latest",
+  "provider": "ollama-local",
+  "recoveredFrom": null,
+  "tasks": {
+    "execute": "task-1792399812390-p2s3nx",
+    "review": "task-1792399812450-ss86ff",
+    "handover": "task-1792399812508-oc5hfn"
+  },
+  "dependencies": {
+    "review": [
+      "task-1792399812390-p2s3nx"
+    ],
+    "handover": [
+      "task-1792399812450-ss86ff"
+    ]
+  },
+  "evidence": {
+    "candidate.py": "cbd186a21e08bfd1d0b4e3055b8a1010e018564d459699413875f9b0fc2f1539",
+    "validation.json": "776f29e8fc7c11c78afb0088f8f74e9d274c8c763c15f5ef9f431c8e333dd0bc",
+    "execution.json": "d245bffc229e609da63ed709730e05533cdf40f589525f1153a9b9af45cee840",
+    "specialist.raw.json": "9b3fb44d13b4fc5fa96a07b8249d57e3d7d0aa42cc7efa58984444a3741a77a6",
+    "attempts/attempt-0/attempt.json": "76995f1bb483c25092f6bdcd21d00f303cb2c16c78189dc571113ac3f67a9d3f",
+    "attempts/attempt-0/candidate.py": "cbd186a21e08bfd1d0b4e3055b8a1010e018564d459699413875f9b0fc2f1539",
+    "attempts/attempt-0/execution.json": "d245bffc229e609da63ed709730e05533cdf40f589525f1153a9b9af45cee840",
+    "attempts/attempt-0/specialist.json": "cd1771d349433f579641c800a80a726aec7125e167329235d71dd39a09fa40ba",
+    "attempts/attempt-0/specialist.prompt.txt": "c85ec8abce34fd0b1580923526902cf5905a7931cac3574816d8b59615169658",
+    "attempts/attempt-0/specialist.raw.json": "9b3fb44d13b4fc5fa96a07b8249d57e3d7d0aa42cc7efa58984444a3741a77a6",
+    "attempts/attempt-0/validation.json": "776f29e8fc7c11c78afb0088f8f74e9d274c8c763c15f5ef9f431c8e333dd0bc",
+    "review.json": "a3b6c1f50bd926e75e7b9dedaf7006d67a6fd0cc718fddbaeb5eb06767604aa4",
+    "review.raw.json": "f364847d65edcbb89caa69ede95124b7bc8ca4c033f1bbdb8740b46b50c10d94",
+    "handover.md": "53bbcae10901d8ef701162ab8ad43ef3941300ea7bef71ee25a272ceaedb4dad",
+    "handover.json": "55fef1611d074a756128033e4e861516cdb67befd11786c76f05285bd445784b",
+    "handover.raw.json": "fabc5178e3672296fd9aa3859278c56de1a9968b47f45bc715ae780d340ee58f"
+  },
+  "model_digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+  "environment_keys": [
+    "HOME",
+    "LANG",
+    "PATH",
+    "PYTHONDONTWRITEBYTECODE",
+    "__CF_USER_TEXT_ENCODING"
+  ],
+  "worker_permissions": {
+    "specialist": "candidate text only; generated function in Seatbelt",
+    "reviewer": "evidence input only; no tools",
+    "continuity": "evidence input only; no tools"
+  },
+  "attempts": [
+    {
+      "number": 0,
+      "directory": "attempts/attempt-0",
+      "status": "passed",
+      "diagnostics": []
+    }
+  ],
+  "accepted_attempt": 0
+}

@@ -6,14 +6,14 @@ import os from 'node:os'
 import assert from 'node:assert/strict'
 import {createHash} from 'node:crypto'
 const root=process.cwd(),data=path.join(root,'.workspace-os/liam-app-data'),base=path.join(data,'local-team')
-const ids=['bg-mvey334q-dwptl6','bg-mvey7aeh-dl4ln8']
+const ids=['bg-mvey334q-dwptl6','bg-mvey7aeh-dl4ln8','bg-mvezq8gz-aqya3i']
 const inputs=ids.map(id=>JSON.parse(fs.readFileSync(path.join(base,id,'input.json'))))
 const task=inputs[0].task
 assert.deepEqual(task.cases,inputs[1].task.cases);assert.equal(task.cases.length,4)
 const digest=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex')
 function inventory(dir){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?inventory(path.join(dir,e.name)):[path.join(dir,e.name)])}
 const originals=Object.fromEntries(ids.flatMap(id=>inventory(path.join(base,id))).map(p=>[p,digest(p)]))
-const target=path.join(root,'docs/local-team/duplicate-removal-verification');fs.mkdirSync(target,{recursive:true})
+const target=path.join(root,'docs/local-team/set-add-verification');fs.mkdirSync(target,{recursive:false})
 fs.writeFileSync(path.join(target,'original-task.json'),JSON.stringify(task,null,2)+'\n')
 let app
 try {

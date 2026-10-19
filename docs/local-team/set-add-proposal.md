@@ -1,6 +1,6 @@
-# Proposed restricted set.add support — awaiting approval
+# Restricted set.add proposal — subsequently approved
 
-No runtime permission change has been applied. Parent implementation checkpoint: `f8a9dae`.
+Historical proposal from checkpoint `d2beeba`, based on `f8a9dae`. The user subsequently approved exactly this boundary; see implementation-log.md for implementation and verification. The remaining sections preserve the proposal as written.
 
 ## Diagnosis
 

@@ -27,12 +27,30 @@ def policy_prompt():
             "no annotations, defaults, decorators, nested functions or top-level expressions.\n"
             "Callable builtins: " + ', '.join(sorted(SAFE)) + ".\n"
             "Permitted methods: " + ', '.join(sorted(METHODS)) + ". No other calls or attributes. "
-            "In particular .add(), .remove(), .sort(), dict.fromkeys(), print(), imports and recursion are denied. "
-            "set() is available but set.add() is not. List membership (in/not in) and list.append() are available.\n"
+            "In particular .remove(), .sort(), dict.fromkeys(), print(), imports and recursion are denied. "
+            "Special case: receiver.add(item) is allowed ONLY on an exact builtin set, with one positional argument and no keywords or starred arguments. Extracting .add as a value is denied. List membership (in/not in) and list.append() are available.\n"
             "Permitted AST constructs/operators: " + ', '.join(n.__name__ for n in ALLOWED) + ".\n"
             "Names starting with _ and assignments to builtin names are denied. Maximum 12000 source characters / 500 AST nodes. "
             "No while, try, with, classes, lambda, I/O or shell. Do not output JavaScript/C braces or pseudocode. "
             "Return a JSON object with one code string containing the entire function, using normal newline escaping.")
+
+def is_set_add_call(node):
+    return (isinstance(node,ast.Call) and isinstance(node.func,ast.Attribute)
+            and node.func.attr=='add' and len(node.args)==1
+            and not isinstance(node.args[0],ast.Starred) and not node.keywords)
+
+def _checked_set_add(receiver, item):
+    if type(receiver) is not set:
+        raise ValueError('SET_ADD_RECEIVER: .add requires an exact builtin set')
+    return set.add(receiver,item)
+
+class _SetAddTransformer(ast.NodeTransformer):
+    def visit_Call(self,node):
+        node=self.generic_visit(node)
+        if is_set_add_call(node):
+            return ast.copy_location(ast.Call(func=ast.Name(id='_checked_set_add',ctx=ast.Load()),
+                                               args=[node.func.value,node.args[0]],keywords=[]),node)
+        return node
 
 def validate(code):
     def diagnostic(kind, message, node=None, line=None, column=None):
@@ -50,14 +68,15 @@ def validate(code):
     fn=tree.body[0]
     if fn.name!='solve' or fn.decorator_list or fn.returns or fn.args.defaults or fn.args.kw_defaults or fn.args.vararg or fn.args.kwarg or fn.args.kwonlyargs or fn.args.posonlyargs or len(fn.args.args)!=1 or fn.args.args[0].annotation:
         return [diagnostic('FUNCTION_STRUCTURE','Expected solve with one positional argument, no annotations/defaults/decorators',fn)]
+    approved_add_attributes={id(n.func) for n in ast.walk(tree) if is_set_add_call(n)}
     errors=[]
     for n in ast.walk(tree):
         kind=message=None
         if not isinstance(n,ALLOWED):kind,message='SYNTAX_POLICY','Unsupported Python construct: '+type(n).__name__
         elif isinstance(n,ast.FunctionDef) and n is not fn:kind,message='FUNCTION_STRUCTURE','Nested functions denied'
         elif isinstance(n,ast.Name) and (n.id.startswith('_') or isinstance(n.ctx,ast.Store) and n.id in SAFE):kind,message='NAME_POLICY','Reserved name: '+n.id
-        elif isinstance(n,ast.Attribute) and n.attr not in METHODS:kind,message='ATTRIBUTE_POLICY','Attribute denied: .'+n.attr
-        elif isinstance(n,ast.Call) and not (isinstance(n.func,ast.Name) and n.func.id in SAFE or isinstance(n.func,ast.Attribute) and n.func.attr in METHODS):
+        elif isinstance(n,ast.Attribute) and n.attr not in METHODS and id(n) not in approved_add_attributes:kind,message='ATTRIBUTE_POLICY','Attribute denied: .'+n.attr
+        elif isinstance(n,ast.Call) and not (is_set_add_call(n) or isinstance(n.func,ast.Name) and n.func.id in SAFE or isinstance(n.func,ast.Attribute) and n.func.attr in METHODS):
             kind,message='CALL_POLICY','Call denied: '+ast.unparse(n.func)+'; permitted builtins: '+', '.join(sorted(SAFE))+'; methods: '+', '.join(sorted(METHODS))
         if kind:errors.append(diagnostic(kind,message,n))
         if len(errors)>=8:break
@@ -69,8 +88,9 @@ def validate(code):
 def evaluate(code, value):
     errors=validate(code)
     if errors:raise CandidateInvalid(errors)
-    scope={'__builtins__':SAFE}
-    exec(compile(code,'<candidate>','exec'),scope)
+    tree=ast.fix_missing_locations(_SetAddTransformer().visit(ast.parse(code)))
+    scope={'__builtins__':SAFE,'_checked_set_add':_checked_set_add}
+    exec(compile(tree,'<candidate>','exec'),scope)
     return scope['solve'](value)
 
 if __name__ == '__main__':

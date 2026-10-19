@@ -1,0 +1,44 @@
+test_approved_evidence_and_handover (__main__.Checks.test_approved_evidence_and_handover) ... Candidate 1/3: initial generation
+COMPLETED: executed checks passed, Nora approved, handover saved.
+ok
+test_denied_generated_code (__main__.Checks.test_denied_generated_code) ... ok
+test_exact_set_add_boundary (__main__.Checks.test_exact_set_add_boundary) ... ok
+test_execution_and_independent_failure (__main__.Checks.test_execution_and_independent_failure) ... ok
+test_failure_blocks_review (__main__.Checks.test_failure_blocks_review) ... Candidate 1/3: initial generation
+Validation/execution diagnostics: [{"kind": "EXECUTION_CHECKS", "message": "Actual execution failed unchanged independent checks", "checks": [{"input": [1, 2, 3], "expected": 7, "actual": 6, "exit_code": 0, "passed": false, "error": ""}]}]
+Candidate 2/3: local repair 1/2
+Validation/execution diagnostics: [{"kind": "EXECUTION_CHECKS", "message": "Actual execution failed unchanged independent checks", "checks": [{"input": [1, 2, 3], "expected": 7, "actual": 6, "exit_code": 0, "passed": false, "error": ""}]}]
+Candidate 3/3: local repair 2/2
+Validation/execution diagnostics: [{"kind": "EXECUTION_CHECKS", "message": "Actual execution failed unchanged independent checks", "checks": [{"input": [1, 2, 3], "expected": 7, "actual": 6, "exit_code": 0, "passed": false, "error": ""}]}]
+FAILED: Initial candidate and two local repairs failed; stopping. [{"kind": "EXECUTION_CHECKS", "message": "Actual execution failed unchanged independent checks", "checks": [{"input": [1, 2, 3], "expected": 7, "actual": 6, "exit_code": 0, "passed": false, "error": ""}]}]
+ok
+test_os_boundary_not_just_ast (__main__.Checks.test_os_boundary_not_just_ast) ... ok
+test_precise_saved_failure_diagnostics (__main__.Checks.test_precise_saved_failure_diagnostics) ... ok
+test_repair_budget_and_cancellation (__main__.Checks.test_repair_budget_and_cancellation) ... Candidate 1/3: initial generation
+Validation/execution diagnostics: [{"kind": "FUNCTION_STRUCTURE", "message": "Exactly one top-level def solve(value) is required", "line": null, "column": null}]
+Candidate 2/3: local repair 1/2
+Validation/execution diagnostics: [{"kind": "FUNCTION_STRUCTURE", "message": "Exactly one top-level def solve(value) is required", "line": null, "column": null}]
+Candidate 3/3: local repair 2/2
+Validation/execution diagnostics: [{"kind": "FUNCTION_STRUCTURE", "message": "Exactly one top-level def solve(value) is required", "line": null, "column": null}]
+FAILED: Initial candidate and two local repairs failed; stopping. [{"kind": "FUNCTION_STRUCTURE", "message": "Exactly one top-level def solve(value) is required", "line": null, "column": null}]
+Candidate 1/3: initial generation
+CANCELLED: Cancelled
+ok
+test_review_rejection_blocks_handover (__main__.Checks.test_review_rejection_blocks_handover) ... Candidate 1/3: initial generation
+REJECTED: Reviewer rejected: Fixture independent review
+ok
+test_ruflo_persistence (__main__.Checks.test_ruflo_persistence) ... ok
+test_two_repairs_preserve_every_candidate (__main__.Checks.test_two_repairs_preserve_every_candidate) ... Candidate 1/3: initial generation
+Validation/execution diagnostics: [{"kind": "SYNTAX", "message": "invalid syntax; supply a complete valid Python def solve(value).", "line": 1, "column": 6}]
+Candidate 2/3: local repair 1/2
+Validation/execution diagnostics: [{"kind": "CALL_POLICY", "message": "Call denied: set(value).remove; permitted builtins: abs, all, any, bool, dict, enumerate, float, int, len, list, max, min, range, reversed, round, set, sorted, str, sum, tuple, zip; methods: append, count, endswith, get, isalnum, isalpha, isdigit, items, join, keys, lower, replace, split, startswith, strip, upper, values", "line": 2, "column": 12}, {"kind": "ATTRIBUTE_POLICY", "message": "Attribute denied: .remove", "line": 2, "column": 12}]
+Candidate 3/3: local repair 2/2
+COMPLETED: executed checks passed, Nora approved, handover saved.
+ok
+test_unavailable_model_no_fallback (__main__.Checks.test_unavailable_model_no_fallback) ... FAILED: Required installed local model digest unavailable; no pull or fallback
+ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 4.423s
+
+OK
