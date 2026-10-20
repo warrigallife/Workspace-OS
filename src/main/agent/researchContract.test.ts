@@ -1,5 +1,6 @@
+import fs from 'fs'
 import {it,expect} from 'vitest'
-import {LIMITS,researchTools,textErrors,fieldErrors} from './researchContract'
+import {LIMITS,providerOutputSchema,researchTools,textErrors,fieldErrors} from './researchContract'
 it('advertises the same text bounds used by validation and hides save during retrieval',()=>{
  const sources={first:{lines:Array(160)},second:{lines:Array(212)}}
  expect(researchTools('dana',sources,false).map((t:any)=>t.function.name)).toEqual(['lookup'])
@@ -11,4 +12,23 @@ it('advertises the same text bounds used by validation and hides save during ret
  expect(draft.function.parameters.properties.findings).toMatchObject({minItems:3,maxItems:8})
  expect((researchTools('dana',sources,false)[0] as any).function.parameters.properties.record_id.enum).toEqual(['first','second'])
  expect(fieldErrors({findings:[],statement:'bad'},['findings','limitations'],'save')).toEqual(['save.limitations: required','save.statement: unexpected field'])
+})
+
+it('projects the preserved HTTP-400 schema without repetition bounds or mutating acceptance requirements',()=>{
+ const saved=JSON.parse(fs.readFileSync('docs/jufe-route-assessment/structured-finalisation-verification/event-007.json','utf8')).data.format
+ const original=JSON.stringify(saved)
+ expect(saved.properties.findings).toMatchObject({minItems:3,maxItems:8})
+ expect(saved.properties.findings.items.properties.statement.maxLength).toBe(2000)
+ const projected=providerOutputSchema(saved)
+ expect(JSON.stringify(projected)).not.toMatch(/"(minLength|maxLength|minItems|maxItems|minimum|maximum)":/)
+ expect(projected.properties.findings.items.properties.citation.properties.record_id.enum).toEqual(['jufe-coverage-2026-10-11','jufe-schedule-2026-10-11'])
+ expect(projected.required).toEqual(saved.required)
+ expect(projected.additionalProperties).toBe(false)
+ expect(projected.properties.findings.items.required).toEqual(['statement','citation'])
+ expect(JSON.stringify(saved)).toBe(original)
+ const sources={'jufe-coverage-2026-10-11':{lines:Array(160)},'jufe-schedule-2026-10-11':{lines:Array(212)}}
+ expect((researchTools('dana',sources,true)[1] as any).function.parameters).toEqual(saved)
+ const review=providerOutputSchema((researchTools('nora',sources,true)[1] as any).function.parameters)
+ expect(review.properties.decision.enum).toEqual(['approve','reject'])
+ expect(review.properties.reason).toEqual({type:'string'})
 })

@@ -38,7 +38,7 @@ it('offers lookup only until BOTH reads succeed, then independently gates Nora a
  })
  await launchOllamaResearch(options);expect(await result).toBe(0)
  const names=(i:number)=>requests[i].tools.map((t:any)=>t.function.name)
- expect(names(0)).toEqual(['lookup']);expect(names(1)).toEqual(['lookup']);expect(names(2)).toEqual(['lookup']);expect(requests[3].tools).toBeUndefined();expect(requests[3].format.required).toEqual(['findings','limitations'])
+ expect(names(0)).toEqual(['lookup']);expect(names(1)).toEqual(['lookup']);expect(names(2)).toEqual(['lookup']);expect(requests[3].tools).toBeUndefined();expect(requests[3].format.required).toEqual(['findings','limitations']);expect(requests[3].format.properties.findings.maxItems).toBeUndefined();expect(requests[3].messages.at(-1).content).toContain('\"maxItems\":8')
  expect(names(4)).toEqual(['lookup']);expect(names(5)).toEqual(['lookup']);expect(requests[6].tools).toBeUndefined();expect(requests[6].format.required).toContain('decision')
  expect(requests[1].messages.at(-1).role).toBe('tool');expect(requests[1].messages.at(-1).content).toContain('not independently retrieved')
  expect(requests[0].messages[0].content).toContain('suspend the persona requirements to check Git status')

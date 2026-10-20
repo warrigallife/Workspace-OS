@@ -1,0 +1,10 @@
+{
+  "check-ui.mjs": "9eaf854e27beec82d09fb0ab1ba4b646baca5c0e3916a0fdd2039cd2fba31de1",
+  "researchContract.ts": "9a1bc397d4f97e318d2a0a3845fc28b70338d35f817ec1e09baa8076a782828c",
+  "ollamaResearchRun.ts": "93daf830ecf29bbc83f717b57aaba533e4f399bd70b07abe5596e49f09f23bf3",
+  "researchContract.test.ts": "c8e2980130966998027dd505cd084fbb77e174eb34b0c15041db7255b6c653d9",
+  "ollamaResearchRun.test.ts": "2ff4bacf81061f7063f7281fbffd12ef6c09aee77175b52d9204d38820ef2606",
+  "README.md": "aaf6d3b1a2d69eb7fb1f3af7cc16bfc18815fc44c705a702bbdaeb6519d085b6",
+  "implementation-log.md": "77ba715cd09be8ce4a0d18a1a0f9545ac12321f181658e3df395d6e17190e6ba",
+  "researchScope.test.ts": "e7d2fb62658741a53da18f6fdfb4ff6b46ec3b06fa70cecaf4aa71503a59329e"
+}

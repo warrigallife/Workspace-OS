@@ -1,4 +1,4 @@
-import { researchTools } from './researchContract'
+import { researchTools, providerOutputSchema } from './researchContract'
 /** Bounded local provider adapter; existing queue, profiles, bridge and checkpoints own the run. */
 import fs from 'fs'
 import path from 'path'
@@ -45,9 +45,10 @@ export async function launchOllamaResearch(o:LaunchRunOptions):Promise<{child:Ch
         const ready=scope.missingRecords(role).length===0 && (role==='dana'||scope.draft!.findings.every(f=>scope.reads.nora.some(r=>r.record_id===f.citation.record_id&&r.start_line<=f.citation.start_line&&r.end_line>=f.citation.end_line)))
         const offeredTools=researchTools(role,scope.sources,false)
         const schema=ready?(researchTools(role,scope.sources,true)[1] as any).function.parameters:undefined
+        const format=ready?providerOutputSchema(schema):undefined
         const requestMessages=ready?[...messages,{role:'user',content:'Retrieval prerequisites are satisfied. Return ONLY the JSON object matching this schema: '+JSON.stringify(schema)+'. Use only the actual retrieved evidence. This is '+(role==='dana'?'the cited draft':'your independent review verdict')+'; trusted code will validate and save it. No tool calls or Markdown fences.'}]:messages
-        record('request',{role,step,messages:requestMessages,...(ready?{format:schema}:{tools:offeredTools})})
-        const response=await localOllama('/api/chat',{model:MODEL,messages:requestMessages,...(ready?{format:schema}:{tools:offeredTools}),stream:false,options:{temperature:0,num_ctx:16384,num_predict:2048},keep_alive:'2m'},controller.signal)
+        record('request',{role,step,messages:requestMessages,...(ready?{format}:{tools:offeredTools})})
+        const response=await localOllama('/api/chat',{model:MODEL,messages:requestMessages,...(ready?{format}:{tools:offeredTools}),stream:false,options:{temperature:0,num_ctx:16384,num_predict:2048},keep_alive:'2m'},controller.signal)
         turns++;record('response',{role,step,response})
         if(!response.done||response.done_reason==='length'||!response.message)throw new Error('Incomplete local response')
         const message=response.message;messages.push(message)

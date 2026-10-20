@@ -37,3 +37,14 @@ describe('approved research scope',()=>{
    expect(()=>scope.save('dana',{findings:draft.findings})).toThrow('save.limitations: required')
    expect(()=>scope.save('dana',{...draft,findings:[{...draft.findings[0],statement:'short'},...draft.findings.slice(1)]})).toThrow('save.findings[0].statement')
  })
+
+it('retains all acceptance bounds removed only from provider grammar',()=>{
+ const {scope}=fixture();read(scope,'dana')
+ for(const n of [2,9])expect(()=>scope.save('dana',{...draft,findings:Array(n).fill(draft.findings[0])})).toThrow('3–8 findings')
+ for(const n of [19,2001])expect(()=>scope.save('dana',{...draft,limitations:'x'.repeat(n)})).toThrow('save.limitations')
+ for(const n of [9,2001])expect(()=>scope.save('dana',{...draft,findings:[{...draft.findings[0],statement:'x'.repeat(n)},...draft.findings.slice(1)]})).toThrow('statement')
+ for(const n of [11,2001])expect(()=>scope.checkCitation({...citations[0],quote:'x'.repeat(n)},'dana')).toThrow('citation.quote')
+ scope.save('dana',draft);read(scope,'nora')
+ for(const n of [19,4001])expect(()=>scope.save('nora',{decision:'approve',checked_citations:[0,1,2],reason:'x'.repeat(n)})).toThrow('save.reason')
+ expect(scope.review).toBeUndefined()
+})

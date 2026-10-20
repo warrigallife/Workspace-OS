@@ -17,3 +17,14 @@ export function researchTools(role:'dana'|'nora',sources:Record<string,{lines:st
   if(!saveEnabled)return [lookup]
   return [lookup,{type:'function',function:{name:'save',description:role==='dana'?'Save 3–8 cited findings and limitations. Cite BOTH records; quotes must exactly match your lookups.':'Save independent review after retrieving both records. Approval requires separately retrieving every draft citation range and checking its meaning.',parameters:role==='dana'?{type:'object',properties:{findings:{type:'array',minItems:LIMITS.findings[0],maxItems:LIMITS.findings[1],items:{type:'object',properties:{statement:text(LIMITS.statement),citation},required:['statement','citation'],additionalProperties:false}},limitations:text(LIMITS.limitations)},required:['findings','limitations'],additionalProperties:false}:{type:'object',properties:{decision:{type:'string',enum:['approve','reject']},reason:text(LIMITS.reason),checked_citations:{type:'array',items:{type:'integer'},description:'On approval, exactly all zero-based draft finding indices, each once; every cited range must have been independently retrieved.'}},required:['decision','reason','checked_citations'],additionalProperties:false}}}]
 }
+
+/** Provider grammar only. Bounded repetitions expand explosively in the installed
+ * Ollama grammar compiler. Keep structural constraints here; all numeric/text/
+ * count bounds remain in the full prompt schema and trusted save validation. */
+export function providerOutputSchema(schema: unknown): any {
+  if (Array.isArray(schema)) return schema.map(providerOutputSchema)
+  if (!schema || typeof schema !== 'object') return schema
+  return Object.fromEntries(Object.entries(schema).filter(([key])=>
+    !['minLength','maxLength','minItems','maxItems','minimum','maximum'].includes(key)
+  ).map(([key,value])=>[key,providerOutputSchema(value)]))
+}

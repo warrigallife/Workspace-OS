@@ -1,0 +1,9 @@
+{
+  "runtime": "Electron-compatible Node",
+  "testsPassed": 122,
+  "testFilesPassed": 9,
+  "typecheck": "passed unchanged baseline: 70 diagnostics versus 75",
+  "build": "Desktop launcher successfully rebuilt and opened real UI",
+  "liveAttempts": 1,
+  "outcome": "provider grammar accepted; response hit 2048-token limit; no draft or review"
+}
