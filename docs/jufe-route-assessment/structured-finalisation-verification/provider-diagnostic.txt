@@ -1,0 +1,4 @@
+parse: error parsing grammar: number of rules that are going to be repeated multiplied by the new repetition exceeds sane defaults, please reduce the number of repetitions or rule complexity
+failed to parse grammar
+srv    send_error: task id = 134, error: Failed to initialize samplers: failed to parse grammar
+[GIN] 2026/10/19 - 17:49:53 | 400 |    46.53525ms |       127.0.0.1 | POST     "/api/chat"

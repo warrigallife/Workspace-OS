@@ -34,13 +34,27 @@ it('offers lookup only until BOTH reads succeed, then independently gates Nora a
    if(route==='/api/tags')return tags
    requests.push(JSON.parse(JSON.stringify(body)))
    const [name,args]=plans[turn++]
-   return {done:true,message:{role:'assistant',content:'',tool_calls:[{function:{name,arguments:args}}]}}
+   return body.format?{done:true,message:{role:'assistant',content:JSON.stringify(args)}}:{done:true,message:{role:'assistant',content:'',tool_calls:[{function:{name,arguments:args}}]}}
  })
  await launchOllamaResearch(options);expect(await result).toBe(0)
  const names=(i:number)=>requests[i].tools.map((t:any)=>t.function.name)
- expect(names(0)).toEqual(['lookup']);expect(names(1)).toEqual(['lookup']);expect(names(2)).toEqual(['lookup']);expect(names(3)).toEqual(['lookup','save'])
- expect(names(4)).toEqual(['lookup']);expect(names(5)).toEqual(['lookup']);expect(names(6)).toEqual(['lookup','save'])
+ expect(names(0)).toEqual(['lookup']);expect(names(1)).toEqual(['lookup']);expect(names(2)).toEqual(['lookup']);expect(requests[3].tools).toBeUndefined();expect(requests[3].format.required).toEqual(['findings','limitations'])
+ expect(names(4)).toEqual(['lookup']);expect(names(5)).toEqual(['lookup']);expect(requests[6].tools).toBeUndefined();expect(requests[6].format.required).toContain('decision')
  expect(requests[1].messages.at(-1).role).toBe('tool');expect(requests[1].messages.at(-1).content).toContain('not independently retrieved')
  expect(requests[0].messages[0].content).toContain('suspend the persona requirements to check Git status')
  const state=JSON.parse(fs.readFileSync(path.join(mock.directory,'state.json'),'utf8'));expect(state.status).toBe('completed');expect(state.reads.nora.length).toBe(2)
+})
+
+it.each([
+ ['invalid JSON','not JSON','invalid JSON'],
+ ['invalid fields',JSON.stringify({findings:[],limitations:'short'}),'save.findings'],
+ ['invented quotes',JSON.stringify({findings:['jufe-coverage-2026-10-11','jufe-schedule-2026-10-11','jufe-coverage-2026-10-11'].map(record_id=>({statement:'An unsupported fixture statement.',citation:{record_id,start_line:1,end_line:1,quote:'This quotation does not exist in either source.'}})),limitations:'Only dated records were inspected.'}),'match source verbatim'],
+])('rejects structured %s without starting review',async(_label,content,error)=>{
+ const {options,result}=setup()
+ mock.request.mockResolvedValueOnce(tags).mockResolvedValueOnce({done:true,message:{role:'assistant',tool_calls:['jufe-coverage-2026-10-11','jufe-schedule-2026-10-11'].map(record_id=>({function:{name:'lookup',arguments:{record_id,start_line:1,end_line:1}}}))}}).mockResolvedValueOnce({done:true,message:{role:'assistant',content}})
+ await launchOllamaResearch(options);expect(await result).toBe(1)
+ expect(mock.request).toHaveBeenCalledTimes(3)
+ const state=JSON.parse(fs.readFileSync(path.join(mock.directory,'state.json'),'utf8'))
+ expect(state.stage).toBe('dana');expect(state.error).toContain(error)
+ expect(fs.existsSync(path.join(mock.directory,'report.md'))).toBe(false);expect(grants.size()).toBe(0)
 })

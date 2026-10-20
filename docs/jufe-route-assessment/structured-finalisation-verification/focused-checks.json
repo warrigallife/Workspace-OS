@@ -1,0 +1,11 @@
+{
+  "electronCompatible": true,
+  "adapterScopeContractBridgeGrants": 31,
+  "queue": 11,
+  "liamAda": 78,
+  "totalPassed": 120,
+  "typecheck": "passed unchanged baseline: 70 known diagnostics, baseline 75",
+  "build": "Desktop launcher built successfully and real UI opened",
+  "liveAttempts": 1,
+  "liveResult": "failed: Ollama schema grammar repetition complexity limit; no structured response or review"
+}
