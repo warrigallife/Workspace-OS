@@ -7,8 +7,8 @@ import fs from 'fs'
 import path from 'path'
 const root=path.join(process.cwd(),'docs/jufe-route-assessment/native-host-boundary')
 const evidence=JSON.parse(fs.readFileSync(path.join(root,'installed-control-evidence.json'),'utf8'))
-it('pins existing route identifiers without default, fallback or model probing',()=>{
- expect(RESEARCH_ROUTES).toEqual({dana:{provider:'claude',model:'claude-sonnet-5'},nora:{provider:'codex',model:'gpt-5.6-terra'}})
+it('pins workflow-only Claude routes without default, fallback or model probing',()=>{
+ expect(RESEARCH_ROUTES).toEqual({dana:{provider:'claude',model:'claude-sonnet-5'},nora:{provider:'claude',model:'claude-sonnet-5'}})
  expect(unexpected).not.toHaveBeenCalled()
 })
 it('Claude native plan uses documented exclusion controls, not Safe mode alone',()=>{
@@ -26,12 +26,12 @@ it('Codex schema establishes narrower controls, not a blanket native tool allowl
  expect(evidence.thread_start_controls.dynamicTools.items.$ref).toContain('DynamicToolSpec')
  expect(Object.keys(evidence.config_tools_type.properties)).toEqual(['web_search'])
  expect(evidence.thread_start_response_fields).not.toContain('tools')
- expect(restrictedHostPlan('nora')).toMatchObject({status:'blocked',thread:{environments:[],dynamicTools:[],sandbox:'read-only',approvalPolicy:'never',allowProviderModelFallback:false}})
+ expect(restrictedHostPlan('nora').args).toEqual(restrictedHostPlan('dana').args)
 })
-it('fails technical preflight before either role; approval cannot stand in for restrictions',()=>{
+it('keeps live execution locked before either role; no provider process starts',()=>{
  for(const check of [assertRestrictedNativeHosts,assertRestrictedLiveApproved]) {
   try { check(); throw new Error('Expected fail-closed check') }
-  catch(e) {expect(e).toMatchObject({name:'NativeResearchBoundaryError',code:'NATIVE_TOOL_EXCLUSION_UNESTABLISHED',provider:'codex'});expect((e as Error).message).toContain('locked')}
+  catch(e) {expect(e).toMatchObject({name:'NativeResearchBoundaryError',code:'RESEARCH_LIVE_NOT_APPROVED'});expect((e as Error).message).toContain('locked')}
  }
  expect(unexpected).not.toHaveBeenCalled()
  expect(evidence).toMatchObject({inference_calls:0,provider_sessions_started:0,research_content_transmitted:false})

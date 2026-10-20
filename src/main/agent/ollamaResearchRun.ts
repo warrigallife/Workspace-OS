@@ -1,3 +1,4 @@
+import { createClaudeResearchDriver } from './providers/claudeResearch'
 import { RESEARCH_ROUTES, RESEARCH_BUDGET, assertRestrictedLiveApproved, withResearchAbort, validateRestriction, type ResearchDriver, type ResearchSession } from './researchProvider'
 import { researchLedger, type ResearchLedger } from './researchLedger'
 import { researchTools, providerOutputSchema } from './researchContract'
@@ -19,7 +20,10 @@ const MODEL='llama3.2:latest'
 const DIGEST='a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72'
 export async function launchOllamaResearch(o:LaunchRunOptions):Promise<{child:ChildProcess;checkpointId:string|null}> {
   if(o.research?.providerMode && !['ollama-local','restricted-hosts'].includes(o.research.providerMode))throw new Error('Unknown research provider mode')
-  if (o.research?.providerMode === 'restricted-hosts') assertRestrictedLiveApproved()
+  if (o.research?.providerMode === 'restricted-hosts') {
+    assertRestrictedLiveApproved()
+    return launchResearchWithDriver(o, createClaudeResearchDriver({directory:runDirectory(o.runId)}))
+  }
   return launchResearchWithDriver(o, {
     kind: 'ollama-local',
     async preflight(signal) {

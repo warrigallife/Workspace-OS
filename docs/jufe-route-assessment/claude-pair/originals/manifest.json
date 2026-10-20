@@ -1,0 +1,32 @@
+[
+  {
+    "path": "src/main/agent/researchProvider.ts",
+    "copy": "src/main/agent/researchProvider.ts",
+    "sha256": "cdb076b95e0d798f462de5fc73db4bcc41a711d6373ec9077c0c57d7c989e34f"
+  },
+  {
+    "path": "src/main/agent/ollamaResearchRun.ts",
+    "copy": "src/main/agent/ollamaResearchRun.ts",
+    "sha256": "29370a7e912573eff6a492bd75365851c701f6ee55e0878e43ccdb2a41497623"
+  },
+  {
+    "path": "src/main/agent/restrictedResearch.test.ts",
+    "copy": "src/main/agent/restrictedResearch.test.ts.snapshot",
+    "sha256": "8949b207060eaabcbc6c0996830e135d697f0d72091224124ab2b945e208d2d6"
+  },
+  {
+    "path": "src/main/agent/nativeResearchBoundary.test.ts",
+    "copy": "src/main/agent/nativeResearchBoundary.test.ts.snapshot",
+    "sha256": "cad4f64d1bf0abb55ba0c610f8cfb82f173b8e2b420d558c386e37be8a046fb7"
+  },
+  {
+    "path": "docs/local-team/implementation-log.md",
+    "copy": "docs/local-team/implementation-log.md",
+    "sha256": "105a9b25a4d9047a1f9d8505fd8cb870aa4bbef5f2a8ceaf4bbfa95eed8d0af9"
+  },
+  {
+    "path": "docs/jufe-route-assessment/restricted-provider-connection/handover.md",
+    "copy": "docs/jufe-route-assessment/restricted-provider-connection/handover.md",
+    "sha256": "34214871dea481b8ce26f10221bdf4e11ceb46dcb779ad63eec5c51dc5d4d388"
+  }
+]

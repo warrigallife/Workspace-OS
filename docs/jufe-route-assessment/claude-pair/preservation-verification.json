@@ -1,0 +1,54 @@
+[
+  {
+    "path": "docs/jufe-route-assessment/claude-pair/originals/src/main/agent/researchProvider.ts",
+    "verified": true
+  },
+  {
+    "path": "docs/jufe-route-assessment/claude-pair/originals/src/main/agent/ollamaResearchRun.ts",
+    "verified": true
+  },
+  {
+    "path": "docs/jufe-route-assessment/claude-pair/originals/src/main/agent/restrictedResearch.test.ts.snapshot",
+    "verified": true
+  },
+  {
+    "path": "docs/jufe-route-assessment/claude-pair/originals/src/main/agent/nativeResearchBoundary.test.ts.snapshot",
+    "verified": true
+  },
+  {
+    "path": "docs/jufe-route-assessment/claude-pair/originals/docs/local-team/implementation-log.md",
+    "verified": true
+  },
+  {
+    "path": "docs/jufe-route-assessment/claude-pair/originals/docs/jufe-route-assessment/restricted-provider-connection/handover.md",
+    "verified": true
+  },
+  {
+    "path": "src/main/agent/researchScope.ts",
+    "verified": true
+  },
+  {
+    "path": "src/main/agent/researchContract.ts",
+    "verified": true
+  },
+  {
+    "path": "src/main/agent/grants.ts",
+    "verified": true
+  },
+  {
+    "path": "src/main/agent-permissions.ts",
+    "verified": true
+  },
+  {
+    "path": "/Users/liammcilmurray/.claude/agents/dana-jufe-runtime-keeper.md",
+    "verified": true
+  },
+  {
+    "path": "/Users/liammcilmurray/.claude/agents/nora-workspace-auditor.md",
+    "verified": true
+  },
+  {
+    "path": "/Users/liammcilmurray/.claude/agents/liam.md",
+    "verified": true
+  }
+]

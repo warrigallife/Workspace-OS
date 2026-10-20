@@ -115,7 +115,7 @@ it('denies arbitrary model action requests',async()=>{
  await launchResearchWithDriver(s.options,d.host,s.factory);expect(await s.result).toBe(1);expect(outcome().error).toContain('Only lookup')
 })
 it('production entrypoint refuses restricted execution before source staging or provider calls',async()=>{
- const s=setup();await expect(launchOllamaResearch(s.options)).rejects.toMatchObject({code:'NATIVE_TOOL_EXCLUSION_UNESTABLISHED',provider:'codex'});expect(fs.existsSync(mock.directory)).toBe(false)
+ const s=setup();await expect(launchOllamaResearch(s.options)).rejects.toMatchObject({code:'RESEARCH_LIVE_NOT_APPROVED'});expect(fs.existsSync(mock.directory)).toBe(false)
 })
 it('missing exact provider preflight stops before any model request',async()=>{
  const s=setup(),d=driver();d.host.preflight=async()=>{throw new Error('Exact model unavailable')}
@@ -123,7 +123,7 @@ it('missing exact provider preflight stops before any model request',async()=>{
 })
 it('native launch plans do not inherit normal tools or enable model fallback',()=>{
  expect((restrictedHostPlan('dana').args as string[])).toEqual(expect.arrayContaining(['--tools','','--safe-mode','--strict-mcp-config']))
- expect(restrictedHostPlan('nora').thread).toMatchObject({allowProviderModelFallback:false,environments:[],dynamicTools:[]})
+ expect(restrictedHostPlan('nora').args).toEqual(restrictedHostPlan('dana').args)
  expect(()=>validateRestriction('nora',undefined as any)).toThrow()
 })
 it('persistent restricted queue interrupts running/queued jobs, never auto-resumes, preserves route choice and failure evidence',async()=>{
@@ -135,4 +135,38 @@ it('persistent restricted queue interrupts running/queued jobs, never auto-resum
  const recoveredLauncher=vi.fn();const recovered=new RunQueue(file,recoveredLauncher,{strictPersistence:true})
  expect(recovered.get(first.id)?.status).toBe('interrupted');expect(recovered.get(second.id)?.status).toBe('interrupted');expect(recovered.get(first.id)?.research?.providerMode).toBe('restricted-hosts');expect(recoveredLauncher).not.toHaveBeenCalled()
  expect(fs.existsSync(path.join(mock.directory,'handover.md'))).toBe(true)
+})
+
+it.each(['success','review-rejection','fabricated-citation','failed-save'])('Claude stream transport and coordinator: %s',async scenario=>{
+ const {EventEmitter}=await import('events'),{PassThrough}=await import('stream')
+ const {createClaudeResearchDriver}=await import('./providers/claudeResearch')
+ const controller=new AbortController(),children:any[]=[],requests:any[]=[]
+ const scripted=driver((role,req,reply)=>{
+  if(req.format&&scenario==='review-rejection'&&role==='nora'){const v=JSON.parse(reply.message.content);v.decision='reject';reply.message.content=JSON.stringify(v)}
+  if(req.format&&scenario==='fabricated-citation'&&role==='dana'){const v=JSON.parse(reply.message.content);v.findings[0].citation.quote='Invented excerpt that does not exist.';reply.message.content=JSON.stringify(v)}
+  return reply
+ })
+ const host=createClaudeResearchDriver({directory:mock.directory,maxBudgetUsd:0.1,launch:()=>{
+  const role=children.length===0?'dana':'nora'
+  const c=Object.assign(new EventEmitter(),{stdin:new PassThrough(),stdout:new PassThrough(),stderr:new PassThrough(),kill:vi.fn(()=>true)})
+  children.push(c);let initialized=false
+  c.stdin.on('data',(chunk)=>{void(async()=>{
+   const req=JSON.parse(JSON.parse(chunk.toString()).message.content);requests.push({role,req})
+   if(!initialized){c.stdout.write(JSON.stringify({type:'system',subtype:'init',model:RESEARCH_ROUTES[role].model,tools:[],mcp_servers:[]})+'\n');initialized=true}
+   const session=await scripted.host.open(role,controller.signal),reply=await session.request(req,controller.signal)
+   const result=req.format?reply.message.content:JSON.stringify({lookups:reply.message.tool_calls!.map((x:any)=>x.function.arguments)})
+   c.stdout.write(JSON.stringify({type:'result',subtype:'success',result,usage:{input_tokens:100,output_tokens:50}})+'\n')
+  })()})
+  return c as any
+ }})
+ if(scenario==='failed-save')mock.failSave='handover.md'
+ const s=setup();await launchResearchWithDriver(s.options,host,s.factory)
+ expect(await s.result).toBe(scenario==='success'?0:1)
+ expect(children).toHaveLength(scenario==='fabricated-citation'?1:2)
+ expect(children.every(c=>c.kill.mock.calls.length>0)).toBe(true)
+ if(scenario==='success'){
+  expect(fs.existsSync(path.join(mock.directory,'handover.md'))).toBe(true)
+  expect(readResearchResult(mock.directory,'pending')).toContain('report.md')
+  expect(requests.find(x=>x.role==='nora').req.messages).toHaveLength(2)
+ }else expect(readResearchResult(mock.directory,'error')).not.toMatch(/(?:^|\n\n)report\.md\n/)
 })

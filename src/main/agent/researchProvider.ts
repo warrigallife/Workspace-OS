@@ -9,27 +9,24 @@ export interface ResearchOptions {
 }
 export const RESEARCH_ROUTES = Object.freeze({
   dana: Object.freeze({ provider: 'claude', model: 'claude-sonnet-5' }),
-  nora: Object.freeze({ provider: 'codex', model: 'gpt-5.6-terra' }),
+  nora: Object.freeze({ provider: 'claude', model: 'claude-sonnet-5' }),
 })
 export const RESEARCH_BUDGET = Object.freeze({ responsesPerStage: 12, actionsPerStage: 16, deadlineMs: 360000, tokens: 24000, contextBytes: 120000, responseBytes: 65536 })
-export const RESTRICTED_LIVE_BLOCK = 'Restricted Claude/Codex research is locked: Codex 0.155.1 has no established supported all-native-tool exclusion boundary in the inspected app-server controls. Content transmission and spending also remain unapproved.'
+export const RESTRICTED_LIVE_BLOCK = 'Restricted Claude → Claude research is locked: live content transmission and spending are not approved; exact model availability remains unverified.'
 export class NativeResearchBoundaryError extends Error {
-  readonly code = 'NATIVE_TOOL_EXCLUSION_UNESTABLISHED'
-  readonly provider = 'codex'
+  readonly code = 'RESEARCH_LIVE_NOT_APPROVED'
   constructor() { super(RESTRICTED_LIVE_BLOCK); this.name='NativeResearchBoundaryError' }
 }
-/** Technical preflight precedes BOTH stages. Empty dynamicTools is not an
- * all-native-tool allowlist; read-only is not a source-read restriction. No
- * assertion from a model or a requested config flag may supply this evidence.
- * User approval cannot repair an unsupported/unestablished native boundary. */
+/** No IPC, environment or queue value can unlock live inference. */
 export function assertRestrictedNativeHosts(): never { throw new NativeResearchBoundaryError() }
-export function assertRestrictedLiveApproved(): never { return assertRestrictedNativeHosts() }
+export function assertRestrictedLiveApproved(): never { throw new NativeResearchBoundaryError() }
 
 export interface ResearchRequest { messages: any[]; tools?: any[]; format?: unknown }
 export interface ResearchReply {
   done: boolean; done_reason?: string; message: { role: string; content?: string; tool_calls?: any[] }
   /** Actual provider/model, not requested labels. Required on every external reply. */
   provider?: string; model?: string; inputTokens?: number; outputTokens?: number
+  nativeEvidence?: unknown[]
 }
 export interface RestrictionReceipt {
   provider: string; model: string
@@ -57,26 +54,15 @@ export function validateRestriction(role: ResearchRole, r: RestrictionReceipt): 
   }
 }
 
-/** Auditable native launch contract. Deliberately not the normal runner's
- * permissions/env/connector injection. Help/schema inspection is not attestation.
- * Codex's current protocol has no complete effective tool-inventory receipt;
- * the native connection remains fail-closed until that boundary is established. */
-export function restrictedHostPlan(role: ResearchRole): Record<string, unknown> {
+/** Workflow-only Claude controls; documented locally, not live verified. */
+export function restrictedHostPlan(role: ResearchRole): {provider:string;model:string;transport:string;status:string;args:string[]} {
   const route = RESEARCH_ROUTES[role]
-  return role === 'dana' ? {
+  return {
     ...route, transport: 'claude-stream-json', status: 'controls-documented-not-live-verified',
     args: ['-p', '--input-format', 'stream-json', '--output-format', 'stream-json', '--verbose',
       '--model', route.model, '--tools', '', '--safe-mode', '--restricted', '--disable-slash-commands',
       '--setting-sources', '', '--strict-mcp-config', '--mcp-config', '{"mcpServers":{}}',
       '--no-session-persistence', '--no-chrome'],
-    requiredReceipt: 'exact model; empty effective tool inventory; no ambient context or connectors',
-  } : {
-    ...route, transport: 'codex-app-server', status: 'blocked',
-    thread: { model: route.model, allowProviderModelFallback: false, ephemeral: true,
-      sandbox: 'read-only', approvalPolicy: 'never', environments: [], dynamicTools: [],
-      runtimeWorkspaceRoots: [], selectedCapabilityRoots: [] },
-    requiredReceipt: 'effective native tools disabled; empty connectors and ambient context; exact model',
-    blocker: 'No established supported all-native-tool exclusion: dynamicTools only supplies app tools, environments controls environment access, and read-only is not an approved-source read allowlist. No complete effective tool inventory is exposed either.',
   }
 }
 

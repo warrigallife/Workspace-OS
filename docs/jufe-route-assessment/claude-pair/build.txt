@@ -1,0 +1,288 @@
+
+> workspace-os@0.2.0-beta.1 build
+> electron-vite build && node scripts/build-metric-cli.mjs && node scripts/build-collection-cli.mjs && node scripts/build-case-cli.mjs && node scripts/build-mcp-token-cli.mjs
+
+vite v8.0.16 building ssr environment for production...
+[2Ktransforming...✓ 236 modules transformed.
+rendering chunks...
+out/main/extractWorker.js      2.75 kB
+out/main/index.js          1,339.09 kB
+
+✓ built in 84ms
+vite v8.0.16 building ssr environment for production...
+[2Ktransforming...✓ 3 modules transformed.
+rendering chunks...
+out/preload/index.cjs  48.16 kB
+
+✓ built in 7ms
+8:39:27 AM [vite] warning: `esbuild` option was specified by "vite:react-babel" plugin. This option is deprecated, please use `oxc` instead.
+`optimizeDeps.rollupOptions` / `ssr.optimizeDeps.rollupOptions` is deprecated. Use `optimizeDeps.rolldownOptions` instead. Note that this option may be set by a plugin. Set VITE_DEPRECATION_TRACE=1 to see where it is called.
+[vite:react-babel] We recommend switching to `@vitejs/plugin-react-oxc` for improved performance. More information at https://vite.dev/rolldown
+vite v8.0.16 building client environment for production...
+[2Ktransforming...✓ 4412 modules transformed.
+rendering chunks...
+out/renderer/index.html                                                            0.92 kB
+out/renderer/assets/jetbrains-mono-greek-400-normal-C190GLew.woff2                 4.22 kB
+out/renderer/assets/ku-B2Sk4hPT.json                                               4.44 kB
+out/renderer/assets/hanken-grotesk-vietnamese-400-normal-BLrFBAHj.woff2            4.64 kB
+out/renderer/assets/hanken-grotesk-vietnamese-600-normal-Cp8QQjQf.woff2            4.73 kB
+out/renderer/assets/bricolage-grotesque-vietnamese-400-normal-B7Iv8-Rg.woff2       5.05 kB
+out/renderer/assets/bricolage-grotesque-vietnamese-700-normal-BLYPkJbo.woff2       5.10 kB
+out/renderer/assets/jetbrains-mono-cyrillic-400-normal-BEIGL1Tu.woff2              5.32 kB
+out/renderer/assets/jetbrains-mono-vietnamese-400-normal-CqNFfHCs.woff             5.37 kB
+out/renderer/assets/archivo-vietnamese-500-normal-k0drYPZA.woff2                   5.65 kB
+out/renderer/assets/jetbrains-mono-greek-400-normal-B9oWc5Lo.woff                  5.66 kB
+out/renderer/assets/fraunces-vietnamese-400-normal-CvGt0Ybw.woff2                  6.20 kB
+out/renderer/assets/fraunces-vietnamese-600-normal-BjlAJixd.woff2                  6.28 kB
+out/renderer/assets/hanken-grotesk-vietnamese-400-normal-C-iWyKLC.woff             6.50 kB
+out/renderer/assets/hanken-grotesk-vietnamese-600-normal-DHaFH8q1.woff             6.50 kB
+out/renderer/assets/bricolage-grotesque-vietnamese-400-normal-Sle7MYWg.woff        6.72 kB
+out/renderer/assets/bricolage-grotesque-vietnamese-700-normal-CHrFuVHU.woff        6.81 kB
+out/renderer/assets/jetbrains-mono-cyrillic-400-normal-ugxPyKxw.woff               6.97 kB
+out/renderer/assets/jetbrains-mono-latin-ext-400-normal-Bc8Ftmh3.woff2             7.33 kB
+out/renderer/assets/my-2Tr1b_KD.json                                               7.35 kB
+out/renderer/assets/archivo-vietnamese-500-normal-7W3lD2kQ.woff                    7.66 kB
+out/renderer/assets/fraunces-vietnamese-600-normal-DlAl5EAR.woff                   7.93 kB
+out/renderer/assets/fraunces-vietnamese-400-normal-B65MOf9T.woff                   7.98 kB
+out/renderer/assets/hanken-grotesk-latin-ext-400-normal-DR7lHpW4.woff2             9.04 kB
+out/renderer/assets/hanken-grotesk-latin-ext-600-normal-FY8kSObK.woff2             9.22 kB
+out/renderer/assets/jetbrains-mono-latin-ext-400-normal-fXTG6kC5.woff             10.12 kB
+out/renderer/assets/bricolage-grotesque-latin-ext-400-normal-D42HmrHD.woff2       10.53 kB
+out/renderer/assets/bricolage-grotesque-latin-ext-700-normal-fBkt-7fi.woff2       10.63 kB
+out/renderer/assets/hanken-grotesk-latin-ext-600-normal-DHIm05DD.woff             12.50 kB
+out/renderer/assets/hanken-grotesk-latin-ext-400-normal-DI-aIsWt.woff             12.55 kB
+out/renderer/assets/archivo-latin-ext-500-normal-RFhg4CpD.woff2                   13.16 kB
+out/renderer/assets/hanken-grotesk-latin-400-normal-BG6hkEXj.woff2                13.46 kB
+out/renderer/assets/bricolage-grotesque-latin-ext-700-normal-BXpPFNFj.woff        13.70 kB
+out/renderer/assets/bricolage-grotesque-latin-ext-400-normal-BH175q6o.woff        13.72 kB
+out/renderer/assets/hanken-grotesk-latin-600-normal-CIXX6EOa.woff2                13.78 kB
+out/renderer/assets/archivo-latin-500-normal-CGugC8dq.woff2                       14.60 kB
+out/renderer/assets/hanken-grotesk-latin-400-normal-CjyVwvJV.woff                 17.24 kB
+out/renderer/assets/fraunces-latin-ext-400-normal-D8gbi3Gu.woff2                  17.28 kB
+out/renderer/assets/fraunces-latin-ext-600-normal-BtzmzP0X.woff2                  17.33 kB
+out/renderer/assets/hanken-grotesk-latin-600-normal-NEn2C4Q3.woff                 17.50 kB
+out/renderer/assets/fraunces-latin-400-normal-6IfK1voy.woff2                      17.96 kB
+out/renderer/assets/fraunces-latin-600-normal-BFCDtZfi.woff2                      18.09 kB
+out/renderer/assets/archivo-latin-ext-500-normal-D7mXw3Kz.woff                    18.29 kB
+out/renderer/assets/archivo-latin-500-normal-pkzA7jw9.woff                        18.98 kB
+out/renderer/assets/jetbrains-mono-latin-400-normal-V6pRDFza.woff2                21.16 kB
+out/renderer/assets/zh-cn-D5ilKeWa.json                                           21.17 kB
+out/renderer/assets/zh-tw-8gJND7a5.json                                           21.26 kB
+out/renderer/assets/main-Cej8yirC.json                                            21.51 kB
+out/renderer/assets/id-Bye4I9WU.json                                              22.13 kB
+out/renderer/assets/da-Cfadwr44.json                                              22.16 kB
+out/renderer/assets/no-DMNBHleU.json                                              22.27 kB
+out/renderer/assets/bricolage-grotesque-latin-400-normal-A6LyuA6R.woff2           22.36 kB
+out/renderer/assets/fraunces-latin-ext-600-normal-B0Dy4lqi.woff                   22.36 kB
+out/renderer/assets/ms-BIRz_l5l.json                                              22.36 kB
+out/renderer/assets/fraunces-latin-ext-400-normal-UihxqfOe.woff                   22.36 kB
+out/renderer/assets/bricolage-grotesque-latin-700-normal-gtcctNPv.woff2           22.38 kB
+out/renderer/assets/fraunces-latin-400-normal-NUPT2cO8.woff                       22.48 kB
+out/renderer/assets/fraunces-latin-600-normal-DL5QCzvS.woff                       22.51 kB
+out/renderer/assets/sv-BKvaWKFB.json                                              22.57 kB
+out/renderer/assets/nl-D7OJDhwa.json                                              22.79 kB
+out/renderer/assets/so-7B9IOOWW.json                                              22.81 kB
+out/renderer/assets/hr-DKUQFW9O.json                                              22.92 kB
+out/renderer/assets/sl-Ca5Hd5p6.json                                              22.97 kB
+out/renderer/assets/fi-2K_amEG6.json                                              23.10 kB
+out/renderer/assets/tr-MYM1Auca.json                                              23.10 kB
+out/renderer/assets/pt-pt-4ecOvCHH.json                                           23.17 kB
+out/renderer/assets/gl-BJPIJ74L.json                                              23.21 kB
+out/renderer/assets/ca-CszFgLck.json                                              23.31 kB
+out/renderer/assets/cs-DrLpEukY.json                                              23.31 kB
+out/renderer/assets/pt-br-BNgG1Iw6.json                                           23.39 kB
+out/renderer/assets/tl-0V5lM8Yl.json                                              23.41 kB
+out/renderer/assets/de-ByCbZon9.json                                              23.44 kB
+out/renderer/assets/es-BW3NjTiq.json                                              23.56 kB
+out/renderer/assets/it-BsJs40Ms.json                                              23.59 kB
+out/renderer/assets/ro-DP1YylDq.json                                              23.60 kB
+out/renderer/assets/pl-CCpx18Je.json                                              23.68 kB
+out/renderer/assets/ko-kr-CFfc1ltY.json                                           23.76 kB
+out/renderer/assets/fr-c1Go9tgC.json                                              23.95 kB
+out/renderer/assets/hu-av6J4XF2.json                                              24.25 kB
+out/renderer/assets/vi-CImD-N8H.json                                              25.05 kB
+out/renderer/assets/ja-DP49dCMK.json                                              25.17 kB
+out/renderer/assets/he-D-aMMUsR.json                                              25.67 kB
+out/renderer/assets/bricolage-grotesque-latin-700-normal-DvJDmrLu.woff            27.04 kB
+out/renderer/assets/ar-BjhqvcQO.json                                              27.09 kB
+out/renderer/assets/bricolage-grotesque-latin-400-normal-D89K-qEP.woff            27.26 kB
+out/renderer/assets/jetbrains-mono-latin-400-normal-6-qcROiO.woff                 27.49 kB
+out/renderer/assets/ur-BCwBBw6w.json                                              28.57 kB
+out/renderer/assets/fa-CdNbmEe9.json                                              28.68 kB
+out/renderer/assets/uk-HcWt9XLM.json                                              31.39 kB
+out/renderer/assets/ru-E3aml3hR.json                                              31.48 kB
+out/renderer/assets/el-DZ4rPegE.json                                              31.64 kB
+out/renderer/assets/gu-in-DBPcasq_.json                                           33.39 kB
+out/renderer/assets/th-DI7B786l.json                                              34.11 kB
+out/renderer/assets/mr-DHBK4lnY.json                                              34.25 kB
+out/renderer/assets/km-kh-OJutt7Al.json                                           34.35 kB
+out/renderer/assets/pa-Cy97FwEH.json                                              34.40 kB
+out/renderer/assets/hi-in-orPhOtRI.json                                           35.57 kB
+out/renderer/assets/bn-CnT_gG-s.json                                              36.01 kB
+out/renderer/assets/kn-CSTt63ne.json                                              37.68 kB
+out/renderer/assets/ne-BTQI-2r1.json                                              38.24 kB
+out/renderer/assets/te-Bu7k8v63.json                                              38.57 kB
+out/renderer/assets/ta-MulN6rAH.json                                              40.01 kB
+out/renderer/assets/ml-BucMs4M7.json                                              40.35 kB
+out/renderer/assets/IBMPlexMono-Bold-DXjtWYQI.woff2                               46.68 kB
+out/renderer/assets/IBMPlexMono-Medium-B772pXP5.woff2                             46.72 kB
+out/renderer/assets/IBMPlexMono-BoldItalic-BgXsX49L.woff2                         50.62 kB
+out/renderer/assets/IBMPlexMono-MediumItalic-DcUpDvfM.woff2                       51.34 kB
+out/renderer/assets/0_merged-DJArLG94.svg                                         55.09 kB
+out/renderer/assets/IBMPlexSans-Bold-CDYgCOW4.woff2                               63.01 kB
+out/renderer/assets/IBMPlexSans-BoldItalic-BgMlRJc-.woff2                         66.63 kB
+out/renderer/assets/IBMPlexSans-Medium-BQLKo0ot.woff2                             66.74 kB
+out/renderer/assets/IBMPlexSerif-Bold-DfPAuzEv.woff2                              68.94 kB
+out/renderer/assets/IBMPlexSans-MediumItalic-SdO5NnXo.woff2                       71.20 kB
+out/renderer/assets/IBMPlexSerif-Medium-BpRXNayp.woff2                            72.60 kB
+out/renderer/assets/IBMPlexSerif-BoldItalic-IdHRMZmK.woff2                        73.99 kB
+out/renderer/assets/IBMPlexSerif-MediumItalic-Bj_1Y4Ju.woff2                      77.90 kB
+out/renderer/assets/codicon-DCmgc-ay.ttf                                          80.34 kB
+out/renderer/assets/Shantell_Sans-Informal_Bold-CHc5U8I8.woff2                   151.26 kB
+out/renderer/assets/Shantell_Sans-Informal_Bold_Italic-ci_cB_6_.woff2            152.33 kB
+out/renderer/assets/Shantell_Sans-Informal_Regular-DT813UET.woff2                153.50 kB
+out/renderer/assets/Shantell_Sans-Informal_Regular_Italic-FZdkI0Vo.woff2         155.42 kB
+out/renderer/assets/editor.worker-Dsd3mtMU.js                                    521.42 kB
+out/renderer/assets/splash-logo-Bd0B4nbw.png                                     769.20 kB
+out/renderer/assets/json.worker-Bhh618Jl.js                                      779.96 kB
+out/renderer/assets/html.worker-CVd1It0i.js                                    1,137.94 kB
+out/renderer/assets/pdf.worker.min-CrMmvqMo.mjs                                1,245.44 kB
+out/renderer/assets/css.worker-B1C7TkAq.js                                     1,632.12 kB
+out/renderer/assets/ts.worker-BIOJt8pm.js                                     10,372.26 kB
+out/renderer/assets/MarkdownPreview-CO1UUAL6.css                                   0.09 kB
+out/renderer/assets/MonacoRenderer-DkQF3OPL.css                                    0.16 kB
+out/renderer/assets/MediaRenderer-OYUj8WZE.css                                     0.60 kB
+out/renderer/assets/GraphView-z_0o2SQl.css                                         0.82 kB
+out/renderer/assets/HexRenderer-D35amoeg.css                                       0.87 kB
+out/renderer/assets/ImageRenderer-CcYTPs3B.css                                     1.04 kB
+out/renderer/assets/HtmlRenderer-DI3zRPQb.css                                      1.26 kB
+out/renderer/assets/CsvRenderer-kiG55THF.css                                       3.06 kB
+out/renderer/assets/PdfRenderer-CxR198C3.css                                       5.69 kB
+out/renderer/assets/OfficeRenderer-AoCTLiay.css                                   91.57 kB
+out/renderer/assets/TldrawRenderer-DgtOnX5b.css                                   99.26 kB
+out/renderer/assets/index-Bj-JuxJB.css                                           584.32 kB
+out/renderer/assets/sanitizeSvg-8OggXyJc.js                                        0.08 kB
+out/renderer/assets/chunk-B-1-B7_t.js                                              1.40 kB
+out/renderer/assets/azcli-BogX2wlY.js                                              1.48 kB
+out/renderer/assets/javascript-Du64Kxdk.js                                         1.56 kB
+out/renderer/assets/ini-DVwkb5wp.js                                                1.83 kB
+out/renderer/assets/csp-D-bFJZSL.js                                                1.92 kB
+out/renderer/assets/preload-helper-DbA_Gf9s.js                                     2.37 kB
+out/renderer/assets/MediaRenderer-tivXMUyt.js                                      2.64 kB
+out/renderer/assets/pla-85Rb6XE0.js                                                2.69 kB
+out/renderer/assets/sb-B0BkuAoA.js                                                 2.73 kB
+out/renderer/assets/bat-qKra0FP3.js                                                2.75 kB
+out/renderer/assets/scheme-Bhl5EnuW.js                                             2.77 kB
+out/renderer/assets/flow9-B8JojhZl.js                                              2.81 kB
+out/renderer/assets/dockerfile-CqlP5jmm.js                                         3.10 kB
+out/renderer/assets/pascaligo-zOSi-fU-.js                                          3.11 kB
+out/renderer/assets/HexRenderer-Ct7c8q3M.js                                        3.16 kB
+out/renderer/assets/lua-B63tOey7.js                                                3.27 kB
+out/renderer/assets/graphql-F706hXoJ.js                                            3.31 kB
+out/renderer/assets/cameligo-Dq_S9XlV.js                                           3.40 kB
+out/renderer/assets/HtmlRenderer-BYw1hgHx.js                                       3.49 kB
+out/renderer/assets/MonacoRenderer-x5YG9kS7.js                                     3.56 kB
+out/renderer/assets/lexon-DSZtt-iw.js                                              3.58 kB
+out/renderer/assets/objective-c-DgYjNosV.js                                        3.62 kB
+out/renderer/assets/MarkdownPreview-Dc5sblRu.js                                    3.62 kB
+out/renderer/assets/sparql-TWI7ZE_V.js                                             3.75 kB
+out/renderer/assets/mips-C3g8-irj.js                                               3.76 kB
+out/renderer/assets/xml-XKYlmiI2.js                                                3.89 kB
+out/renderer/assets/go-DuL1PYSi.js                                                 3.98 kB
+out/renderer/assets/sophia-BJps6bBe.js                                             3.99 kB
+out/renderer/assets/bicep-BWh-ogU6.js                                              4.03 kB
+out/renderer/assets/m3-89PKzhrG.js                                                 4.20 kB
+out/renderer/assets/ImageRenderer-DweSzbTG.js                                      4.24 kB
+out/renderer/assets/fsharp-CRhIqtO3.js                                             4.29 kB
+out/renderer/assets/pascal-DwWodA_I.js                                             4.39 kB
+out/renderer/assets/typespec-BrkgLXSN.js                                           4.44 kB
+out/renderer/assets/shell-D8AV03o2.js                                              4.52 kB
+out/renderer/assets/r-BWkKiStt.js                                                  4.53 kB
+out/renderer/assets/java-Pj8sQg1i.js                                               4.61 kB
+out/renderer/assets/qsharp-_ypghAL1.js                                             4.70 kB
+out/renderer/assets/powershell-C3uCd2a0.js                                         4.79 kB
+out/renderer/assets/hcl-De-JDbD6.js                                                4.84 kB
+out/renderer/assets/cypher-efVVPoE3.js                                             4.92 kB
+out/renderer/assets/kotlin-Cd-9cKsj.js                                             4.94 kB
+out/renderer/assets/redis-DwnfNRBd.js                                              5.00 kB
+out/renderer/assets/tcl-CTSCwBTI.js                                                5.12 kB
+out/renderer/assets/coffee-wSbu8bWE.js                                             5.31 kB
+out/renderer/assets/less-D3h8ApwN.js                                               5.35 kB
+out/renderer/assets/markdown-C6SOvQJg.js                                           5.41 kB
+out/renderer/assets/restructuredtext-D5ycwsaz.js                                   5.58 kB
+out/renderer/assets/apex-D_Yfvx1H.js                                               5.69 kB
+out/renderer/assets/yaml-DPltxe-m.js                                               5.85 kB
+out/renderer/assets/rust-Bib88RrJ.js                                               5.91 kB
+out/renderer/assets/dart-DwpJxWgh.js                                               5.91 kB
+out/renderer/assets/liquid-D0IOZ4Ce.js                                             5.92 kB
+out/renderer/assets/css-D6dFiGtW.js                                                6.20 kB
+out/renderer/assets/csharp-CEGGyAcr.js                                             6.49 kB
+out/renderer/assets/python-C1uW2G0S.js                                             6.58 kB
+out/renderer/assets/msdax-BPEm2VjQ.js                                              6.68 kB
+out/renderer/assets/swift-CAJSSBvq.js                                              6.90 kB
+out/renderer/assets/pug-BqYq5ChL.js                                                7.05 kB
+out/renderer/assets/cpp-C4txW7nB.js                                                7.31 kB
+out/renderer/assets/ecl-CQJd9X2q.js                                                7.44 kB
+out/renderer/assets/html-BJcnDdmY.js                                               7.46 kB
+out/renderer/assets/mdx-CPkJWRAY.js                                                7.47 kB
+out/renderer/assets/vb-DnJfwU8j.js                                                 7.81 kB
+out/renderer/assets/typescript-D533PW0p.js                                         7.88 kB
+out/renderer/assets/twig-KF2WDYqZ.js                                               8.37 kB
+out/renderer/assets/wgsl-DEn6Sm8W.js                                               8.66 kB
+out/renderer/assets/scss-DDcdHqtm.js                                               8.76 kB
+out/renderer/assets/handlebars-DZtvEA49.js                                         9.60 kB
+out/renderer/assets/julia-D_x1darZ.js                                             10.12 kB
+out/renderer/assets/systemverilog-Cu0pSRdh.js                                     10.23 kB
+out/renderer/assets/st-lnRehGTG.js                                                10.24 kB
+out/renderer/assets/scala-Ph2togpn.js                                             10.33 kB
+out/renderer/assets/jsx-runtime-C1X0bX5w.js                                       10.60 kB
+out/renderer/assets/php-PyW4kRRd.js                                               10.81 kB
+out/renderer/assets/postiats-CX-S2v-R.js                                          11.15 kB
+out/renderer/assets/perl-kOvI2CV0.js                                              11.24 kB
+out/renderer/assets/ruby-Dm7to8es.js                                              11.64 kB
+out/renderer/assets/GraphView-DR-bGJtd.js                                         11.74 kB
+out/renderer/assets/razor-DAbRPcu3.js                                             12.38 kB
+out/renderer/assets/clojure-MQ0LbH3e.js                                           12.51 kB
+out/renderer/assets/protobuf-Bdjlur3E.js                                          12.64 kB
+out/renderer/assets/elixir-7HehjBi4.js                                            13.03 kB
+out/renderer/assets/sql-D0HoBBuy.js                                               13.44 kB
+out/renderer/assets/mysql-CLkYm0KV.js                                             14.56 kB
+out/renderer/assets/redshift-BxP5dEt8.js                                          14.83 kB
+out/renderer/assets/pgsql-dXWG1yMp.js                                             16.61 kB
+out/renderer/assets/abap-BXv3EciL.js                                              18.57 kB
+out/renderer/assets/powerquery-hF4qOTGo.js                                        20.27 kB
+out/renderer/assets/freemarker2-BriS-lwG.js                                       22.58 kB
+out/renderer/assets/solidity-BzxvyNcb.js                                          23.31 kB
+out/renderer/assets/PdfRenderer-CFwYF-XI.js                                       27.19 kB
+out/renderer/assets/CsvRenderer-DvuToygT.js                                       35.13 kB
+out/renderer/assets/tsMode-DxA70QyF.js                                            38.44 kB
+out/renderer/assets/marked.esm-DnYQTD6L.js                                        62.36 kB
+out/renderer/assets/cssMode-B6J71IUV.js                                           64.06 kB
+out/renderer/assets/htmlMode-CAA4aYtA.js                                          65.19 kB
+out/renderer/assets/jsonMode-C5_-zr8t.js                                          84.60 kB
+out/renderer/assets/pdf-B-3kQZRa.js                                              747.04 kB
+out/renderer/assets/OfficeRenderer-twkhRUq2.js                                   766.06 kB
+out/renderer/assets/TldrawRenderer-CANe_lO9.js                                 3,612.25 kB
+out/renderer/assets/index-p8X1J4kX.js                                          8,268.84 kB
+
+✓ built in 1.39s
+
+  resources/wos-metric/metric-cli.cjs  2.2mb ⚠️
+
+⚡ Done in 80ms
+[build-metric-cli] wrote /Users/liammcilmurray/Desktop/Workspace-OS/resources/wos-metric/metric-cli.cjs
+
+  resources/wos-collection/collection-cli.cjs  2.2mb ⚠️
+
+⚡ Done in 46ms
+[build-collection-cli] wrote /Users/liammcilmurray/Desktop/Workspace-OS/resources/wos-collection/collection-cli.cjs
+
+  resources/wos-case/case-cli.cjs  10.3kb
+
+⚡ Done in 2ms
+[build-case-cli] wrote /Users/liammcilmurray/Desktop/Workspace-OS/resources/wos-case/case-cli.cjs
+
+  resources/wos-mcp-token/mcp-token-cli.cjs  11.2kb
+
+⚡ Done in 2ms
+[build-mcp-token-cli] wrote /Users/liammcilmurray/Desktop/Workspace-OS/resources/wos-mcp-token/mcp-token-cli.cjs
