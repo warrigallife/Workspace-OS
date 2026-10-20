@@ -1,0 +1,186 @@
+[1021/081657.686050:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+
+ RUN  v4.1.9 /Users/liammcilmurray/Desktop/Workspace-OS
+
+[1021/081658.148832:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1021/081658.148865:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+ ✓ src/main/agent/ollamaResearchRun.test.ts > stops after 12 local responses, preserving failures without review or fallback 12ms
+ ✓ src/main/agent/ollamaResearchRun.test.ts > stops at 16 tool calls even when the model batches them 5ms
+ ✓ src/main/agent/ollamaResearchRun.test.ts > cancellation aborts the request and revokes stage grants 2ms
+ ✓ src/main/agent/ollamaResearchRun.test.ts > missing installed model fails before inference and never falls back 2ms
+ ✓ src/main/agent/ollamaResearchRun.test.ts > offers lookup only until BOTH reads succeed, then independently gates Nora and preserves message history 9ms
+ ✓ src/main/agent/ollamaResearchRun.test.ts > rejects structured invalid JSON without starting review 4ms
+ ✓ src/main/agent/ollamaResearchRun.test.ts > rejects structured invalid fields without starting review 4ms
+ ✓ src/main/agent/ollamaResearchRun.test.ts > rejects structured invented quotes without starting review 3ms
+ ✓ src/main/agent/restrictedResearch.test.ts > runs both exact routes through retrieval/save/review, ledger and saved handover; result display shows report 13ms
+ ✓ src/main/agent/restrictedResearch.test.ts > review rejection blocks final report and handover completion 7ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fabricated quotation fails before reviewer, preserves raw response and failure handover 4ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed draft.json never completes queue or publishes report 4ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed review.json never completes queue or publishes report 7ms
+ × src/main/agent/restrictedResearch.test.ts > failed report.md never completes queue or publishes report 8ms
+   → expected 'Authoritative outcome: failed\nInject…' not to contain 'report.md\n'
+ ✓ src/main/agent/restrictedResearch.test.ts > failed handover.md never completes queue or publishes report 5ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed outcome.json never completes queue or publishes report 4ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed checkpoint is explicit in terminal outcome and suppresses otherwise generated report 5ms
+ ✓ src/main/agent/restrictedResearch.test.ts > cancel closes uncooperative request, revokes grants and prevents reviewer 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > pre-aborted run does not preflight or open provider 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified nativeTools before sending content 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified connectors before sending content 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified ambientContext before sending content 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified restrictionsEnforced before sending content 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified fallback before sending content 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > never substitutes model in receipt 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > never substitutes model in response 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed for missing token accounting 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed for exceeded token accounting 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > denies arbitrary model action requests 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > production entrypoint refuses restricted execution before source staging or provider calls 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > missing exact provider preflight stops before any model request 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > native launch plans do not inherit normal tools or enable model fallback 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > persistent restricted queue interrupts running/queued jobs, never auto-resumes, preserves route choice and failure evidence 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/main/agent/restrictedResearch.test.ts > failed report.md never completes queue or publishes report
+AssertionError: expected 'Authoritative outcome: failed\nInject…' not to contain 'report.md\n'
+
+- Expected
++ Received
+
+- report.md
++ Authoritative outcome: failed
++ Injected save failure: report.md
++ Intermediate artifacts below do not override this outcome.
++
++ outcome.json
++ {
++   "status": "failed",
++   "error": "Injected save failure: report.md",
++   "checkpointId": "stub-checkpoint",
++   "turns": 4,
++   "totalTokens": 600
++ }
++
++ review.json
++ {
++   "decision": "approve",
++   "reason": "Each fixture statement is supported by the independently retrieved excerpt.",
++   "checked_citations": [
++     0,
++     1,
++     2
++   ]
++ }
++
++ handover.md
++ # JUFE research handover
++
++ Status: failed
++
++ Injected save failure: report.md
++
++ Originals unchanged; no canonical writes. Evidence: /private/var/folders/bf/kshqt9954z14m1lbsrxt9t8w0000gn/T/restricted-research-aVfzY7/run
+
++
++ state.json
++ {
++   "id": "bg-restricted-test",
++   "status": "failed",
++   "stage": "nora",
++   "provider": "restricted-hosts",
++   "routes": {
++     "dana": {
++       "provider": "claude",
++       "model": "claude-sonnet-5"
++     },
++     "nora": {
++       "provider": "codex",
++       "model": "gpt-5.6-terra"
++     }
++   },
++   "task": "Identify outstanding research work recorded in the two approved JUFE coverage reports dated 2026-10-11. Produce exactly three distinct, concise findings with short exact source excerpts and line citations. Cover both approved records. Distinguish reported coverage gaps from inference and unresolved present-day status. Do not inspect or change manuscripts.",
++   "recoveredFrom": null,
++   "sourceHashes": {
++     "jufe-coverage-2026-10-11": "e6a4315b4b7e24fe5a7c8d3376aed3bda182cdccef3afb82fde86ae72c6745ec",
++     "jufe-schedule-2026-10-11": "e6a4315b4b7e24fe5a7c8d3376aed3bda182cdccef3afb82fde86ae72c6745ec"
++   },
++   "events": [
++     "event-000.json",
++     "event-001.json",
++     "event-002.json",
++     "event-003.json",
++     "event-004.json",
++     "event-005.json",
++     "event-006.json",
++     "event-007.json",
++     "event-008.json",
++     "event-009.json",
++     "event-010.json",
++     "event-011.json",
++     "event-012.json",
++     "event-013.json",
++     "event-014.json",
++     "event-015.json",
++     "event-016.json",
++     "event-017.json"
++   ],
++   "tasks": {
++     "dana": "task-dana",
++     "nora": "task-nora",
++     "handover": "task-handover"
++   },
++   "dependencies": {
++     "task-nora": [
++       "task-dana"
++     ],
++     "task-handover": [
++       "task-nora"
++     ]
++   },
++   "error": "Injected save failure: report.md",
++   "turns": 4,
++   "totalTokens": 600,
++   "reads": {
++     "dana": [
++       {
++         "record_id": "jufe-coverage-2026-10-11",
++         "start_line": 1,
++         "end_line": 1
++       },
++       {
++         "record_id": "jufe-schedule-2026-10-11",
++         "start_line": 1,
++         "end_line": 1
++       }
++     ],
++     "nora": [
++       {
++         "record_id": "jufe-coverage-2026-10-11",
++         "start_line": 1,
++         "end_line": 1
++       },
++       {
++         "record_id": "jufe-schedule-2026-10-11",
++         "start_line": 1,
++         "end_line": 1
++       }
++     ]
++   }
++ }
+
+ ❯ src/main/agent/restrictedResearch.test.ts:84:57
+     82| it.each(['draft.json','review.json','report.md','handover.md','outcome…
+     83|  mock.failSave=name;const s=setup(),d=driver();await launchResearchWit…
+     84|  expect(readResearchResult(mock.directory,'error')).not.toContain('rep…
+       |                                                         ^
+     85| })
+     86| it('failed checkpoint is explicit in terminal outcome and suppresses o…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 32 passed (33)
+   Start at  08:16:58
+   Duration  296ms (transform 127ms, setup 0ms, import 170ms, tests 124ms, environment 0ms)
+

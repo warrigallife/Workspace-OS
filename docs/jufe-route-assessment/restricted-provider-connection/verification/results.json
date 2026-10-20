@@ -1,0 +1,24 @@
+{
+  "status": "stub-only integration verified; live transport blocked",
+  "tests": {
+    "passed": 144,
+    "failed": 0,
+    "files": 10,
+    "runtime": "Electron via ELECTRON_RUN_AS_NODE=1",
+    "new_tests": 30
+  },
+  "typecheck": {
+    "new_errors": 0,
+    "known_errors": 70,
+    "baseline": 75
+  },
+  "build": "passed",
+  "live_model_calls": 0,
+  "research_transmission": false,
+  "limitations": [
+    "Native Claude/Codex sessions are not implemented as an attested safe driver; host plans are contracts, not execution.",
+    "No real UI/provider success claimed.",
+    "Dollar cost remains unknown; token threshold is reactive and not a guaranteed bill cap."
+  ],
+  "recoverable_original_copies": 16
+}

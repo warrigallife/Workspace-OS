@@ -87,3 +87,7 @@ The single UI run `bg-mvfyz8ar-2hwhh0` passed grammar compilation but **failed a
 Generation instructions now request exactly three concise findings, short contiguous exact excerpts (12–180 characters) and a short limitations sentence. Application acceptance limits, citation checks, permissions and all budgets remain unchanged.
 
 The single UI attempt `bg-mvfzajpm-hhz9la` **failed**: after reading both records, the model returned complete JSON in 101 tokens but only one finding. The unchanged minimum-three validator rejected the save. No accepted draft, Nora review or report exists. See `concise-findings-verification/`. No retry was made. View this run through the existing Desktop launcher → Agents → JUFE local research → View research report and handover.
+
+## Restricted Claude/Codex connection checkpoint
+
+[Handover and deterministic results](restricted-provider-connection/handover.md): the shared research coordinator now accepts restricted stage drivers and passes 144 deterministic checks. **Native provider execution remains blocked**: safe attested transport, exact-model availability and separate content/spending approval are still required. The stored host plans are not a working CLI connection. Existing local controls are unchanged; there is no new verified live workflow to click.

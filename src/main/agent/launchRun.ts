@@ -1,3 +1,4 @@
+import type { ResearchOptions } from './researchProvider'
 import { launchOllamaResearch } from './ollamaResearchRun'
 import { launchLocalTeam } from './localTeamRun'
 import type { LocalTeamOptions } from '../runs/localTeamTask'
@@ -75,7 +76,7 @@ export interface RunSink {
 }
 
 export interface LaunchRunOptions {
-  research?: { recoveredFrom?: string }
+  research?: ResearchOptions
   localTeam?: LocalTeamOptions
   runId: string
   prompt: string

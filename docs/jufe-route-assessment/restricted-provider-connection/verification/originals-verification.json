@@ -1,0 +1,82 @@
+[
+  {
+    "copy": "docs/jufe-route-assessment/restricted-provider-connection/originals/src/main/agent/ollamaResearchRun.ts",
+    "sha256": "a59063f9c4b418bec7a1fcbdfb9f16de772d03e2cc09c69b1877f0ac93c0af44",
+    "verified": true
+  },
+  {
+    "copy": "docs/jufe-route-assessment/restricted-provider-connection/originals/src/main/agent/launchRun.ts",
+    "sha256": "64aec68c2eb6446f54f32d2492208950b02fa94abf5cddde9165fbffd4104e62",
+    "verified": true
+  },
+  {
+    "copy": "docs/jufe-route-assessment/restricted-provider-connection/originals/src/main/agent/providers/codexRpc.ts",
+    "sha256": "0d58825dc838b1c8a05bb406bafbc133343c4dbbded5477d5ed4f4b3120b7b38",
+    "verified": true
+  },
+  {
+    "copy": "docs/jufe-route-assessment/restricted-provider-connection/originals/src/main/runs/queue.ts",
+    "sha256": "125b26f6042e60177c8940b9ec25e52df73d58735f4b35b5a5df34630f0e48ff",
+    "verified": true
+  },
+  {
+    "copy": "docs/jufe-route-assessment/restricted-provider-connection/originals/src/main/handlers/runs.ts",
+    "sha256": "633cfdc8471ad8dc59408988416855cf430f7b85a2ecd73165cc891d9039491f",
+    "verified": true
+  },
+  {
+    "copy": "docs/jufe-route-assessment/restricted-provider-connection/originals/src/renderer/src/components/Agents/LocalResearch.tsx",
+    "sha256": "7b23db3fdfa8a7a8b0d30138408e3fc829a149d15179e52c1226a970c2c30551",
+    "verified": true
+  },
+  {
+    "copy": "docs/jufe-route-assessment/restricted-provider-connection/originals/src/preload/index.ts",
+    "sha256": "fbc3a71a792d86850a66f5816c510690abfb74ac58e736e1a3adcb34d0bb8f51",
+    "verified": true
+  },
+  {
+    "copy": "docs/jufe-route-assessment/restricted-provider-connection/originals/src/main/ipc-channels.ts",
+    "sha256": "fa283745d34187e769027989b2987eba53cc0cd60bb35e9aa94e16b5ca603ed1",
+    "verified": true
+  },
+  {
+    "copy": "docs/jufe-route-assessment/restricted-provider-connection/originals/docs/local-team/implementation-log.md",
+    "sha256": "3a94b03a55eabad7aad9bcc9494c2e5614a2f8c2f68df987913a16871f10da56",
+    "verified": true
+  },
+  {
+    "copy": "docs/jufe-route-assessment/restricted-provider-connection/originals/docs/jufe-route-assessment/README.md",
+    "sha256": "634e047667b219aa3dfbf41a4e44582f3127b5685b2113e5771986f8a55fcd3a",
+    "verified": true
+  },
+  {
+    "copy": "docs/jufe-route-assessment/restricted-provider-connection/resume-originals/src/main/agent/researchProvider.ts",
+    "sha256": "262b0726179e96914fe7921713260ab0028bdfd2b3e0d2eee36dad431e2563c5",
+    "verified": true
+  },
+  {
+    "copy": "docs/jufe-route-assessment/restricted-provider-connection/resume-originals/src/main/agent/researchLedger.ts",
+    "sha256": "ed4bca8b7a8593b9109ed5503ab1bf3aecf2589a6be678c2782b94419eb0c0d2",
+    "verified": true
+  },
+  {
+    "copy": "docs/jufe-route-assessment/restricted-provider-connection/resume-originals/src/main/agent/ollamaResearchRun.ts",
+    "sha256": "c75d19fb292c9937bb7de739e937b04a2abca986beefb95f6d4ff8918792ed27",
+    "verified": true
+  },
+  {
+    "copy": "docs/jufe-route-assessment/restricted-provider-connection/resume-originals/src/main/agent/launchRun.ts",
+    "sha256": "4d625079009492f1b92faa32503c9270f2765e926c885e997848e1a33b86dfee",
+    "verified": true
+  },
+  {
+    "copy": "docs/jufe-route-assessment/restricted-provider-connection/resume-originals/src/main/runs/queue.ts",
+    "sha256": "fd76880514c980c3d90574690120a3b6dd2439e10fa10a235538b4b40a816c9c",
+    "verified": true
+  },
+  {
+    "copy": "docs/jufe-route-assessment/restricted-provider-connection/resume-originals/src/main/handlers/runs.ts",
+    "sha256": "633cfdc8471ad8dc59408988416855cf430f7b85a2ecd73165cc891d9039491f",
+    "verified": true
+  }
+]

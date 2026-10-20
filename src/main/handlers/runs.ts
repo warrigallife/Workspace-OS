@@ -1,6 +1,6 @@
-import fs from 'fs'
+import { readResearchResult } from '../agent/researchResult'
 import { RESEARCH_TASK } from '../agent/ollamaResearchRun'
-import { RESEARCH_ROOT, runDirectory, safePath } from '../agent/researchScope'
+import { RESEARCH_ROOT, runDirectory } from '../agent/researchScope'
 import { app, type IpcMain } from 'electron'
 import path from 'path'
 import { IPC } from '../ipc-channels'
@@ -140,10 +140,7 @@ export function registerRunsHandlers(ipcMain: IpcMain): void {
     assertMainFrame(event)
     if(typeof id!=='string'||!getQueue().get(id)?.research)throw new Error('Unknown research run')
     const dir=runDirectory(id)
-    return ['report.md','review.json','handover.md','state.json'].flatMap(name=>{
-      const file=path.join(dir,name);safePath(file)
-      return fs.existsSync(file)&&fs.statSync(file).size<=100000?[name+'\n'+fs.readFileSync(file,'utf8')]:[]
-    }).join('\n\n')
+    return readResearchResult(dir,getQueue().get(id)!.status)
   })
 
   ipcHandle(ipcMain, IPC.RUNS_ENQUEUE, (event, input: unknown) => {

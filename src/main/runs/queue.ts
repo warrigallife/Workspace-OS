@@ -1,3 +1,4 @@
+import type { ResearchOptions } from '../agent/researchProvider'
 import type { LocalTeamOptions } from './localTeamTask'
 import fs from 'fs'
 import path from 'path'
@@ -32,7 +33,7 @@ export interface JobArtifact {
 }
 
 export interface BackgroundJob {
-  research?: { recoveredFrom?: string }
+  research?: ResearchOptions
   localTeam?: LocalTeamOptions
   id: string
   /** A short human label — "Morning sift", or the prompt's first line. */
@@ -66,7 +67,7 @@ export interface BackgroundJob {
 }
 
 export interface JobInput {
-  research?: { recoveredFrom?: string }
+  research?: ResearchOptions
   localTeam?: LocalTeamOptions
   prompt: string
   label?: string

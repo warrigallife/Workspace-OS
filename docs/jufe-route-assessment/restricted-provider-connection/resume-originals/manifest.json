@@ -1,0 +1,26 @@
+[
+  {
+    "path": "src/main/agent/researchProvider.ts",
+    "sha256": "262b0726179e96914fe7921713260ab0028bdfd2b3e0d2eee36dad431e2563c5"
+  },
+  {
+    "path": "src/main/agent/researchLedger.ts",
+    "sha256": "ed4bca8b7a8593b9109ed5503ab1bf3aecf2589a6be678c2782b94419eb0c0d2"
+  },
+  {
+    "path": "src/main/agent/ollamaResearchRun.ts",
+    "sha256": "c75d19fb292c9937bb7de739e937b04a2abca986beefb95f6d4ff8918792ed27"
+  },
+  {
+    "path": "src/main/agent/launchRun.ts",
+    "sha256": "4d625079009492f1b92faa32503c9270f2765e926c885e997848e1a33b86dfee"
+  },
+  {
+    "path": "src/main/runs/queue.ts",
+    "sha256": "fd76880514c980c3d90574690120a3b6dd2439e10fa10a235538b4b40a816c9c"
+  },
+  {
+    "path": "src/main/handlers/runs.ts",
+    "sha256": "633cfdc8471ad8dc59408988416855cf430f7b85a2ecd73165cc891d9039491f"
+  }
+]
