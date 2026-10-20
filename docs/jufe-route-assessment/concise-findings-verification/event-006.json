@@ -1,0 +1,24 @@
+{
+  "kind": "response",
+  "data": {
+    "role": "dana",
+    "step": 1,
+    "response": {
+      "model": "llama3.2:latest",
+      "created_at": "2026-10-20T01:02:31.31401Z",
+      "message": {
+        "role": "assistant",
+        "content": "{\"findings\":[{\"statement\":\"The JUFE full-collection analysis-coverage audit found no equivalent complete audit for source 31.\",\"citation\":{\"record_id\":\"jufe-coverage-2026-10-11\",\"start_line\":1,\"end_line\":80,\"quote\":\"No plan, source, specification, handover, or persona file was changed; no next task is selected; no manuscript analysis is begun.\"}}],\"limitations\":\"Only two concrete gaps found against the prior remaining-file list.\"}"
+      },
+      "done": true,
+      "done_reason": "stop",
+      "total_duration": 12646491291,
+      "load_duration": 3426583,
+      "prompt_eval_count": 6106,
+      "prompt_eval_cached_count": 451,
+      "prompt_eval_duration": 10378875000,
+      "eval_count": 101,
+      "eval_duration": 2224664000
+    }
+  }
+}

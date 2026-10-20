@@ -1,0 +1,47 @@
+// Single approved real-UI submission. Never resubmits after failure.
+import {_electron as electron} from 'playwright'
+import fs from 'node:fs'
+import path from 'node:path'
+import os from 'node:os'
+import assert from 'node:assert/strict'
+import {createHash} from 'node:crypto'
+const root=process.cwd(),base=path.join(root,'.workspace-os/liam-workspace/JUFE-staging')
+const target=path.join(root,'docs/jufe-route-assessment/simple-schema-verification')
+fs.mkdirSync(target,{recursive:false})
+const sourcePaths=['JUFE_Full_Collection_Coverage_Audit_2026-10-11.md','JUFE_Schedule_and_Source31_Coverage_Review_2026-10-11.md'].map(n=>path.join(os.homedir(),'Desktop/JUFE/docs/reports',n))
+const digest=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex')
+const hashes=sourcePaths.map(digest)
+const priors=['bg-mvfjwjrp-jrzvu0','bg-mvfrniva-d7d502','bg-mvfyujmy-lovpsj'].map(id=>path.join(base,id))
+function files(dir){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?files(path.join(dir,e.name)):[path.join(dir,e.name)])}
+const priorHashes=Object.fromEntries(priors.flatMap(files).map(p=>[p,digest(p)]))
+let app,report={status:'infrastructure-failed',sourcePaths,sourceHashes:hashes,modelCallsClaimed:0}
+try {
+ app=await electron.launch({executablePath:path.join(os.homedir(),'Desktop/Workspace OS — Local Python Pilot.command'),cwd:root,timeout:60000})
+ const win=await app.firstWindow();await win.waitForFunction(()=>!!window.workspace?.research)
+ const identity=await app.evaluate(({app})=>({appPath:app.getAppPath(),userData:app.getPath('userData')}))
+ assert.equal(identity.appPath,root);assert.equal(identity.userData,path.join(root,'.workspace-os/liam-app-data'));report.identity=identity
+ const enter=win.getByRole('button',{name:'Enter',exact:true});await enter.waitFor({state:'visible',timeout:5000}).catch(()=>{});if(await enter.isVisible())await enter.click()
+ await win.getByRole('button',{name:'Agents',exact:true}).click();await win.getByTestId('local-research').locator('summary').click()
+ const old=await win.evaluate(()=>window.workspace.runs.list());assert(!old.some(j=>['running','queued'].includes(j.status)),'Preserve active work; stop before submission')
+ await win.getByRole('button',{name:'Run approved JUFE research',exact:true}).click()
+ let job;const end=Date.now()+410000
+ while(Date.now()<end){const jobs=await win.evaluate(()=>window.workspace.runs.list());job=jobs.find(j=>!old.some(o=>o.id===j.id));if(job&&!['queued','running'].includes(job.status))break;await new Promise(r=>setTimeout(r,500))}
+ assert(job&&!['queued','running'].includes(job.status),'Workflow did not finish within bounded deadline')
+ const dir=path.join(base,job.id)
+ for(const e of fs.readdirSync(dir,{withFileTypes:true}))if(e.isFile())fs.copyFileSync(path.join(dir,e.name),path.join(target,e.name))
+ const state=JSON.parse(fs.readFileSync(path.join(dir,'state.json')))
+ await win.getByTestId('research-job').filter({hasText:job.id}).getByRole('button',{name:'View research report and handover'}).click()
+ const displayed=await win.getByTestId('research-result').innerText();assert(displayed.includes('handover.md'))
+ assert.deepEqual(sourcePaths.map(digest),hashes)
+ for(const [file,sha] of Object.entries(priorHashes))assert.equal(digest(file),sha,'Previous failure changed')
+ report={...report,status:state.status,jobId:job.id,queueStatus:job.status,checkpointId:job.checkpointId,turns:state.turns,sourceFilesUnchanged:true,previousFailureUnchanged:true,displayedHandover:true,error:state.error??null}
+ delete report.modelCallsClaimed
+ if(state.status==='completed'){
+  assert.equal(job.status,'pending');assert(job.checkpointId);assert(displayed.includes('report.md'))
+  const draft=JSON.parse(fs.readFileSync(path.join(dir,'draft.json'))),review=JSON.parse(fs.readFileSync(path.join(dir,'review.json')))
+  assert.equal(review.decision,'approve');assert(draft.findings.length>=3)
+  for(const f of draft.findings){const c=f.citation;const source=c.record_id==='jufe-coverage-2026-10-11'?sourcePaths[0]:sourcePaths[1];assert(fs.readFileSync(source,'utf8').split(/\r?\n/).slice(c.start_line-1,c.end_line).join('\n').includes(c.quote));assert(state.reads.nora.some(r=>r.record_id===c.record_id&&r.start_line<=c.start_line&&r.end_line>=c.end_line))}
+  report.citationsVerified=draft.findings.length
+ }else process.exitCode=1
+} catch(e){report.error=String(e);process.exitCode=1}
+finally {fs.writeFileSync(path.join(target,'ui-result.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));if(app)await app.close()}

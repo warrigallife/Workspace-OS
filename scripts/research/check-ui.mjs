@@ -6,12 +6,12 @@ import os from 'node:os'
 import assert from 'node:assert/strict'
 import {createHash} from 'node:crypto'
 const root=process.cwd(),base=path.join(root,'.workspace-os/liam-workspace/JUFE-staging')
-const target=path.join(root,'docs/jufe-route-assessment/simple-schema-verification')
+const target=path.join(root,'docs/jufe-route-assessment/concise-findings-verification')
 fs.mkdirSync(target,{recursive:false})
 const sourcePaths=['JUFE_Full_Collection_Coverage_Audit_2026-10-11.md','JUFE_Schedule_and_Source31_Coverage_Review_2026-10-11.md'].map(n=>path.join(os.homedir(),'Desktop/JUFE/docs/reports',n))
 const digest=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex')
 const hashes=sourcePaths.map(digest)
-const priors=['bg-mvfjwjrp-jrzvu0','bg-mvfrniva-d7d502','bg-mvfyujmy-lovpsj'].map(id=>path.join(base,id))
+const priors=['bg-mvfjwjrp-jrzvu0','bg-mvfrniva-d7d502','bg-mvfyujmy-lovpsj','bg-mvfyz8ar-2hwhh0'].map(id=>path.join(base,id))
 function files(dir){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?files(path.join(dir,e.name)):[path.join(dir,e.name)])}
 const priorHashes=Object.fromEntries(priors.flatMap(files).map(p=>[p,digest(p)]))
 let app,report={status:'infrastructure-failed',sourcePaths,sourceHashes:hashes,modelCallsClaimed:0}
@@ -39,7 +39,7 @@ try {
  if(state.status==='completed'){
   assert.equal(job.status,'pending');assert(job.checkpointId);assert(displayed.includes('report.md'))
   const draft=JSON.parse(fs.readFileSync(path.join(dir,'draft.json'))),review=JSON.parse(fs.readFileSync(path.join(dir,'review.json')))
-  assert.equal(review.decision,'approve');assert(draft.findings.length>=3)
+  assert.equal(review.decision,'approve');assert.equal(draft.findings.length,3)
   for(const f of draft.findings){const c=f.citation;const source=c.record_id==='jufe-coverage-2026-10-11'?sourcePaths[0]:sourcePaths[1];assert(fs.readFileSync(source,'utf8').split(/\r?\n/).slice(c.start_line-1,c.end_line).join('\n').includes(c.quote));assert(state.reads.nora.some(r=>r.record_id===c.record_id&&r.start_line<=c.start_line&&r.end_line>=c.end_line))}
   report.citationsVerified=draft.findings.length
  }else process.exitCode=1

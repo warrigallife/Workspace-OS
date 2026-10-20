@@ -42,6 +42,10 @@ it('offers lookup only until BOTH reads succeed, then independently gates Nora a
  expect(names(4)).toEqual(['lookup']);expect(names(5)).toEqual(['lookup']);expect(requests[6].tools).toBeUndefined();expect(requests[6].format.required).toContain('decision')
  expect(requests[1].messages.at(-1).role).toBe('tool');expect(requests[1].messages.at(-1).content).toContain('not independently retrieved')
  expect(requests[0].messages[0].content).toContain('suspend the persona requirements to check Git status')
+ expect(requests[3].messages.at(-1).content).toContain('Produce exactly three findings')
+ expect(requests[3].messages.at(-1).content).toContain('12–180 characters')
+ expect(requests[3].options.num_predict).toBe(2048)
+ expect(requests[6].messages.at(-1).content).toContain('Check each of the three findings independently')
  const state=JSON.parse(fs.readFileSync(path.join(mock.directory,'state.json'),'utf8'));expect(state.status).toBe('completed');expect(state.reads.nora.length).toBe(2)
 })
 

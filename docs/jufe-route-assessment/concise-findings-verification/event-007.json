@@ -1,0 +1,26 @@
+{
+  "kind": "tool",
+  "data": {
+    "role": "dana",
+    "action": "researchReport.save",
+    "args": {
+      "findings": [
+        {
+          "statement": "The JUFE full-collection analysis-coverage audit found no equivalent complete audit for source 31.",
+          "citation": {
+            "record_id": "jufe-coverage-2026-10-11",
+            "start_line": 1,
+            "end_line": 80,
+            "quote": "No plan, source, specification, handover, or persona file was changed; no next task is selected; no manuscript analysis is begun."
+          }
+        }
+      ],
+      "limitations": "Only two concrete gaps found against the prior remaining-file list."
+    },
+    "result": {
+      "ok": false,
+      "error": "save.findings: require 3–8 findings"
+    },
+    "origin": "structured-finalisation"
+  }
+}

@@ -81,3 +81,9 @@ Use the existing Desktop launcher **Workspace OS — Local Python Pilot.command*
 Only the Ollama `format` schema now omits numeric/count/string bounds to avoid the recorded grammar expansion failure. The full constraints remain in the prompt and application validation; required fields, types and enums remain in the provider grammar. Acceptance requirements, permissions, citation checks, review gates and budgets are unchanged.
 
 The single UI run `bg-mvfyz8ar-2hwhh0` passed grammar compilation but **failed at the unchanged 2,048-token generation limit**, returning incomplete JSON. No draft/save/Nora review/final report was accepted. Evidence is in `simple-schema-verification/`; prior evidence is unchanged. No retry was made. Use the existing Desktop launcher and Agents → JUFE local research panel to view this run's failure handover; this is not a verified successful research workflow.
+
+## Concise findings attempt (2026-10-20)
+
+Generation instructions now request exactly three concise findings, short contiguous exact excerpts (12–180 characters) and a short limitations sentence. Application acceptance limits, citation checks, permissions and all budgets remain unchanged.
+
+The single UI attempt `bg-mvfzajpm-hhz9la` **failed**: after reading both records, the model returned complete JSON in 101 tokens but only one finding. The unchanged minimum-three validator rejected the save. No accepted draft, Nora review or report exists. See `concise-findings-verification/`. No retry was made. View this run through the existing Desktop launcher → Agents → JUFE local research → View research report and handover.
