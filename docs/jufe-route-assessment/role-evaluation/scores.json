@@ -1,0 +1,147 @@
+{
+  "model": {
+    "model": "llama3.2:latest",
+    "digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72"
+  },
+  "inferenceRequests": 4,
+  "sourcesMatchFixture": true,
+  "expectedAnswerIsolationVerified": true,
+  "dana": {
+    "tokens": 134,
+    "completeJSON": true,
+    "findingCount": 1,
+    "exactlyThree": false,
+    "bothRecords": false,
+    "quotations": [
+      {
+        "matchesDisk": true,
+        "characters": 71
+      }
+    ],
+    "semanticScoring": "See assessment.md; not inferred from quotation matching."
+  },
+  "nora": [
+    {
+      "id": "nora-1",
+      "tokens": 111,
+      "candidates": [
+        {
+          "candidate_id": "candidate-1",
+          "expected": {
+            "candidate_id": "candidate-1",
+            "claim_supported": false,
+            "quotation_matches": true
+          },
+          "actual": {
+            "candidate_id": "candidate-1",
+            "quotation_matches": false,
+            "claim_supported": false,
+            "reason": "The report states that the claim is not supported by the dedicated chapter, and the word 'stochastic' appears nowhere else in the entire collection."
+          },
+          "quotationDecisionCorrect": false,
+          "supportDecisionCorrect": true
+        },
+        {
+          "candidate_id": "candidate-2",
+          "expected": {
+            "candidate_id": "candidate-2",
+            "claim_supported": true,
+            "quotation_matches": true
+          },
+          "actual": {
+            "candidate_id": "candidate-2",
+            "quotation_matches": true,
+            "claim_supported": false,
+            "reason": "The report quotation matches the candidate's statement, but it does not support the claim that stochastic evolution is impossible."
+          },
+          "quotationDecisionCorrect": true,
+          "supportDecisionCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "nora-2",
+      "tokens": 107,
+      "candidates": [
+        {
+          "candidate_id": "candidate-1",
+          "expected": {
+            "candidate_id": "candidate-1",
+            "claim_supported": true,
+            "quotation_matches": true
+          },
+          "actual": {
+            "candidate_id": "candidate-1",
+            "quotation_matches": true,
+            "claim_supported": false,
+            "reason": "The report does not provide a clear definition of \"sympathetic weights\" and its connection to other operators."
+          },
+          "quotationDecisionCorrect": true,
+          "supportDecisionCorrect": false
+        },
+        {
+          "candidate_id": "candidate-2",
+          "expected": {
+            "candidate_id": "candidate-2",
+            "claim_supported": false,
+            "quotation_matches": true
+          },
+          "actual": {
+            "candidate_id": "candidate-2",
+            "quotation_matches": false,
+            "claim_supported": true,
+            "reason": "The report does not address the issue, but the existing reports establish that sympathetic weights and sympathetic gear shifts are the same operator."
+          },
+          "quotationDecisionCorrect": false,
+          "supportDecisionCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "nora-3",
+      "tokens": 121,
+      "candidates": [
+        {
+          "candidate_id": "candidate-1",
+          "expected": {
+            "candidate_id": "candidate-1",
+            "claim_supported": false,
+            "quotation_matches": true
+          },
+          "actual": {
+            "candidate_id": "candidate-1",
+            "quotation_matches": false,
+            "claim_supported": false,
+            "reason": "The report states that the claim has not been checked against any other source or against the claimed experimental basis, which is a crucial aspect of verifying the claim."
+          },
+          "quotationDecisionCorrect": false,
+          "supportDecisionCorrect": true
+        },
+        {
+          "candidate_id": "candidate-2",
+          "expected": {
+            "candidate_id": "candidate-2",
+            "claim_supported": true,
+            "quotation_matches": true
+          },
+          "actual": {
+            "candidate_id": "candidate-2",
+            "quotation_matches": false,
+            "claim_supported": false,
+            "reason": "The report states that the claim has not been checked against any other source or against the claimed experimental basis, which is a crucial aspect of verifying the claim."
+          },
+          "quotationDecisionCorrect": false,
+          "supportDecisionCorrect": false
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "quotationDecisionsCorrect": 2,
+    "supportDecisionsCorrect": 2,
+    "totalCandidates": 6,
+    "supportedAccepted": 0,
+    "unsupportedRejected": 2,
+    "falseAcceptances": 1
+  }
+}

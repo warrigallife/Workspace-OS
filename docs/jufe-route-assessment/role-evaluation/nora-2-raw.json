@@ -1,0 +1,4 @@
+{
+  "status": 200,
+  "body": "{\"model\":\"llama3.2:latest\",\"created_at\":\"2026-10-20T01:16:32.667858Z\",\"message\":{\"role\":\"assistant\",\"content\":\"{\\\"reviews\\\": [{\\\"candidate_id\\\": \\\"candidate-1\\\", \\\"quotation_matches\\\": true, \\\"claim_supported\\\": false, \\\"reason\\\": \\\"The report does not provide a clear definition of \\\\\\\"sympathetic weights\\\\\\\" and its connection to other operators.\\\"}, {\\\"candidate_id\\\": \\\"candidate-2\\\", \\\"quotation_matches\\\": false, \\\"claim_supported\\\": true, \\\"reason\\\": \\\"The report does not address the issue, but the existing reports establish that sympathetic weights and sympathetic gear shifts are the same operator.\\\"}]}\"},\"done\":true,\"done_reason\":\"stop\",\"total_duration\":2967539875,\"load_duration\":1336750,\"prompt_eval_count\":802,\"prompt_eval_cached_count\":146,\"prompt_eval_duration\":1031991000,\"eval_count\":107,\"eval_duration\":1914078000}"
+}

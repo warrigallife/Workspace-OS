@@ -1,0 +1,38 @@
+{
+  "nora-1": [
+    {
+      "candidate_id": "candidate-1",
+      "claim_supported": false,
+      "quotation_matches": true
+    },
+    {
+      "candidate_id": "candidate-2",
+      "claim_supported": true,
+      "quotation_matches": true
+    }
+  ],
+  "nora-2": [
+    {
+      "candidate_id": "candidate-1",
+      "claim_supported": true,
+      "quotation_matches": true
+    },
+    {
+      "candidate_id": "candidate-2",
+      "claim_supported": false,
+      "quotation_matches": true
+    }
+  ],
+  "nora-3": [
+    {
+      "candidate_id": "candidate-1",
+      "claim_supported": false,
+      "quotation_matches": true
+    },
+    {
+      "candidate_id": "candidate-2",
+      "claim_supported": true,
+      "quotation_matches": true
+    }
+  ]
+}

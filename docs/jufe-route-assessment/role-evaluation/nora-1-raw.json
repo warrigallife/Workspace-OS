@@ -1,0 +1,4 @@
+{
+  "status": 200,
+  "body": "{\"model\":\"llama3.2:latest\",\"created_at\":\"2026-10-20T01:16:29.697955Z\",\"message\":{\"role\":\"assistant\",\"content\":\"{\\\"reviews\\\": [{\\\"candidate_id\\\": \\\"candidate-1\\\", \\\"quotation_matches\\\": false, \\\"claim_supported\\\": false, \\\"reason\\\": \\\"The report states that the claim is not supported by the dedicated chapter, and the word 'stochastic' appears nowhere else in the entire collection.\\\"}, {\\\"candidate_id\\\": \\\"candidate-2\\\", \\\"quotation_matches\\\": true, \\\"claim_supported\\\": false, \\\"reason\\\": \\\"The report quotation matches the candidate's statement, but it does not support the claim that stochastic evolution is impossible.\\\"}]}\"},\"done\":true,\"done_reason\":\"stop\",\"total_duration\":3072222209,\"load_duration\":1441875,\"prompt_eval_count\":686,\"prompt_eval_cached_count\":17,\"prompt_eval_duration\":1024057000,\"eval_count\":111,\"eval_duration\":1995487000}"
+}
