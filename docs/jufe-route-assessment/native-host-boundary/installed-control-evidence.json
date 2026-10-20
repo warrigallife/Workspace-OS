@@ -1,0 +1,97 @@
+{
+  "installed_binaries": {
+    "claude": {
+      "resolved_path": "/opt/homebrew/Caskroom/claude-code/2.1.267/claude",
+      "sha256": "a681f3008f0050029aeebcab3af51bb6a55ddeb625a3af3141a4416d43cd2558"
+    },
+    "codex": {
+      "resolved_path": "/opt/homebrew/Caskroom/codex/0.155.1/bin/codex",
+      "sha256": "8eaf1ad12fe6bf89b1710330f58900014322c7c5af677e43be116d8ac5fc0a9e"
+    }
+  },
+  "schema_hashes": {
+    "ThreadStartParams.json": "25f490368ec6df52a2a3b82a5469d2413307eb93439121b309f415b5648eee7a",
+    "ThreadStartResponse.json": "b43f4e53d2262e0501d21bcf2a5a45b0316b8fab757a7ff19a6f1e042d4b09da",
+    "ConfigReadResponse.json": "96a04a3f7fff2dc7fafc9f831e8bcd422e021d697dd2c14c801f098a9f21396d"
+  },
+  "thread_start_controls": {
+    "environments": {
+      "description": "Optional sticky environments for this thread.\n\nOmitted selects the default environment when environment access is enabled. Empty disables environment access for turns that do not provide a turn override. Non-empty selects the first environment as the current turn environment.",
+      "items": {
+        "$ref": "#/definitions/TurnEnvironmentParams"
+      },
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "dynamicTools": {
+      "default": null,
+      "items": {
+        "$ref": "#/definitions/DynamicToolSpec"
+      },
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "sandbox": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/SandboxMode"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "approvalPolicy": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/AskForApproval"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "allowProviderModelFallback": {
+      "description": "Allow a provider with an authoritative static model catalog to replace an unavailable requested model with its default.",
+      "type": "boolean"
+    }
+  },
+  "thread_start_response_fields": [
+    "activePermissionProfile",
+    "approvalPolicy",
+    "approvalsReviewer",
+    "cwd",
+    "instructionSources",
+    "model",
+    "modelProvider",
+    "multiAgentMode",
+    "reasoningEffort",
+    "runtimeWorkspaceRoots",
+    "sandbox",
+    "serviceTier",
+    "thread"
+  ],
+  "config_tools_type": {
+    "properties": {
+      "web_search": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/WebSearchToolConfig"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "type": "object"
+  },
+  "inference_calls": 0,
+  "provider_sessions_started": 0,
+  "research_content_transmitted": false,
+  "scope": "Local CLI help and generated protocol schema only; absence of an advertised global exclusion control is a fail-closed blocker, not proof that every possible Codex route is incapable."
+}

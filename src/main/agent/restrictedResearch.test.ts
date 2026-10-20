@@ -115,7 +115,7 @@ it('denies arbitrary model action requests',async()=>{
  await launchResearchWithDriver(s.options,d.host,s.factory);expect(await s.result).toBe(1);expect(outcome().error).toContain('Only lookup')
 })
 it('production entrypoint refuses restricted execution before source staging or provider calls',async()=>{
- const s=setup();await expect(launchOllamaResearch(s.options)).rejects.toThrow('locked');expect(fs.existsSync(mock.directory)).toBe(false)
+ const s=setup();await expect(launchOllamaResearch(s.options)).rejects.toMatchObject({code:'NATIVE_TOOL_EXCLUSION_UNESTABLISHED',provider:'codex'});expect(fs.existsSync(mock.directory)).toBe(false)
 })
 it('missing exact provider preflight stops before any model request',async()=>{
  const s=setup(),d=driver();d.host.preflight=async()=>{throw new Error('Exact model unavailable')}

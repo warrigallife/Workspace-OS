@@ -1,0 +1,196 @@
+[1021/082543.607669:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+
+ RUN  v4.1.9 /Users/liammcilmurray/Desktop/Workspace-OS
+
+[1021/082544.024479:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1021/082544.025367:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1021/082544.030153:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1021/082544.033447:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1021/082544.033972:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1021/082544.035557:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1021/082544.036978:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1021/082544.041596:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1021/082544.043096:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1021/082544.045032:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+ ✓ src/main/agent/researchContract.test.ts > advertises the same text bounds used by validation and hides save during retrieval 2ms
+ ✓ src/main/agent/researchContract.test.ts > projects the preserved HTTP-400 schema without repetition bounds or mutating acceptance requirements 1ms
+ ✓ src/main/agent/nativeResearchBoundary.test.ts > pins existing route identifiers without default, fallback or model probing 1ms
+ ✓ src/main/agent/nativeResearchBoundary.test.ts > Claude native plan uses documented exclusion controls, not Safe mode alone 1ms
+ ✓ src/main/agent/nativeResearchBoundary.test.ts > Codex schema establishes narrower controls, not a blanket native tool allowlist 0ms
+ ✓ src/main/agent/nativeResearchBoundary.test.ts > fails technical preflight before either role; approval cannot stand in for restrictions 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > Ada action adapter > returns retrieval-only JSON using a fixed invocation and bounded execution 2ms
+ ✓ src/main/agent/evidenceAction.test.ts > Ada action adapter > rejects invalid or oversized input before spawning: null 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > Ada action adapter > rejects invalid or oversized input before spawning: undefined 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > Ada action adapter > rejects invalid or oversized input before spawning: {} 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > Ada action adapter > rejects invalid or oversized input before spawning: {"question":""} 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > Ada action adapter > rejects invalid or oversized input before spawning: {"question":"   "} 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > Ada action adapter > rejects invalid or oversized input before spawning: {"question":123} 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > Ada action adapter > rejects invalid or oversized input before spawning: {"question":"x","path":"/tmp/arbitrary"} 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > Ada action adapter > rejects invalid or oversized input before spawning: {"question":"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"} 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > Ada action adapter > rejects invalid or oversized input before spawning: {"question":"ééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééé"} 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > Ada action adapter > reports process failure safely: missing backend 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > Ada action adapter > reports process failure safely: timeout 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > Ada action adapter > reports process failure safely: oversized output 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > Ada action adapter > rejects malformed JSON 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > Ada action adapter > rejects a response that violates the retrieval contract 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > Ada action adapter > rejects a response that violates the retrieval contract 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > Ada action adapter > rejects a response that violates the retrieval contract 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > Ada action adapter > rejects a response that violates the retrieval contract 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > uses the same bounded fixed process and preserves lookup identity 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects invalid input before spawning: null 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects invalid input before spawning: undefined 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects invalid input before spawning: {} 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects invalid input before spawning: {"record_id":"implementation-log","start_line":145,"end_line":160,"path":"/etc/passwd"} 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects invalid input before spawning: {"record_id":"implementation-log","start_line":145,"end_line":160,"question":"extra"} 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects invalid input before spawning: {"record_id":"../../etc/passwd","start_line":145,"end_line":160} 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects invalid input before spawning: {"record_id":"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx","start_line":145,"end_line":160} 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects invalid input before spawning: {"record_id":"","start_line":145,"end_line":160} 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects invalid input before spawning: {"record_id":1,"start_line":145,"end_line":160} 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects invalid input before spawning: {"record_id":"implementation-log","start_line":0,"end_line":160} 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects invalid input before spawning: {"record_id":"implementation-log","start_line":-1,"end_line":160} 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects invalid input before spawning: {"record_id":"implementation-log","start_line":true,"end_line":160} 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects invalid input before spawning: {"record_id":"implementation-log","start_line":"145","end_line":160} 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects invalid input before spawning: {"record_id":"implementation-log","start_line":145.5,"end_line":160} 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects invalid input before spawning: {"record_id":"implementation-log","start_line":145,"end_line":144} 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects invalid input before spawning: {"record_id":"implementation-log","start_line":145,"end_line":225} 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects invalid input before spawning: {"record_id":"implementation-log","start_line":145,"end_line":null} 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects invalid input before spawning: {"record_id":"implementation-log","start_line":100001,"end_line":100001} 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects miscorrelated or oversized results 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects miscorrelated or oversized results 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects miscorrelated or oversized results 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects miscorrelated or oversized results 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects miscorrelated or oversized results 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects miscorrelated or oversized results 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects miscorrelated or oversized results 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects miscorrelated or oversized results 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects miscorrelated or oversized results 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects miscorrelated or oversized results 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > rejects miscorrelated or oversized results 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > returns a fixed failure code: UNKNOWN_RECORD 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > returns a fixed failure code: INVALID_RANGE 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > returns a fixed failure code: SOURCE_UNAVAILABLE 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > returns a fixed failure code: SOURCE_TOO_LARGE 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > returns a fixed failure code: RANGE_OUT_OF_BOUNDS 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > returns a fixed failure code: EXCERPT_TOO_LARGE 0ms
+ ✓ src/main/agent/evidenceAction.test.ts > bounded approved-record action > returns a fixed failure code: REGISTRY_MISMATCH 0ms
+ ✓ src/main/agent/researchLedger.test.ts > reuses task-only Ruflo adapter with per-run cwd, no inherited credentials and bounded process 3ms
+ ✓ src/main/agent/researchLedger.test.ts > missing ledger fails closed without spawning anything 1ms
+ ✓ src/main/agent/researchLedger.test.ts > cancelled ledger operation never spawns 0ms
+ ✓ src/main/agent/researchLedger.test.ts > ledger rejects invalid result malformed 0ms
+ ✓ src/main/agent/researchLedger.test.ts > ledger rejects invalid result {"success":false} 0ms
+ ✓ src/main/agent/grants.test.ts > grants > a capability grants its surface prefix, unknown ids grant nothing 1ms
+ ✓ src/main/agent/grants.test.ts > grants > allows: prefix match, baseline memory.search, never memory.remember without knowledge 0ms
+ ✓ src/main/agent/grants.test.ts > grants > issue/lookup/revoke: one token per run, re-issue replaces, revoke forgets 0ms
+ ✓ src/main/runs/queue.test.ts > RunQueue > runs at most `concurrency` jobs; the rest wait in order 5ms
+ ✓ src/main/runs/queue.test.ts > RunQueue > records output tail, meta and artifacts on the job; exit code decides pending vs error 2ms
+ ✓ src/main/runs/queue.test.ts > RunQueue > a launcher that throws lands the job as error, not as a stuck running job 2ms
+ ✓ src/main/runs/queue.test.ts > RunQueue > cancel: a queued job is cancelled; a running one is killed and stays cancelled after done() 2ms
+ ✓ src/main/runs/queue.test.ts > RunQueue > persists, and a run in flight at load is marked interrupted 3ms
+ ✓ src/main/runs/queue.test.ts > RunQueue > shutdown kills what is running, marks it interrupted and writes now 2ms
+ ✓ src/main/runs/queue.test.ts > RunQueue > a corrupt file loads as an empty queue 0ms
+ ✓ src/main/runs/queue.test.ts > local team restart and shutdown > marks running and queued local attempts interrupted, without executing on read 1ms
+ ✓ src/main/runs/queue.test.ts > local team restart and shutdown > late child completion cannot overwrite interrupted state or start queued work 3ms
+ ✓ src/main/runs/queue.test.ts > refuses to overwrite a corrupt strict local queue 1ms
+ ✓ src/main/runs/queue.test.ts > approved local research queue persistence > persists research before launch and never auto-resumes queued/running research after restart 4ms
+[1021/082544.299450:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+ ✓ src/main/agent/ollamaResearchRun.test.ts > stops after 12 local responses, preserving failures without review or fallback 17ms
+ ✓ src/main/agent/ollamaResearchRun.test.ts > stops at 16 tool calls even when the model batches them 6ms
+ ✓ src/main/agent/ollamaResearchRun.test.ts > cancellation aborts the request and revokes stage grants 2ms
+ ✓ src/main/agent/ollamaResearchRun.test.ts > missing installed model fails before inference and never falls back 3ms
+ ✓ src/main/agent/ollamaResearchRun.test.ts > offers lookup only until BOTH reads succeed, then independently gates Nora and preserves message history 11ms
+ ✓ src/main/agent/ollamaResearchRun.test.ts > rejects structured invalid JSON without starting review 4ms
+ ✓ src/main/agent/ollamaResearchRun.test.ts > rejects structured invalid fields without starting review 3ms
+ ✓ src/main/agent/ollamaResearchRun.test.ts > rejects structured invented quotes without starting review 4ms
+ ✓ src/main/agent/restrictedResearch.test.ts > runs both exact routes through retrieval/save/review, ledger and saved handover; result display shows report 17ms
+ ✓ src/main/agent/restrictedResearch.test.ts > review rejection blocks final report and handover completion 7ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fabricated quotation fails before reviewer, preserves raw response and failure handover 6ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed draft.json never completes queue or publishes report 4ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed review.json never completes queue or publishes report 6ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed report.md never completes queue or publishes report 6ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed handover.md never completes queue or publishes report 5ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed outcome.json never completes queue or publishes report 5ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed checkpoint is explicit in terminal outcome and suppresses otherwise generated report 6ms
+ ✓ src/main/agent/restrictedResearch.test.ts > cancel closes uncooperative request, revokes grants and prevents reviewer 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > pre-aborted run does not preflight or open provider 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified nativeTools before sending content 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified connectors before sending content 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified ambientContext before sending content 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified restrictionsEnforced before sending content 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified fallback before sending content 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > never substitutes model in receipt 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > never substitutes model in response 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed for missing token accounting 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed for exceeded token accounting 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > denies arbitrary model action requests 3ms
+ ✓ src/main/agent/restrictedResearch.test.ts > production entrypoint refuses restricted execution before source staging or provider calls 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > missing exact provider preflight stops before any model request 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > native launch plans do not inherit normal tools or enable model fallback 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > persistent restricted queue interrupts running/queued jobs, never auto-resumes, preserves route choice and failure evidence 2ms
+stderr | src/main/agent/actionBridge.grants.test.ts > actionBridge — per-run grants > a research agent may drive the browser, not mail, not memory.remember, not cases
+[action-bridge] refused mail.compose for run Nadia: outside its grant
+
+stderr | src/main/agent/actionBridge.grants.test.ts > actionBridge — per-run grants > a research agent may drive the browser, not mail, not memory.remember, not cases
+[action-bridge] refused memory.remember for run Nadia: outside its grant
+
+stderr | src/main/agent/actionBridge.grants.test.ts > actionBridge — per-run grants > a research agent may drive the browser, not mail, not memory.remember, not cases
+[action-bridge] refused cases.list for run Nadia: outside its grant
+
+stderr | src/main/agent/evidencePermissions.test.ts > evidence.query permissions > rejects a token lacking the evidence grant
+[action-bridge] refused evidence.query for run Other: outside its grant
+
+stderr | src/main/agent/actionBridge.grants.test.ts > Codex document bridge grants > checks the granted surface and original workspace before any document or data write
+[action-bridge] refused document.generate for run research: outside its grant
+
+stderr | src/main/agent/actionBridge.grants.test.ts > Codex document bridge grants > checks the granted surface and original workspace before any document or data write
+[action-bridge] refused document.data for run research: outside its grant
+
+ ✓ src/main/agent/actionBridge.grants.test.ts > actionBridge — per-run grants > refuses a run with no identity, before touching anything 1ms
+ ✓ src/main/agent/actionBridge.grants.test.ts > actionBridge — per-run grants > a research agent may drive the browser, not mail, not memory.remember, not cases 1ms
+ ✓ src/main/agent/actionBridge.grants.test.ts > actionBridge — per-run grants > the legacy full grant keeps the dock whole; a revoked token is a stranger again 0ms
+ ✓ src/main/agent/actionBridge.grants.test.ts > actionBridge — per-run grants > list and context need no identity 0ms
+ ✓ src/main/agent/actionBridge.grants.test.ts > actionBridge — per-run grants > without a grants dep the protocol is unchanged (existing tests) 0ms
+ ✓ src/main/agent/actionBridge.grants.test.ts > Codex document bridge grants > checks the granted surface and original workspace before any document or data write 0ms
+ ✓ src/main/agent/actionBridge.grants.test.ts > Codex document bridge grants > a workspace-bound run still acts while no workspace is open (nothing to protect) 0ms
+stderr | src/main/agent/evidencePermissions.test.ts > evidence.lookup permissions > rejects a token lacking the evidence grant
+[action-bridge] refused evidence.lookup for run Other: outside its grant
+
+ ✓ src/main/agent/evidencePermissions.test.ts > evidence.query permissions > grants evidence without unrelated action permissions 1ms
+ ✓ src/main/agent/evidencePermissions.test.ts > evidence.query permissions > routes an authorised query to Ada without renderer registration 1ms
+ ✓ src/main/agent/evidencePermissions.test.ts > evidence.query permissions > rejects a missing token before calling Ada 0ms
+ ✓ src/main/agent/evidencePermissions.test.ts > evidence.query permissions > rejects a token lacking the evidence grant 0ms
+ ✓ src/main/agent/evidencePermissions.test.ts > evidence.query permissions > rejects an unbound token 0ms
+ ✓ src/main/agent/evidencePermissions.test.ts > evidence.query permissions > rejects a revoked token 0ms
+ ✓ src/main/agent/evidencePermissions.test.ts > evidence.query permissions > rejects a token bound to a different workspace 0ms
+ ✓ src/main/agent/evidencePermissions.test.ts > evidence.query permissions > rejects evidence queries when no workspace is open 0ms
+ ✓ src/main/agent/evidencePermissions.test.ts > evidence.query permissions > rejects evidence queries without an authorization dependency 0ms
+ ✓ src/main/agent/evidencePermissions.test.ts > evidence.query permissions > preserves legacy all-grant access: Liam is not exclusive 0ms
+ ✓ src/main/agent/evidencePermissions.test.ts > evidence.lookup permissions > grants evidence without unrelated action permissions 0ms
+ ✓ src/main/agent/evidencePermissions.test.ts > evidence.lookup permissions > routes an authorised query to Ada without renderer registration 0ms
+ ✓ src/main/agent/evidencePermissions.test.ts > evidence.lookup permissions > rejects a missing token before calling Ada 0ms
+ ✓ src/main/agent/evidencePermissions.test.ts > evidence.lookup permissions > rejects a token lacking the evidence grant 0ms
+ ✓ src/main/agent/evidencePermissions.test.ts > evidence.lookup permissions > rejects an unbound token 0ms
+ ✓ src/main/agent/evidencePermissions.test.ts > evidence.lookup permissions > rejects a revoked token 0ms
+ ✓ src/main/agent/evidencePermissions.test.ts > evidence.lookup permissions > rejects a token bound to a different workspace 0ms
+ ✓ src/main/agent/evidencePermissions.test.ts > evidence.lookup permissions > rejects evidence queries when no workspace is open 0ms
+ ✓ src/main/agent/evidencePermissions.test.ts > evidence.lookup permissions > rejects evidence queries without an authorization dependency 0ms
+ ✓ src/main/agent/evidencePermissions.test.ts > evidence.lookup permissions > preserves legacy all-grant access: Liam is not exclusive 0ms
+stderr | src/main/agent/researchScope.test.ts > approved research scope > requires exact grant, token, matching workspace and active stage in actual bridge
+[action-bridge] refused memory.remember for run Dana: outside its grant
+
+stderr | src/main/agent/researchScope.test.ts > approved research scope > requires exact grant, token, matching workspace and active stage in actual bridge
+[action-bridge] refused researchRecords.lookupExtra for run Dana: outside its grant
+
+ ✓ src/main/agent/researchScope.test.ts > approved research scope > requires Dana retrieval, exact quotes, both sources and independent Nora lookups 4ms
+ ✓ src/main/agent/researchScope.test.ts > approved research scope > rejects paths, IDs, invalid ranges, extra fields and false quotes 1ms
+ ✓ src/main/agent/researchScope.test.ts > approved research scope > rejects source drift, missing sources, symlinks and output escapes 1ms
+ ✓ src/main/agent/researchScope.test.ts > approved research scope > records rejection without falsely accepting and closes cancellation authority 1ms
+ ✓ src/main/agent/researchScope.test.ts > approved research scope > requires exact grant, token, matching workspace and active stage in actual bridge 2ms
+ ✓ src/main/agent/researchScope.test.ts > enforces both-record retrieval before save, including direct unadvertised calls 1ms
+ ✓ src/main/agent/researchScope.test.ts > reports exact extra, missing and length errors rather than misleading finding counts 1ms
+ ✓ src/main/agent/researchScope.test.ts > retains all acceptance bounds removed only from provider grammar 2ms
+
+ Test Files  11 passed (11)
+      Tests  148 passed (148)
+   Start at  08:25:43
+   Duration  466ms (transform 744ms, setup 0ms, import 1.22s, tests 209ms, environment 0ms)
+

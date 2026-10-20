@@ -1,0 +1,16 @@
+{
+  "status": "stopped at native exclusion boundary",
+  "tests_passed": 148,
+  "tests_failed": 0,
+  "test_files": 11,
+  "build": "passed",
+  "new_typecheck_errors": 0,
+  "known_typecheck_errors": 70,
+  "baseline": 75,
+  "inference_calls": 0,
+  "native_provider_sessions": 0,
+  "research_transmission": false,
+  "original_copies_verified": 4,
+  "blocker_code": "NATIVE_TOOL_EXCLUSION_UNESTABLISHED",
+  "native_adapters_completed": false
+}

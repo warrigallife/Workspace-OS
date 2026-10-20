@@ -1,5 +1,7 @@
 # Restricted provider connection — handover
 
+Follow-up: [installed native-host boundary determination](../native-host-boundary/handover.md). The requested adapter completion stopped at unestablished Codex native-tool exclusion. The production guard now reports that specific technical blocker; 148 deterministic tests pass. Native adapters are not claimed complete.
+
 Status: shared coordinator connection and deterministic verification completed. **Native Claude/Codex execution remains blocked, not ready for live approval alone.** No live model calls or research-content transmission occurred.
 
 Implemented in the existing research coordinator: injectable, stage-specific provider sessions; exact route/restriction receipt checks before sending context; mandatory usage accounting; existing grants, lookup/citation/save validation and Dana → Nora gate; Ruflo task-handler wiring; cancellation of uncooperative requests; and post-save outcome reporting that hides reports on failed saves. Existing queue interruption/recovery and staging are retained. No new UI, framework, persona, source access or Python-pilot extension.

@@ -1,0 +1,23 @@
+[
+  {
+    "path": "src/main/agent/researchProvider.ts",
+    "sha256": "ca1c72d1f8baa7a957a1b8203212fdf06b53b56072ab9d6a4b83fad77c0e9044",
+    "verified": true
+  },
+  {
+    "path": "src/main/agent/restrictedResearch.test.ts",
+    "sha256": "a0d731484162781806e1bf8713934befb754ed42e28e0019abfe534957d421f2",
+    "verified": true,
+    "copy": "src/main/agent/restrictedResearch.test.ts.snapshot"
+  },
+  {
+    "path": "docs/local-team/implementation-log.md",
+    "sha256": "ee628d6155bdf34b2e1c796542a176c347575fb0fde33128b2ded2441f6d5627",
+    "verified": true
+  },
+  {
+    "path": "docs/jufe-route-assessment/restricted-provider-connection/handover.md",
+    "sha256": "0b0571d0f2f07690a2e2ca88293e26457d81f0758da90eeaf04a8ab8d876a0b6",
+    "verified": true
+  }
+]
