@@ -1,0 +1,24 @@
+{
+  "id": "bg-mvip8uzc-elb3nt",
+  "status": "running",
+  "stage": "preflight",
+  "provider": "restricted-hosts",
+  "routes": {
+    "dana": {
+      "provider": "claude",
+      "model": "claude-sonnet-5"
+    },
+    "nora": {
+      "provider": "claude",
+      "model": "claude-sonnet-5"
+    }
+  },
+  "usage": {},
+  "task": "Identify outstanding research work recorded in the two approved JUFE coverage reports dated 2026-10-11. Produce exactly three distinct, concise findings with short exact source excerpts and line citations. Cover both approved records. Distinguish reported coverage gaps from inference and unresolved present-day status. Do not inspect or change manuscripts.",
+  "recoveredFrom": null,
+  "sourceHashes": {
+    "jufe-coverage-2026-10-11": "eaa5a95fc910bf016c03f899e2ec7d283d9eb56b9c35ad88aa3a5ba569f4b96d",
+    "jufe-schedule-2026-10-11": "e281c7def2fc5461202f84422771adc6a32300260ee1d2a0928416830fee4772"
+  },
+  "events": []
+}

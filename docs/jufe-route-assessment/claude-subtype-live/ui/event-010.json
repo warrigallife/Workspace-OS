@@ -1,0 +1,44 @@
+{
+  "kind": "tool",
+  "data": {
+    "role": "dana",
+    "action": "researchReport.save",
+    "args": {
+      "findings": [
+        {
+          "statement": "Source 35 introduces an unassessed operator and an unchecked empirical claim tied to an external experiment.",
+          "citation": {
+            "record_id": "jufe-coverage-2026-10-11",
+            "start_line": 1,
+            "end_line": 80,
+            "quote": "a strong, unassessed claim of \\\"laboratory-verified physics\\\"/empirical proof-of-principle (line 19) tied to a named external experiment (UCCS/RPTU magnon data)"
+          }
+        },
+        {
+          "statement": "File 4's remaining ~300 lines beyond the repeated preamble were not read and remain explicitly unverified.",
+          "citation": {
+            "record_id": "jufe-coverage-2026-10-11",
+            "start_line": 1,
+            "end_line": 80,
+            "quote": "the remaining ~300 lines were **not read in this pass — mark as unverified**, since this file is markedly longer than its near-duplicates"
+          }
+        },
+        {
+          "statement": "The abstract's claim that evolution is stochastically emergent is unsupported by the deterministic source-30 treatment and unflagged elsewhere.",
+          "citation": {
+            "record_id": "jufe-schedule-2026-10-11",
+            "start_line": 1,
+            "end_line": 80,
+            "quote": "This is a concrete claim made only in the abstract, not stated,\\n   defined, or supported by the dedicated chapter covering the same\\n   mechanism."
+          }
+        }
+      ],
+      "limitations": "Findings reflect only the retrieved line ranges from the two dated reports, not full-document or present-day verification."
+    },
+    "result": {
+      "ok": false,
+      "error": "save.findings[0].citation.quote: must match source verbatim"
+    },
+    "origin": "structured-finalisation"
+  }
+}

@@ -1,0 +1,296 @@
+{
+  "kind": "response",
+  "data": {
+    "role": "dana",
+    "step": 0,
+    "response": {
+      "done": true,
+      "done_reason": "stop",
+      "message": {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "function": {
+              "name": "lookup",
+              "arguments": {
+                "record_id": "jufe-coverage-2026-10-11",
+                "start_line": 1,
+                "end_line": 80
+              }
+            }
+          },
+          {
+            "function": {
+              "name": "lookup",
+              "arguments": {
+                "record_id": "jufe-schedule-2026-10-11",
+                "start_line": 1,
+                "end_line": 80
+              }
+            }
+          }
+        ]
+      },
+      "provider": "claude",
+      "model": "claude-sonnet-5",
+      "inputTokens": 3407,
+      "outputTokens": 139,
+      "aggregateUsage": {
+        "basis": "cumulative per session",
+        "models": [
+          {
+            "model": "claude-haiku-4-5-20251001",
+            "attribution": "additional aggregate usage; purpose unattributed",
+            "inputTokens": 1631,
+            "outputTokens": 15,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0,
+            "costUSD": 0.001706
+          },
+          {
+            "model": "claude-sonnet-5",
+            "attribution": "selected answer model",
+            "inputTokens": 2,
+            "outputTokens": 124,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 1774,
+            "costUSD": 0.00834
+          }
+        ],
+        "inputTokens": 3407,
+        "outputTokens": 139,
+        "costUSD": 0.010046
+      },
+      "nativeEvidence": [
+        {
+          "type": "system",
+          "subtype": "init",
+          "cwd": "/Users/liammcilmurray/Desktop/Workspace-OS/.workspace-os/liam-workspace/JUFE-staging/bg-mvip8uzc-elb3nt",
+          "session_id": "88d2a18d-75eb-4cdb-bdc1-b6baa4dfab2c",
+          "tools": [],
+          "mcp_servers": [],
+          "model": "claude-sonnet-5",
+          "permissionMode": "default",
+          "slash_commands": [],
+          "apiKeySource": "none",
+          "claude_code_version": "2.1.267",
+          "output_style": "default",
+          "agents": [
+            "claude",
+            "Explore",
+            "general-purpose",
+            "Plan"
+          ],
+          "skills": [],
+          "plugins": [],
+          "capabilities": [
+            "interrupt_receipt_v1",
+            "interrupt_cancel_queued_v1",
+            "msg_lifecycle_v1"
+          ],
+          "analytics_disabled": false,
+          "product_feedback_disabled": false,
+          "uuid": "24ce36c9-aff6-438d-8e62-cad78590eac7",
+          "messaging_socket_path": "/tmp/cc-socks/76931.sock",
+          "fast_mode_state": "off",
+          "fast_mode_disabled_reason": "sdk_opt_in_required"
+        },
+        {
+          "type": "assistant",
+          "message": {
+            "model": "claude-sonnet-5",
+            "id": "msg_011CgGC6fU6hqXLWUCpvaCs3",
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "thinking",
+                "thinking": "",
+                "signature": "EsMECugCCBMYAipAnBJdwgp/c77svuF0a6haDZzPpY0WxWBfuKl4150IA7lXLvN4AixOYydLsgGW3azUijpR4Zn36MSTPQ/yiydVMDIPY2xhdWRlLXNvbm5ldC01OABCCHRoaW5raW5nWiQyMzAzMGY1Zi01ZDY5LTQ3MzItYWQ0Mi05NTllYmQyMWM4YTZyEKi0TmcHRLe7s2VdV4l1R3SIAQGaAREKD2NsYXVkZS1zb25uZXQtNagBxIDl1gawAQLCAUYICBAAGhgBO+0BuhcC2ooDTzcF2rwF3C4Rc+IEJq0gAzIEEnHPJToEeuE70UIEODMjikoEODMjilAAWgTZBeFWYAJoAXAC2gFgChZwcmVmaXhfYmVmb3JlX2Jsb2NrX3YxEiAvw0jhVVcyq/PhWYOY6HbJCLJyDFZ+h99UxW1NvjpaxiIAMiDCwBPIapyS4i+Wbz2GF3aPi3pEyQKtzAl7+h4JivtOH0gDEgwcI0gV4oV5BKwbhAEaDGNsTveteG2x9TiTaSIwVH9S1tJwCoGw4kMLHMmKZBdVt1yp7rW+MgMIa4LQl+KRoVLZZqs/WBdrcIWoUuACKocBFiVlOHSmz9HRJM3huujpeA7rOvDq3FuFPyaTr+N1QybMilG8OmzVJFZhutveM3ZU9CSxyBaAei4++Gp7vk59264XiqH3X8K2SIyw9lJlN6YJyOv9JpyVShZJtSDVR88r1ORJpQRHH0ap3qBsNZOWyq/wu8FJM8jyoEH1BwIRb0072RLklf4WGAE="
+              }
+            ],
+            "container": null,
+            "stop_reason": null,
+            "stop_sequence": null,
+            "stop_details": null,
+            "usage": {
+              "input_tokens": 2,
+              "cache_creation_input_tokens": 1774,
+              "cache_read_input_tokens": 0,
+              "cache_creation": {
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 1774
+              },
+              "output_tokens": 7,
+              "service_tier": "standard",
+              "inference_geo": "global",
+              "speed": "standard"
+            },
+            "diagnostics": null,
+            "context_management": null
+          },
+          "parent_tool_use_id": null,
+          "session_id": "88d2a18d-75eb-4cdb-bdc1-b6baa4dfab2c",
+          "uuid": "60b4b065-588e-4255-a72f-d4e7e2ebaf31",
+          "timestamp": "2026-10-21T22:44:20.252Z",
+          "request_id": "req_011CgGC6fCUQArfnaSoeJrL5"
+        },
+        {
+          "type": "rate_limit_event",
+          "subtype": "<absent>",
+          "classification": "lifecycle"
+        },
+        {
+          "type": "assistant",
+          "message": {
+            "model": "claude-sonnet-5",
+            "id": "msg_011CgGC6fU6hqXLWUCpvaCs3",
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "{\"lookups\":[{\"record_id\":\"jufe-coverage-2026-10-11\",\"start_line\":1,\"end_line\":80},{\"record_id\":\"jufe-schedule-2026-10-11\",\"start_line\":1,\"end_line\":80}]}"
+              }
+            ],
+            "container": null,
+            "stop_reason": null,
+            "stop_sequence": null,
+            "stop_details": null,
+            "usage": {
+              "input_tokens": 2,
+              "cache_creation_input_tokens": 1774,
+              "cache_read_input_tokens": 0,
+              "cache_creation": {
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 1774
+              },
+              "output_tokens": 7,
+              "service_tier": "standard",
+              "inference_geo": "global",
+              "speed": "standard"
+            },
+            "diagnostics": null,
+            "context_management": null
+          },
+          "parent_tool_use_id": null,
+          "session_id": "88d2a18d-75eb-4cdb-bdc1-b6baa4dfab2c",
+          "uuid": "edca1a98-e320-4d4e-8379-0478b85bf48b",
+          "timestamp": "2026-10-21T22:44:20.767Z",
+          "request_id": "req_011CgGC6fCUQArfnaSoeJrL5"
+        },
+        {
+          "duration_api_ms": 2996,
+          "stop_reason": "end_turn",
+          "session_id": "88d2a18d-75eb-4cdb-bdc1-b6baa4dfab2c",
+          "total_cost_usd": 0.010046,
+          "usage": {
+            "input_tokens": 2,
+            "cache_creation_input_tokens": 1774,
+            "cache_read_input_tokens": 0,
+            "output_tokens": 124,
+            "output_tokens_details": {
+              "thinking_tokens": 42
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 1774,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "global",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 124,
+                "cache_read_input_tokens": 0,
+                "cache_creation_input_tokens": 1774,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 1774
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard"
+          },
+          "modelUsage": {
+            "claude-haiku-4-5-20251001": {
+              "inputTokens": 1631,
+              "outputTokens": 15,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0,
+              "webSearchRequests": 0,
+              "costUSD": 0.001706,
+              "contextWindow": 200000,
+              "maxOutputTokens": 32000,
+              "thinkingTokens": 0,
+              "canonicalModel": "claude-haiku-4-5",
+              "provider": "firstParty",
+              "costBasis": "list"
+            },
+            "claude-sonnet-5": {
+              "inputTokens": 2,
+              "outputTokens": 124,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 1774,
+              "webSearchRequests": 0,
+              "costUSD": 0.00834,
+              "contextWindow": 1000000,
+              "maxOutputTokens": 64000,
+              "thinkingTokens": 42,
+              "canonicalModel": "claude-sonnet-5",
+              "provider": "firstParty",
+              "costBasis": "list"
+            }
+          },
+          "permission_denials": [],
+          "terminal_reason": "completed",
+          "fast_mode_state": "off",
+          "fast_mode_disabled_reason": "sdk_opt_in_required",
+          "subagent_stats": {
+            "spawned": 0,
+            "requested": {
+              "background": 0,
+              "foreground": 0,
+              "unset": 0
+            },
+            "started_in_background": 0,
+            "max_depth": 0,
+            "spawned_by_subagents": 0,
+            "completed": 0,
+            "failed": 0,
+            "killed": {
+              "parent": 0,
+              "user": 0,
+              "system": 0
+            },
+            "refused": {
+              "depth_limit": 0,
+              "concurrency_limit": 0,
+              "budget": 0
+            },
+            "by_type": {}
+          },
+          "is_error": false,
+          "num_turns": 1,
+          "subtype": "success",
+          "api_error_status": null,
+          "result": "{\"lookups\":[{\"record_id\":\"jufe-coverage-2026-10-11\",\"start_line\":1,\"end_line\":80},{\"record_id\":\"jufe-schedule-2026-10-11\",\"start_line\":1,\"end_line\":80}]}",
+          "ttft_ms": 1984,
+          "type": "result",
+          "duration_ms": 2527,
+          "uuid": "ff6616cc-2afa-4181-97a9-4e904207012f",
+          "ttft_stream_ms": 1701,
+          "time_to_request_ms": 907,
+          "first_content_frame_ms": 1701,
+          "queued_turn_count": 0
+        }
+      ]
+    }
+  }
+}
