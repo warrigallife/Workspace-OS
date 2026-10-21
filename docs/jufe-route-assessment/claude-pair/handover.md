@@ -145,3 +145,10 @@ Six originals verified; four runtime/UI files restored byte-for-byte and live bl
 Completed usage diagnosis showed correct accounting but repeated context. Persistent Claude roles now send only new messages and changed metadata after the initial request, rejecting changed history. Finalisation instructions stay once in local history; correction feedback uses exact errors and prior lookup references without copying passages/draft again. Complete local transcripts and both draft attempts remain preserved; actual wire payloads recorded on successful responses. Nora remains independent; stateless Ollama still gets full history.
 
 257 deterministic tests /12 files passed, including three-turn transport/correction/review and retained safety boundaries; build passed; no new typecheck errors. Six originals verified. Validation, permissions, budgets, usage accounting and live block unchanged. No live calls; actual token savings/live compatibility unverified. [Implementation, tests and recovery](../incremental-claude-requests/handover.md).
+
+
+## 2026-10-22 — Single incremental-context UI attempt
+
+From 039ca48, Claude Pro auth confirmed and existing routes/scope/subscription-only limits reused. Run `bg-mviqojx1-tm4ont`: Dana draft passed application validation without correction; Nora then stopped on `system / thinking_tokens / unsupported_system_event`. No accepted Nora review or completed report. Actual UI displayed failure handover. Dana accepted usage 15,579 tokens; Nora usage unknown because no accepted accounting returned. Per-stage usage and full/incremental transcripts saved. No retry or repair.
+
+Six originals verified; four runtime/UI files restored byte-for-byte and live-blocked app rebuilt. Sources and eleven checked earlier failures unchanged. Budgets, permissions and selected routes unchanged. [Saved result, per-stage usage and recovery](../claude-incremental-live/handover.md).

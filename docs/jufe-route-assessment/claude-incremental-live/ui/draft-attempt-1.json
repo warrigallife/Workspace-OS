@@ -1,0 +1,32 @@
+{
+  "findings": [
+    {
+      "statement": "Sources 13 and 14, non-manuscript kernel fragments, have no dedicated or cited analysis anywhere in the record.",
+      "citation": {
+        "record_id": "jufe-coverage-2026-10-11",
+        "start_line": 1,
+        "end_line": 80,
+        "quote": "Entire 34-line fragment; non-manuscript/code category, never assessed by this lineage"
+      }
+    },
+    {
+      "statement": "Source 36's ontology, terminology crosswalk, and operator hierarchy remain unexamined as primary material despite being characterized by the plan.",
+      "citation": {
+        "record_id": "jufe-coverage-2026-10-11",
+        "start_line": 1,
+        "end_line": 80,
+        "quote": "no report has examined its actual ontology/crosswalk/hierarchy content as primary material"
+      }
+    },
+    {
+      "statement": "Source 31's claim that evolution is stochastically emergent is unsupported by the deterministic source-30 treatment and unflagged elsewhere.",
+      "citation": {
+        "record_id": "jufe-schedule-2026-10-11",
+        "start_line": 1,
+        "end_line": 80,
+        "quote": "This is a concrete claim made only in the abstract, not stated,\n   defined, or supported by the dedicated chapter covering the same\n   mechanism."
+      }
+    }
+  ],
+  "limitations": "Only lines 1-80 of each record were retrieved; later sections were not inspected."
+}
