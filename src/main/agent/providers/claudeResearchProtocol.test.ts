@@ -1,5 +1,5 @@
 import {expect,it} from 'vitest'
-import {classifyResearchEvent,ResearchProtocolError} from './claudeResearchProtocol'
+import {classifyResearchEvent,ResearchProtocolError,protocolMetadata} from './claudeResearchProtocol'
 it.each([
  {type:'keep_alive'},
  {type:'rate_limit_event',rate_limit_info:{status:'allowed'}},
@@ -35,4 +35,18 @@ it('redacts unknown type/subtype and never serializes content or credentials',()
 it('preserves safe control subtype and stable reason, not payload',()=>{
  const e=new ResearchProtocolError({type:'control_request',request:{subtype:'can_use_tool',input:{secret:'SECRET'}}},'control_or_tool_event_denied')
  expect(e.message).toContain('"type":"control_request"');expect(e.message).toContain('"subtype":"can_use_tool"');expect(e.message).not.toContain('SECRET')
+})
+
+it.each(['future_notice','api_retry','task_summary','a'.repeat(64)])('retains bounded subtype %s but still rejects unknown system events',subtype=>{
+ expect(protocolMetadata({type:'system',subtype})).toEqual({type:'system',subtype})
+ expect(()=>classifyResearchEvent({type:'system',subtype,content:'PRIVATE'})).toThrow('unsupported_system_event')
+})
+it.each(['a'.repeat(65),'private text','line\nbreak','escape\u001b[31m','/private/path','https://private.invalid','{"token":"SECRET"}','sk-ant-secret-value','秘密',null,42,{},[]])('redacts malformed or oversized subtype %j',subtype=>{
+ const e=new ResearchProtocolError({type:'system',subtype,content:'PRIVATE',token:'SECRET'},'unsupported_system_event')
+ expect(e.message).toContain('<redacted-unrecognized>');expect(e.message).not.toContain('SECRET');expect(e.message).not.toContain('PRIVATE');expect(e.message.length).toBeLessThan(200)
+})
+it('preserves absence and bounded control-request subtype without accepting control events',()=>{
+ expect(protocolMetadata({type:'system'}).subtype).toBe('<absent>')
+ expect(protocolMetadata({type:'control_request',request:{subtype:'future_control',token:'SECRET'}}).subtype).toBe('future_control')
+ expect(()=>classifyResearchEvent({type:'control_request',request:{subtype:'future_control'}})).toThrow('control_or_tool_event_denied')
 })

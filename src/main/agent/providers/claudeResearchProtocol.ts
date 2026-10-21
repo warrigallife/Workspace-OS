@@ -5,8 +5,14 @@ const subtypes=new Set(['init','success','error_during_execution','error_max_tur
 function label(value:unknown,known:Set<string>):string {
   return value===undefined?'<absent>':typeof value==='string'&&known.has(value)?value:'<redacted-unrecognized>'
 }
+/** Diagnostic only, never an acceptance rule. Preserve bounded snake-case
+ * protocol labels, not free text, paths, controls, JSON or truncated payloads. */
+function subtypeLabel(value:unknown):string {
+  if(typeof value==='string'&&value.length<=64&&/^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$/.test(value))return value
+  return label(value,subtypes)
+}
 export function protocolMetadata(event:any):{type:string;subtype:string} {
-  return {type:label(event?.type,types),subtype:label(event?.subtype??event?.request?.subtype,subtypes)}
+  return {type:label(event?.type,types),subtype:subtypeLabel(event?.subtype!==undefined?event.subtype:event?.request?.subtype)}
 }
 export type ProtocolReason = 'malformed_event'|'unsupported_event'|'unsupported_system_event'|'control_or_tool_event_denied'|'invalid_lifecycle_event'|'rate_limit_rejected'|'paid_overage_denied'|'continuation_denied'|'restrictions_mismatch'|'init_tools_invalid'|'init_tools_not_empty'|'init_mcp_invalid'|'init_mcp_not_empty'|'native_tool_action_denied'|'result_without_verified_request'|'incomplete_response'|'invalid_token_usage'|'invalid_lookup_intents'|'invalid_event_or_response_json'|'model_identity_rejected'|'response_size_limit'
 export class ResearchProtocolError extends Error {

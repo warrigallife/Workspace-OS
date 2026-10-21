@@ -1,0 +1,13 @@
+{
+  "originalsVerified": 5,
+  "eventClassifierByteForByteUnchanged": true,
+  "unchangedFiles": [
+    "src/main/agent/launchRun.ts",
+    "src/main/agent/providers/claudeResearch.ts",
+    "src/main/agent/researchProvider.ts",
+    "src/main/agent/researchScope.ts",
+    "src/main/agent/grants.ts"
+  ],
+  "liveCalls": 0,
+  "historicalSubtypeRecoverable": false
+}

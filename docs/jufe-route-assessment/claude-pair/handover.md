@@ -110,3 +110,10 @@ Every init now revalidates the selected model and empty tool/MCP arrays; repetit
 From 9ed5b37, auth metadata confirmed Claude Pro. One approved UI submission with selected Claude / claude-sonnet-5 for Dana and Nora, recorded two-report and subscription-only bounds. Run `bg-mvimbs76-yofh6q` failed after one accepted response and both report lookups (1–80): `system / <redacted-unrecognized> / unsupported_system_event`. Raw subtype unavailable; no cause inferred. No draft or Nora review. UI failure handover displayed; stopped without retry or another repair cycle.
 
 Six originals verified, four runtime/UI files restored byte-for-byte and live-blocked app rebuilt. Reports and eight checked earlier failures unchanged. Passed tests not repeated. No purchases, credits, fallback or broader access. [Saved outcome and sanitized diagnostics](../claude-reinit-live/handover.md).
+
+
+## 2026-10-22 — Bounded unknown-subtype diagnostics
+
+Diagnostic-only fix: safe lowercase snake-case subtype identifiers up to 64 characters now survive rejection; malformed, oversized and free-text values stay redacted, with no payload copied. Unknown events still stop; classifier and all access/live-block checks unchanged. Installed Claude contract was statically checked and the existing launcher compared; no new transport. The original bg-mvimbs76-yofh6q event cannot be recovered, and no identity is guessed. Live compatibility remains unverified.
+
+132 focused deterministic tests passed, build passed, no new typecheck errors. Five originals hash-verified. No live calls or permission changes. [Evidence and handover](../subtype-diagnostics/handover.md).
