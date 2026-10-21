@@ -28,7 +28,7 @@ export function createClaudeResearchDriver(options:Options):ResearchDriver {
       opened.add(role)
       const route=RESEARCH_ROUTES[role]
       const child=launch([...restrictedHostPlan(role).args,'--system-prompt',TRANSPORT,'--max-budget-usd',String(options.maxBudgetUsd!/2)],{
-        cwd:options.directory,stdio:['pipe','pipe','pipe'],env:{HOME:os.homedir(),PATH:'/opt/homebrew/bin:/usr/bin:/bin',LANG:'en_US.UTF-8',CLAUDE_CODE_MAX_OUTPUT_TOKENS:'2048'},
+        cwd:options.directory,stdio:['pipe','pipe','pipe'],env:{HOME:os.homedir(),USER:process.env.USER,PATH:'/opt/homebrew/bin:/usr/bin:/bin',LANG:'en_US.UTF-8',CLAUDE_CODE_MAX_OUTPUT_TOKENS:'2048'},
       })
       let closed=false, initialized=false, buffer='',bytes=0
       let events:unknown[]=[]

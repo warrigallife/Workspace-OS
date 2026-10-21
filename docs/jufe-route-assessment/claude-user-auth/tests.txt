@@ -1,0 +1,105 @@
+[1021/135620.850953:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+
+ RUN  v4.1.9 /Users/liammcilmurray/Desktop/Workspace-OS
+
+[1021/135621.283690:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1021/135621.283699:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1021/135621.283791:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1021/135621.286885:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1021/135621.289077:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1021/135621.293182:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+ ✓ src/main/agent/nativeResearchBoundary.test.ts > pins workflow-only Claude routes without default, fallback or model probing 1ms
+ ✓ src/main/agent/nativeResearchBoundary.test.ts > Claude native plan uses documented exclusion controls, not Safe mode alone 1ms
+ ✓ src/main/agent/nativeResearchBoundary.test.ts > Codex schema establishes narrower controls, not a blanket native tool allowlist 0ms
+ ✓ src/main/agent/nativeResearchBoundary.test.ts > keeps live execution locked before either role; no provider process starts 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > production adapter cannot launch or transmit without separate approval 2ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > uses separate fresh restricted sessions, explicit caps, sanitized environment and no fallback 2ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > translates only lookup intents and passes final JSON to existing application validation 1ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > fails closed on tools 1ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > fails closed on connectors 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > fails closed on model 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > fails closed on native action 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > fails closed on permission request 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > fails closed on missing init 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > rejects usage before save 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > rejects negative usage before save 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > rejects truncation before save 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > rejects provider failure before save 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > rejects substitution before save 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > rejects arbitrary actions, malformed JSON and oversized output 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > cancels pending work and refuses further requests 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > fails on interruption and refuses overlapping requests 0ms
+ ✓ src/main/agent/grants.test.ts > grants > a capability grants its surface prefix, unknown ids grant nothing 1ms
+ ✓ src/main/agent/grants.test.ts > grants > allows: prefix match, baseline memory.search, never memory.remember without knowledge 0ms
+ ✓ src/main/agent/grants.test.ts > grants > issue/lookup/revoke: one token per run, re-issue replaces, revoke forgets 0ms
+ ✓ src/main/agent/restrictedResearch.test.ts > runs both exact routes through retrieval/save/review, ledger and saved handover; result display shows report 12ms
+ ✓ src/main/agent/restrictedResearch.test.ts > review rejection blocks final report and handover completion 7ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fabricated quotation fails before reviewer, preserves raw response and failure handover 5ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed draft.json never completes queue or publishes report 3ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed review.json never completes queue or publishes report 5ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed report.md never completes queue or publishes report 5ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed handover.md never completes queue or publishes report 5ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed outcome.json never completes queue or publishes report 6ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed checkpoint is explicit in terminal outcome and suppresses otherwise generated report 6ms
+ ✓ src/main/agent/restrictedResearch.test.ts > cancel closes uncooperative request, revokes grants and prevents reviewer 3ms
+ ✓ src/main/agent/restrictedResearch.test.ts > pre-aborted run does not preflight or open provider 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified nativeTools before sending content 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified connectors before sending content 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified ambientContext before sending content 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified restrictionsEnforced before sending content 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified fallback before sending content 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > never substitutes model in receipt 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > never substitutes model in response 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed for missing token accounting 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed for exceeded token accounting 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > denies arbitrary model action requests 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > production entrypoint refuses restricted execution before source staging or provider calls 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > missing exact provider preflight stops before any model request 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > native launch plans do not inherit normal tools or enable model fallback 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > persistent restricted queue interrupts running/queued jobs, never auto-resumes, preserves route choice and failure evidence 3ms
+ ✓ src/main/agent/restrictedResearch.test.ts > Claude stream transport and coordinator: success 7ms
+ ✓ src/main/agent/restrictedResearch.test.ts > Claude stream transport and coordinator: review-rejection 5ms
+ ✓ src/main/agent/restrictedResearch.test.ts > Claude stream transport and coordinator: fabricated-citation 3ms
+ ✓ src/main/agent/restrictedResearch.test.ts > Claude stream transport and coordinator: failed-save 5ms
+stderr | src/main/agent/actionBridge.grants.test.ts > actionBridge — per-run grants > a research agent may drive the browser, not mail, not memory.remember, not cases
+[action-bridge] refused mail.compose for run Nadia: outside its grant
+
+stderr | src/main/agent/actionBridge.grants.test.ts > actionBridge — per-run grants > a research agent may drive the browser, not mail, not memory.remember, not cases
+[action-bridge] refused memory.remember for run Nadia: outside its grant
+
+stderr | src/main/agent/actionBridge.grants.test.ts > actionBridge — per-run grants > a research agent may drive the browser, not mail, not memory.remember, not cases
+[action-bridge] refused cases.list for run Nadia: outside its grant
+
+stderr | src/main/agent/actionBridge.grants.test.ts > Codex document bridge grants > checks the granted surface and original workspace before any document or data write
+[action-bridge] refused document.generate for run research: outside its grant
+
+stderr | src/main/agent/actionBridge.grants.test.ts > Codex document bridge grants > checks the granted surface and original workspace before any document or data write
+[action-bridge] refused document.data for run research: outside its grant
+
+ ✓ src/main/agent/actionBridge.grants.test.ts > actionBridge — per-run grants > refuses a run with no identity, before touching anything 1ms
+ ✓ src/main/agent/actionBridge.grants.test.ts > actionBridge — per-run grants > a research agent may drive the browser, not mail, not memory.remember, not cases 1ms
+ ✓ src/main/agent/actionBridge.grants.test.ts > actionBridge — per-run grants > the legacy full grant keeps the dock whole; a revoked token is a stranger again 0ms
+ ✓ src/main/agent/actionBridge.grants.test.ts > actionBridge — per-run grants > list and context need no identity 0ms
+ ✓ src/main/agent/actionBridge.grants.test.ts > actionBridge — per-run grants > without a grants dep the protocol is unchanged (existing tests) 0ms
+ ✓ src/main/agent/actionBridge.grants.test.ts > Codex document bridge grants > checks the granted surface and original workspace before any document or data write 0ms
+ ✓ src/main/agent/actionBridge.grants.test.ts > Codex document bridge grants > a workspace-bound run still acts while no workspace is open (nothing to protect) 0ms
+stderr | src/main/agent/researchScope.test.ts > approved research scope > requires exact grant, token, matching workspace and active stage in actual bridge
+[action-bridge] refused memory.remember for run Dana: outside its grant
+
+stderr | src/main/agent/researchScope.test.ts > approved research scope > requires exact grant, token, matching workspace and active stage in actual bridge
+[action-bridge] refused researchRecords.lookupExtra for run Dana: outside its grant
+
+ ✓ src/main/agent/researchScope.test.ts > approved research scope > requires Dana retrieval, exact quotes, both sources and independent Nora lookups 3ms
+ ✓ src/main/agent/researchScope.test.ts > approved research scope > rejects paths, IDs, invalid ranges, extra fields and false quotes 1ms
+ ✓ src/main/agent/researchScope.test.ts > approved research scope > rejects source drift, missing sources, symlinks and output escapes 1ms
+ ✓ src/main/agent/researchScope.test.ts > approved research scope > records rejection without falsely accepting and closes cancellation authority 1ms
+ ✓ src/main/agent/researchScope.test.ts > approved research scope > requires exact grant, token, matching workspace and active stage in actual bridge 1ms
+ ✓ src/main/agent/researchScope.test.ts > enforces both-record retrieval before save, including direct unadvertised calls 1ms
+ ✓ src/main/agent/researchScope.test.ts > reports exact extra, missing and length errors rather than misleading finding counts 1ms
+ ✓ src/main/agent/researchScope.test.ts > retains all acceptance bounds removed only from provider grammar 2ms
+
+ Test Files  6 passed (6)
+      Tests  68 passed (68)
+   Start at  13:56:21
+   Duration  363ms (transform 540ms, setup 0ms, import 733ms, tests 129ms, environment 0ms)
+

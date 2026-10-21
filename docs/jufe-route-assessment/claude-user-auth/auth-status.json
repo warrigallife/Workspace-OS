@@ -1,0 +1,18 @@
+{
+  "command": "claude auth status --json",
+  "environment_names": [
+    "CLAUDE_CODE_MAX_OUTPUT_TOKENS",
+    "HOME",
+    "LANG",
+    "PATH",
+    "USER"
+  ],
+  "metadata": {
+    "loggedIn": true,
+    "authMethod": "claude.ai",
+    "apiProvider": "firstParty",
+    "subscriptionType": "pro"
+  },
+  "exit_code": 0,
+  "inference_calls": 0
+}

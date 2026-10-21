@@ -200,3 +200,10 @@ Implemented one restricted streaming adapter with separate Dana/Nora sessions. N
 174 deterministic tests passed across 13 files (99 coordinator/transport/recovery tests plus 75 Liam–Ada regressions); build passed and typecheck introduced no errors (70 known /75 baseline). Six originals and seven unchanged protected inputs were SHA-256 verified. No inference calls or actual provider sessions occurred. Tests include native-action rejection, missing restrictions/usage, substitution, cancellation/interruption, reviewer rejection, fabricated citations and failed saves. These establish application behavior with stubs, not live host compatibility or semantic review quality.
 
 Live execution remains hard-blocked with no runtime unlock. Before one UI test, approval must specify transmission of the already-approved records and a total dollar ceiling; exact model availability remains unverified. See [Claude pair handover](../jufe-route-assessment/claude-pair/handover.md), verification logs and recovery manifest. No push.
+
+
+## 2026-10-21 — Preserve USER for restricted Claude authentication discovery
+
+Approved minimal fix: added USER to the restricted child environment; all other exclusions, tool controls, grants, approved sources and live locks remain unchanged. Metadata-only auth status with the corrected environment confirms existing Claude.ai / firstParty / Pro authentication. No login, credential changes, billing changes or inference calls. The prior unauthenticated result was caused by this launcher environment omission, not proof of absent normal Claude authentication.
+
+68 focused tests passed in six files. Four preserved originals verified by SHA-256. Evidence and recovery copies: `docs/jufe-route-assessment/claude-user-auth/`; updated handover: `docs/jufe-route-assessment/claude-pair/handover.md`. Exact model entitlement and billing safeguards remain unverified; live execution is blocked. No push.
