@@ -1,0 +1,10 @@
+
+> workspace-os@0.2.0-beta.1 typecheck
+> node scripts/typecheck.mjs
+
+Typecheck FAILED — 2 new errors:
+
+  src/main/agent/ollamaResearchRun.ts: TS6133 (1, was 0)
+  src/main/agent/providers/claudeResearch.ts: TS6133 (1, was 0)
+
+Fix them, or if they are genuinely acceptable: npm run typecheck -- --accept

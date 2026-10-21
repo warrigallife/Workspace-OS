@@ -207,3 +207,10 @@ Live execution remains hard-blocked with no runtime unlock. Before one UI test, 
 Approved minimal fix: added USER to the restricted child environment; all other exclusions, tool controls, grants, approved sources and live locks remain unchanged. Metadata-only auth status with the corrected environment confirms existing Claude.ai / firstParty / Pro authentication. No login, credential changes, billing changes or inference calls. The prior unauthenticated result was caused by this launcher environment omission, not proof of absent normal Claude authentication.
 
 68 focused tests passed in six files. Four preserved originals verified by SHA-256. Evidence and recovery copies: `docs/jufe-route-assessment/claude-user-auth/`; updated handover: `docs/jufe-route-assessment/claude-pair/handover.md`. Exact model entitlement and billing safeguards remain unverified; live execution is blocked. No push.
+
+
+## 2026-10-21 — Single approved subscription-only UI verification failed
+
+Run `bg-mvhme2ov-p65r04` failed in Dana's first response with `Claude model substitution`. No accepted response, retrieval, draft or Nora review. The offending native model identifier was not retained by the failure path, so an identifier mismatch versus actual substitution cannot be distinguished from saved evidence. No retries or model substitutions were initiated. Subscription credits remained off per user confirmation; no billing/credential changes. Token/cost usage is unverified.
+
+The UI used the existing local app/data directory and displayed the failure handover; reports and checked prior failures were unchanged. Run checkpoint: `9894f5b86720af2667920ca160ddb0c980de322a`. Temporary one-use routing was restored to the prior live-blocked source after the attempt. Detailed evidence and recovery copies: `docs/jufe-route-assessment/claude-live-once/` (including `handover.md`). Stopped after this one attempt.

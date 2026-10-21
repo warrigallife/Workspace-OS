@@ -1,0 +1,15 @@
+{
+  "approval": "User approved one subscription-only UI attempt; usage credits off and zero balance confirmed by user",
+  "models": {
+    "dana": "claude-sonnet-5",
+    "nora": "claude-sonnet-5"
+  },
+  "estimated_usd_threshold": 1,
+  "paid_usage_authorized": false,
+  "retry_count": 0,
+  "deadline_ms": 360000,
+  "source_ids": [
+    "jufe-coverage-2026-10-11",
+    "jufe-schedule-2026-10-11"
+  ]
+}

@@ -1,0 +1,15 @@
+# Single subscription-only UI attempt — 2026-10-21
+
+Outcome: **failed; stopped without retry**. Run `bg-mvhme2ov-p65r04`; queue status `error`; saved run checkpoint `9894f5b86720af2667920ca160ddb0c980de322a`.
+
+The actual UI used the source app `/Users/liammcilmurray/Desktop/Workspace-OS` and its existing `.workspace-os/liam-app-data`. The test clicked the approved research button once, selected the temporary restricted-hosts route, and displayed the saved failure handover through the existing result button.
+
+The adapter failed during Dana's first response with `Claude model substitution`. No complete normalized reply was accepted (`turns: 0`); no lookup occurred, so no report excerpts were sent. The initial request contained the task, Dana persona, bounded instructions, record catalog and lookup schema. No draft/report was accepted and Nora was not started. The run is not successful research execution.
+
+**Evidence limitation:** the adapter discards failing native events before its normalized-response recorder. Consequently the offending reported model identifier and raw failed response were not preserved. The recorded error establishes a model-identity guard failure; it does not establish whether the host actually substituted models or reported an unexpected identifier. There is no verified token/cost total; zero accepted turns must not be read as zero inference or zero usage. No second call was made to diagnose this. Subscription authentication had been verified; user confirmed credits off and zero balance. No credits, billing settings or credentials were changed.
+
+Temporary launch used exact `claude-sonnet-5`, empty native tools/MCP, existing source/grant boundaries, `$0.50` estimated stop threshold per role, existing six-minute/step/action/token budgets, and `CLAUDE_CODE_MAX_RETRIES=0` (supported by inspected installed binary). One-use authorization was consumed durably before launch. No workflow retries occurred. The test did not choose a different model.
+
+Before the UI attempt, 47 deterministic tests passed and typecheck reported no new errors (70 known /75 baseline). Initial typecheck caught two unused imports; they were corrected before launch. Existing source reports and the four earlier failed-run directories checked by the UI script were unchanged. All temporary runtime/UI changes were subsequently restored byte-for-byte to their pre-test sources, and the live-blocked application was rebuilt. The consumption marker remains preserved. No additional inference was run during restoration.
+
+Evidence: `ui/` contains input, request, state, outcome and displayed handover evidence; `ui-console.txt` records the UI result; `temporary-live-route.patch` and `temporary-files/` preserve the tested one-use connection; `manifest.json` preserves original hashes. `consumed.json` records the single submission. Current source remains live-blocked. Stop here; diagnosing model identity requires separate authorization, and must begin with this evidence limitation rather than assuming a proven model fallback.

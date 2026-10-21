@@ -1,0 +1,7 @@
+{
+  "status": "failed",
+  "error": "Claude model substitution",
+  "checkpointId": "9894f5b86720af2667920ca160ddb0c980de322a",
+  "turns": 0,
+  "totalTokens": 0
+}

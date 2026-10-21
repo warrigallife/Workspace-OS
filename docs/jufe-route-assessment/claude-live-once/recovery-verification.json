@@ -1,0 +1,42 @@
+[
+  {
+    "original": "src/main/agent/ollamaResearchRun.ts",
+    "snapshot_verified": true,
+    "source_restored": true
+  },
+  {
+    "original": "src/main/agent/providers/claudeResearch.ts",
+    "snapshot_verified": true,
+    "source_restored": true
+  },
+  {
+    "original": "src/main/handlers/runs.ts",
+    "snapshot_verified": true,
+    "source_restored": true
+  },
+  {
+    "original": "src/renderer/src/components/Agents/LocalResearch.tsx",
+    "snapshot_verified": true,
+    "source_restored": true
+  },
+  {
+    "original": "docs/jufe-route-assessment/claude-pair/handover.md",
+    "snapshot_verified": true,
+    "source_restored": false
+  },
+  {
+    "original": "docs/local-team/implementation-log.md",
+    "snapshot_verified": true,
+    "source_restored": false
+  },
+  {
+    "original": "src/main/agent/providers/claudeResearch.test.ts",
+    "snapshot_verified": true,
+    "source_restored": true
+  },
+  {
+    "original": "src/main/agent/restrictedResearch.test.ts",
+    "snapshot_verified": true,
+    "source_restored": true
+  }
+]

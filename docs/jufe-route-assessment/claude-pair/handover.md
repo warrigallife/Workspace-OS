@@ -38,3 +38,10 @@ Verified after the fix using `claude auth status --json` outside the sandbox wit
 68 focused deterministic tests passed across six files, including the exact environment allowlist, separate sessions, native tool rejection, cancellation, failed saves, grant/source checks and production live gate. Four pre-change originals were SHA-256 verified in [recovery evidence](../claude-user-auth/manifest.json). See [status metadata](../claude-user-auth/auth-status.json) and [test results](../claude-user-auth/tests.txt).
 
 Live inference remains blocked. Before any live UI test, confirm exact model entitlement and billing controls and obtain specific content/spending approval. Correction to the prior spending wording: `--max-budget-usd` is a client-estimated stop threshold, not a guaranteed invoice ceiling; Anthropic documents possible overshoot (https://code.claude.com/docs/en/cli-reference). No new ceiling or billing setting is approved by this authentication fix.
+
+
+## 2026-10-21 — Single approved subscription-only UI verification failed
+
+Run `bg-mvhme2ov-p65r04` failed in Dana's first response with `Claude model substitution`. No accepted response, retrieval, draft or Nora review. The offending native model identifier was not retained by the failure path, so an identifier mismatch versus actual substitution cannot be distinguished from saved evidence. No retries or model substitutions were initiated. Subscription credits remained off per user confirmation; no billing/credential changes. Token/cost usage is unverified.
+
+The UI used the existing local app/data directory and displayed the failure handover; reports and checked prior failures were unchanged. Run checkpoint: `9894f5b86720af2667920ca160ddb0c980de322a`. Temporary one-use routing was restored to the prior live-blocked source after the attempt. Detailed evidence and recovery copies: `docs/jufe-route-assessment/claude-live-once/` (including `handover.md`). Stopped after this one attempt.
