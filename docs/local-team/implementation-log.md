@@ -214,3 +214,12 @@ Approved minimal fix: added USER to the restricted child environment; all other 
 Run `bg-mvhme2ov-p65r04` failed in Dana's first response with `Claude model substitution`. No accepted response, retrieval, draft or Nora review. The offending native model identifier was not retained by the failure path, so an identifier mismatch versus actual substitution cannot be distinguished from saved evidence. No retries or model substitutions were initiated. Subscription credits remained off per user confirmation; no billing/credential changes. Token/cost usage is unverified.
 
 The UI used the existing local app/data directory and displayed the failure handover; reports and checked prior failures were unchanged. Run checkpoint: `9894f5b86720af2667920ca160ddb0c980de322a`. Temporary one-use routing was restored to the prior live-blocked source after the attempt. Detailed evidence and recovery copies: `docs/jufe-route-assessment/claude-live-once/` (including `handover.md`). Stopped after this one attempt.
+
+
+## 2026-10-21 — Deterministic model-identity diagnostics
+
+Installed Claude Code 2.1.267 inspection confirms full IDs and configurable short aliases are distinct, and host-generated assistant/API-error messages can report `<synthetic>`. The old adapter mislabelled that sentinel as substitution. No evidence establishes that this caused the c66a79d failure; its native event remains unavailable.
+
+Exact approved `claude-sonnet-5` matching remains required. No alias/date/suffix normalization or fallback was added. Synthetic/error messages fail with accurate classifications, and sanitized bounded requested/returned IDs plus safe HTTP status now survive in state/outcome/handover. Missing identity also fails closed. Arbitrary error bodies and unsafe model strings are excluded.
+
+66 deterministic tests passed across four files; build passed; no new typecheck errors (70 known /75 baseline). Five originals hash-verified. Live execution remains blocked; no calls or workflow repeat. Evidence: `docs/jufe-route-assessment/claude-model-identity/handover.md`, installed-contract excerpts, tests and recovery manifest.

@@ -1,0 +1,43 @@
+{
+  "path": "/opt/homebrew/Caskroom/claude-code/2.1.267/claude",
+  "sha256": "a681f3008f0050029aeebcab3af51bb6a55ddeb625a3af3141a4416d43cd2558",
+  "method": "read-only installed binary text inspection; no host startup",
+  "snippets": [
+    {
+      "label": "synthetic_sentinel",
+      "offset": 160645172,
+      "excerpt": "\",SR=\"No response requested.\",zl=\"<synthetic>\",rfr=\"Auto Mode Active\",tHt=\"the tracked path is (or became) a link or other non-regular file, its directory changed since the checkpoint, or its backup could not be safely read\";import{createHmac as PK}from\"crypto\";var MK=/[^\\p{L}\\p{N}._-]+/gu,xK=/^[._-]+|[._-]+$/gu,IK=/[\\p{L}\\p{N}]/u,DK=20;function kA(e){let n=Kh(e).trim(),r=[...n];return r.length>64?`${r.slice(0,64).join(\"\")}\\u2026`:n}function Kh(e){return e.replace(/[\\p{Cf}\\p{Cc}\\p{Cs}\\p{Zl}\\p{Zp}]/gu,\"\")}var PIn=120,HXt=512,Au=4*HXt;function IIn(e){let n=0;while(n<=e.length){let r=e.indexOf(`\n`,n),o=r===-1?e.length:r,d=o-n<=Au,p=oe(e.slice(n,Math.min(o,n+Au)),Au),E=T2(p,\""
+    },
+    {
+      "label": "synthetic_assistant",
+      "offset": 161369613,
+      "excerpt": "nction LOn(){return Ort(Jt())}function zRr(){return Ort(wn().read()?.claudeAiOauth??null)}function Ort(e){return aH(e?.scopes)&&!!e?.accessToken}function Pp(){let e=Jt()?.scopes;return Array.isArray(e)&&e.includes($2)}function Ou(){return Jt()?.accessToken!=null}function Q4(e){let n=Jt()?.scopes;return Array.isArray(n)&&n.includes(e)}function _Jt(){let e=Jt()?.scopes;return Array.isArray(e)&&(e.includes($2)||e.includes(\"user:office\")||e.includes(\"user:ccr_inference\"))}function SJt(){return Jt()?.expiresAt??null}function T6e(){return Jt()?.subscriptionType??null}function MOn(){return Jt()?.refreshToken!=null}function jye(){if(!Fn())return!1;if(gt())return!1;return!0}functi"
+    },
+    {
+      "label": "api_error_assistant",
+      "offset": 168721902,
+      "excerpt": ":n,isVirtual:r,now:o,uuid:d})}function Co({content:e,apiError:n,apiErrorIsTransient:r,quotaLimits:o,error:d,errorDetails:p,truncatedAfterOutput:y,now:v,uuid:E}){let P=zRr({content:[{type:\"text\",text:e===\"\"?Hp:e}],isApiErrorMessage:!0,apiError:n,apiErrorIsTransient:r,quotaLimits:o,error:d,errorDetails:p,truncatedAfterOutput:y,now:v,uuid:E});if(ZRr(P))P.healsDistinctCarrier=!0;return P}function xTe(e){return Array.isArray(e)&&e.some((n)=>n.type===\"tool_result\")}function wNs(e){for(let n=e.length-1;n>=0;n--){let r=e[n];if(r.type!==\"user\")continue;if(oat(r))return-1;if(xTe(r.message.content))continue;if(r.promptId||!(r.isMeta||r.isVirtual||r.isVisibleInTranscriptOnly))return "
+    },
+    {
+      "label": "wire_error_field",
+      "offset": 160922700,
+      "excerpt": "r inside `message.content`.\"),is_api_error_message:I().optional().describe(\"@internal True when this assistant message wraps an API error (from internal AssistantMessage.isApiErrorMessage).\"),api_error_status:A().int().optional().describe(\"@internal HTTP status code of the API error when is_api_error_message is true.\"),api_error:X([\"max_output_tokens\",\"dlp_request_denied\",\"claude_code_version_too_old\"]).optional().describe(\"@internal API error code when is_api_error_message is true. dlp_request_denied: the request was refused by the organization's data-loss-prevention policy \\u2014 terminal for that request body; a consumer replaying history must not re-send it. claude_co"
+    },
+    {
+      "label": "initialization",
+      "offset": 172486314,
+      "excerpt": "e)=>ee.name),G={type:\"system\",subtype:\"init\",cwd:w.cwd,session_id:w.sessionId,tools:w.tools.map((ee)=>jlt(ee.name)),mcp_servers:w.mcpClients.map((ee)=>({name:ee.name,status:mbe(ee.type)})),model:w.model,permissionMode:Rc(w.permissionMode),slash_commands:w.commands.filter((ee)=>ee.userInvocable!==!1).map((ee)=>ee.name),...U.length>0&&{terminal_slash_commands:U},apiKeySource:w.apiKeySource,betas:w.betas,claude_code_version:{ISSUES_EXPLAINER:\"report the issue at https://github.com/anthropics/claude-code/issues\",PACKAGE_URL:\"@anthropic-ai/claude-code\",README_URL:\"https://code.claude.com/docs/en/overview\",VERSION:\"2.1.267\",FEEDBACK_CHANNEL:\"https://github.com/anthropics/claude"
+    },
+    {
+      "label": "alias_resolution",
+      "offset": 160820736,
+      "excerpt": "n\":return o?Yb(Qe(Rp())):Rp();case\"sonnet\":return o?Yb(Qe(Rp())):Rp();case\"haiku\":return o?Yb(Qe(q8())):q8();case\"opus\":return o?Yb(Qe(Wl())):Wl();case\"best\":return Rie();default:}if(La()&&wye(d)&&zje())return o?Yb(Qe(Wl())):Wl();if(o&&nd()&&Pie(d)&&zg(d))return Yb(n.replace(/(\\[1m\\])+$/i,\"\").trim());if(o)return Yb(n.replace(/(\\[1m\\])+$/i,\"\").trim()+\"[1m]\");return Yb(n)}function BZ(e){return e===\"inherit\"?void 0:e}function jnt(e,n){let r=kt(e);if(!Dm(r)&&!Tr(r))return t(`Skill/command model \"${e}\" is not in the availableModels allowlist; keeping the session model`,{level:\"warn\"}),n;let o=dc(n)||zg(n)||Ext(n);if(dc(e)||!o)return e;let d=kt(e);if(zg(d))return d;if(Ext(d))re"
+    },
+    {
+      "label": "full_id",
+      "offset": 190724207,
+      "excerpt": "V_OPUS_NAME:\"Claude Opus 4.8\",SONNET_ID:\"claude-sonnet-5\",SONNET_NAME:\"Claude Sonnet 5\",SONNET_NEXT_ID:\"claude-sonnet-5\",SONNET_NEXT_NAME:\"Claude Sonnet 5\",HAIKU_ID:\"claude-haiku-4-5\",HAIKU_NAME:\"Claude Haiku 4.5\",PREV_SONNET_ID:\"claude-sonnet-4-6\"},ml=z,ul={\"csharp/claude-api/README.md\":a,\"csharp/claude-api/batches.md\":e,\"csharp/claude-api/files-api.md\":t,\"csharp/claude-api/streaming.md\":o,\"csharp/claude-api/tool-use.md\":r,\"curl/examples.md\":i,\"curl/managed-agents.md\":c,\"go/claude-api/README.md\":p,\"go/claude-api/files-api.md\":d,\"go/claude-api/streaming.md\":m,\"go/claude-api/tool-use.md\":h,\"go/managed-agents/README.md\":g,\"java/claude-api/README.md\":k,\"java/claude-api/files"
+    }
+  ],
+  "calls": 0
+}

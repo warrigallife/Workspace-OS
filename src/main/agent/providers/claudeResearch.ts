@@ -1,3 +1,4 @@
+import { requireResearchModel, checkResearchAssistant, checkResearchUsageModels } from './claudeResearchIdentity'
 /** Text-only Claude transport. Native tools never dispatch research actions.
  * Only the existing coordinator interprets returned intents through its grants. */
 import {spawn, type ChildProcess, type SpawnOptions} from 'child_process'
@@ -57,10 +58,11 @@ export function createClaudeResearchDriver(options:Options):ResearchDriver {
             const event=JSON.parse(line)
             events.push(event)
             if(event.type==='system'&&event.subtype==='init') {
-              if(initialized||event.model!==route.model||!Array.isArray(event.tools)||event.tools.length||!Array.isArray(event.mcp_servers)||event.mcp_servers.length)throw new Error('Claude effective restrictions/model mismatch')
+              requireResearchModel('init',route.model,event.model)
+              if(initialized||!Array.isArray(event.tools)||event.tools.length||!Array.isArray(event.mcp_servers)||event.mcp_servers.length)throw new Error('Claude effective restrictions/model mismatch')
               initialized=true
             } else if(event.type==='assistant') {
-              if(event.message?.model && event.message.model!==route.model)throw new Error('Claude model substitution')
+              checkResearchAssistant(route.model,event)
               if(!Array.isArray(event.message?.content)||event.message.content.some((b:any)=>!['text','thinking'].includes(b.type)))throw new Error('Claude native tool action denied')
             } else if(event.type==='result') {
               if(!initialized||!pending)throw new Error('Claude result without verified initialization/request')
@@ -69,7 +71,7 @@ export function createClaudeResearchDriver(options:Options):ResearchDriver {
               if(!usage||!Number.isInteger(usage.input_tokens)||usage.input_tokens<0||!Number.isInteger(usage.output_tokens)||usage.output_tokens<0)throw new Error('Claude token usage missing or invalid')
               let input=usage.input_tokens
               for(const key of ['cache_creation_input_tokens','cache_read_input_tokens'])if(usage[key]!==undefined){if(!Number.isInteger(usage[key])||usage[key]<0)throw new Error('Claude cache usage invalid');input+=usage[key]}
-              if(event.modelUsage&&Object.keys(event.modelUsage).some(m=>m!==route.model))throw new Error('Claude model substitution')
+              checkResearchUsageModels(route.model,event.modelUsage)
               const message:ResearchReply['message']={role:'assistant',content:event.result}
               if(pending.request.format===undefined){
                 const value=JSON.parse(event.result)

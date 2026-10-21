@@ -78,3 +78,15 @@ it('fails on interruption and refuses overlapping requests',async()=>{
  await expect(s.request({messages:[]},f.controller.signal)).rejects.toThrow('Concurrent')
  f.children[0].emit('exit',1);await assertion
 })
+it.each([
+ ['<synthetic>',{is_api_error_message:true,api_error_status:403},'host-api-error'],
+ ['claude-sonnet-5-20260630',{},'identity-mismatch'],
+ ['private credential text',{},'<redacted-invalid-model-id>'],
+])('preserves sanitized requested/returned identity on rejection: %s',async(returned,extra,expected)=>{
+ const f=fixture(),s=await f.driver.open('dana',f.controller.signal)
+ const p=s.request({messages:[],format:{}},f.controller.signal),assertion=expect(p).rejects.toThrow(expected)
+ f.init();f.emit({type:'assistant',message:{model:returned,content:[{type:'text',text:'DO NOT RECORD PRIVATE BODY'}]},...extra})
+ await assertion
+ try{await p}catch(e){const text=(e as Error).message;expect(text).toContain('"requested":"claude-sonnet-5"');expect(text).not.toContain('DO NOT RECORD PRIVATE BODY');expect(text).not.toContain('private credential text')}
+ expect(f.children[0].kill).toHaveBeenCalledWith('SIGTERM')
+})

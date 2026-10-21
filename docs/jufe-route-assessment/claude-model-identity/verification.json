@@ -1,0 +1,15 @@
+{
+  "preserved_originals_verified": 5,
+  "unchanged_boundary_files": [
+    "src/main/agent/researchProvider.ts",
+    "src/main/agent/researchScope.ts",
+    "src/main/agent/researchContract.ts",
+    "src/main/agent/grants.ts",
+    "src/main/agent/ollamaResearchRun.ts"
+  ],
+  "tests_passed": 66,
+  "test_files": 4,
+  "inference_calls": 0,
+  "workflow_repeated": false,
+  "live_execution": "blocked"
+}

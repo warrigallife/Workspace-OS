@@ -137,7 +137,7 @@ it('persistent restricted queue interrupts running/queued jobs, never auto-resum
  expect(fs.existsSync(path.join(mock.directory,'handover.md'))).toBe(true)
 })
 
-it.each(['success','review-rejection','fabricated-citation','failed-save'])('Claude stream transport and coordinator: %s',async scenario=>{
+it.each(['success','review-rejection','fabricated-citation','failed-save','identity-rejection'])('Claude stream transport and coordinator: %s',async scenario=>{
  const {EventEmitter}=await import('events'),{PassThrough}=await import('stream')
  const {createClaudeResearchDriver}=await import('./providers/claudeResearch')
  const controller=new AbortController(),children:any[]=[],requests:any[]=[]
@@ -153,6 +153,7 @@ it.each(['success','review-rejection','fabricated-citation','failed-save'])('Cla
   c.stdin.on('data',(chunk)=>{void(async()=>{
    const req=JSON.parse(JSON.parse(chunk.toString()).message.content);requests.push({role,req})
    if(!initialized){c.stdout.write(JSON.stringify({type:'system',subtype:'init',model:RESEARCH_ROUTES[role].model,tools:[],mcp_servers:[]})+'\n');initialized=true}
+   if(scenario==='identity-rejection'){c.stdout.write(JSON.stringify({type:'assistant',message:{model:'<synthetic>',content:[{type:'text',text:'PRIVATE HOST ERROR'}]},is_api_error_message:true,api_error_status:403})+'\n');return}
    const session=await scripted.host.open(role,controller.signal),reply=await session.request(req,controller.signal)
    const result=req.format?reply.message.content:JSON.stringify({lookups:reply.message.tool_calls!.map((x:any)=>x.function.arguments)})
    c.stdout.write(JSON.stringify({type:'result',subtype:'success',result,usage:{input_tokens:100,output_tokens:50}})+'\n')
@@ -162,8 +163,9 @@ it.each(['success','review-rejection','fabricated-citation','failed-save'])('Cla
  if(scenario==='failed-save')mock.failSave='handover.md'
  const s=setup();await launchResearchWithDriver(s.options,host,s.factory)
  expect(await s.result).toBe(scenario==='success'?0:1)
- expect(children).toHaveLength(scenario==='fabricated-citation'?1:2)
+ expect(children).toHaveLength(['fabricated-citation','identity-rejection'].includes(scenario)?1:2)
  expect(children.every(c=>c.kill.mock.calls.length>0)).toBe(true)
+ if(scenario==='identity-rejection'){expect(outcome().error).toContain('host-api-error');expect(outcome().error).toContain('<synthetic>');expect(outcome().error).toContain('claude-sonnet-5');expect(fs.readFileSync(path.join(mock.directory,'handover.md'),'utf8')).toContain('host-api-error');expect(outcome().error).not.toContain('PRIVATE HOST ERROR')}
  if(scenario==='success'){
   expect(fs.existsSync(path.join(mock.directory,'handover.md'))).toBe(true)
   expect(readResearchResult(mock.directory,'pending')).toContain('report.md')
