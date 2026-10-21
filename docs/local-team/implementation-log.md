@@ -244,3 +244,10 @@ Before launch, 63 deterministic tests passed; typecheck had no new errors. Eight
 Static installed-contract inspection confirms explicit non-action lifecycle events; the old adapter rejected non-system notices indiscriminately and silently ignored all system subtypes. Added narrow lifecycle handling (heartbeat, validated status/informational and allowed non-overage rate-limit notices). Controls/tools, unsupported system events, fallback/permission changes, blocked rate limits and active paid overage remain rejected. No grants, model policy, sources or budgets broadened.
 
 Rejections now persist sanitized event type/subtype and fixed reason; corrected model-identity diagnostics retained. Event bodies, credentials/research content and JSON parser excerpts are excluded. The event behind 0eb5708 **cannot be reconstructed** from existing evidence; no live cause is claimed. 108 deterministic tests in five files passed; build passed; no new typecheck errors (70 known /75 baseline). Five originals hash-verified. No calls or UI retry; live block unchanged. See `docs/jufe-route-assessment/claude-protocol-events/handover.md` and evidence.
+
+
+## 2026-10-21 — Single UI attempt from 7062aa9 rejected mixed-model usage
+
+Run `bg-mvhxrby3-v7n62j` stopped on sanitized diagnostic: type=result, subtype=success, reason=model_identity_rejected, phase=result-modelUsage; requested claude-sonnet-5; returned usage IDs claude-haiku-4-5-20251001 and claude-sonnet-5. No alternate model selected by the application. Ancillary host use versus task-generation substitution is not established; no further calls or retry. No accepted lookup/draft or Nora review.
+
+Pro authentication confirmed before submission; no billing/credential changes. Actual UI displayed the failed handover. Run checkpoint `fc419a91ab43797e74c29061a1a7c356be1c1904`. Reports and checked prior failures unchanged. 105 deterministic preflight tests passed; typecheck no new errors. Eight originals hash-verified; live-blocked source restored and rebuilt. Evidence: `docs/jufe-route-assessment/claude-live-protocol-check/handover.md` and adjacent files. Stopped after one submission; no push.

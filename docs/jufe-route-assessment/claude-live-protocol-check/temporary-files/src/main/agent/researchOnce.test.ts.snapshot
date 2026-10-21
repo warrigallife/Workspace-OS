@@ -1,0 +1,17 @@
+import {it,expect,vi} from 'vitest'
+import fs from 'fs'
+import os from 'os'
+import path from 'path'
+const tmp=vi.hoisted(()=>({root:''}))
+vi.mock('./researchScope',()=>({get RESEARCH_ROOT(){return tmp.root},safePath:()=>{}}))
+import {claimApprovedResearchOnce,assertResearchOncePermit} from './researchOnce'
+it('consumes exactly once and rejects forged/missing permits across restart',async()=>{
+ tmp.root=fs.mkdtempSync(path.join(os.tmpdir(),'research-once-'))
+ try{
+ expect(()=>assertResearchOncePermit(undefined)).toThrow();expect(()=>assertResearchOncePermit({})).toThrow()
+ const p=claimApprovedResearchOnce('bg-test-once');expect(()=>assertResearchOncePermit(p)).not.toThrow()
+ expect(()=>claimApprovedResearchOnce('bg-test-next')).toThrow()
+ vi.resetModules();const restarted=await import('./researchOnce')
+ expect(()=>restarted.assertResearchOncePermit(p)).toThrow();expect(()=>restarted.claimApprovedResearchOnce('bg-test-restart')).toThrow()
+ }finally{fs.rmSync(tmp.root,{recursive:true,force:true})}
+})

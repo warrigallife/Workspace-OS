@@ -1,0 +1,14 @@
+{
+  "base": "7062aa9",
+  "approval": "One two-report subscription-only UI test, previously agreed limits, no paid credits/fallback/substitution/retry",
+  "authentication": {
+    "loggedIn": true,
+    "authMethod": "claude.ai",
+    "apiProvider": "firstParty",
+    "subscriptionType": "pro",
+    "exitCode": 0
+  },
+  "billing": "User previously confirmed credits off and zero balance; no billing changes authorized",
+  "model": "claude-sonnet-5",
+  "estimated_usd_threshold_per_session": 0.5
+}

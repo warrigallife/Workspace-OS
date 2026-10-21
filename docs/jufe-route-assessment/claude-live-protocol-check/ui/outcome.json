@@ -1,0 +1,7 @@
+{
+  "status": "failed",
+  "error": "Claude protocol rejected: {\"type\":\"result\",\"subtype\":\"success\",\"reason\":\"model_identity_rejected\"} Claude response rejected: {\"phase\":\"result-modelUsage\",\"kind\":\"identity-mismatch\",\"requested\":\"claude-sonnet-5\",\"returned\":[\"claude-haiku-4-5-20251001\",\"claude-sonnet-5\"],\"truncated\":false}",
+  "checkpointId": "fc419a91ab43797e74c29061a1a7c356be1c1904",
+  "turns": 0,
+  "totalTokens": 0
+}
