@@ -1,0 +1,31 @@
+{
+  "base_checkpoint": "8e3a940",
+  "status": "blocked-before-inference",
+  "reason": "Restricted-environment authentication status does not establish required Claude Pro subscription route",
+  "auth_status": {
+    "loggedIn": false,
+    "authMethod": "none",
+    "apiProvider": "firstParty",
+    "subscriptionType": null
+  },
+  "auth_check": "Pinned installed Claude auth status --json, outside sandbox; sanitized output only",
+  "environment_names": [
+    "HOME",
+    "USER",
+    "PATH",
+    "LANG",
+    "CLAUDE_CODE_MAX_OUTPUT_TOKENS"
+  ],
+  "billing_evidence": {
+    "user_previously_confirmed_usage_credits_off_and_zero_balance": true,
+    "cached_hasExtraUsageEnabled": false,
+    "cached_profileFetchedAt": "2026-10-18T04:02:46.086000+00:00",
+    "live_billing_state_independently_verified": false
+  },
+  "ui_submissions": 0,
+  "inference_calls": 0,
+  "research_content_transmitted": false,
+  "automatic_retries": 0,
+  "live_block": "unchanged",
+  "credentials_or_billing_changed": false
+}

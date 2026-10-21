@@ -1,0 +1,12 @@
+[
+  {
+    "original": "docs/jufe-route-assessment/claude-pair/handover.md",
+    "copy": "originals/docs/jufe-route-assessment/claude-pair/handover.md.snapshot",
+    "sha256": "664a38a304434528e87eb9fad9a57aef73a42ab9e532ae903cb927893ee3bd52"
+  },
+  {
+    "original": "docs/local-team/implementation-log.md",
+    "copy": "originals/docs/local-team/implementation-log.md.snapshot",
+    "sha256": "27e19002312c0615ace461a29e87b73fc817f7f1d49da3bd147dbea9496fe2b3"
+  }
+]

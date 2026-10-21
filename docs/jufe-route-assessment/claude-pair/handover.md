@@ -54,3 +54,10 @@ Installed Claude Code 2.1.267 inspection confirms full IDs and configurable shor
 Exact approved `claude-sonnet-5` matching remains required. No alias/date/suffix normalization or fallback was added. Synthetic/error messages fail with accurate classifications, and sanitized bounded requested/returned IDs plus safe HTTP status now survive in state/outcome/handover. Missing identity also fails closed. Arbitrary error bodies and unsafe model strings are excluded.
 
 66 deterministic tests passed across four files; build passed; no new typecheck errors (70 known /75 baseline). Five originals hash-verified. Live execution remains blocked; no calls or workflow repeat. Evidence: `docs/jufe-route-assessment/claude-model-identity/handover.md`, installed-contract excerpts, tests and recovery manifest.
+
+
+## 2026-10-21 — Further approved attempt stopped before inference
+
+From 8e3a940, the required preflight reported loggedIn=false / authMethod=none / firstParty / no subscription type in the restricted environment including USER, outside the sandbox. Required Claude Pro subscription-only execution could not be confirmed. Stopped before UI submission, inference or research transmission; no retry. Prior successful auth and the user's credits-off/zero-balance confirmation remain evidence, but do not override this failed preflight. Cause not diagnosed.
+
+Live block remained unchanged, corrected identity diagnostics preserved, no runtime/credential/billing changes. Saved result and recovery copies: `docs/jufe-route-assessment/claude-live-identity-preflight/`. No automatic pending attempt.
