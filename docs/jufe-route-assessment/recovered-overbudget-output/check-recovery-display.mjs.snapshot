@@ -1,0 +1,26 @@
+import {_electron as electron} from 'playwright'
+import fs from 'node:fs'
+import path from 'node:path'
+import os from 'node:os'
+import assert from 'node:assert/strict'
+const root=process.cwd(),target=path.join(root,'docs/jufe-route-assessment/recovered-overbudget-output'),id='bg-mviqvk8b-utpn8m'
+let app
+try{
+ app=await electron.launch({executablePath:path.join(os.homedir(),'Desktop/Workspace OS — Local Python Pilot.command'),cwd:root,timeout:60000})
+ const win=await app.firstWindow();await win.waitForFunction(()=>!!window.workspace?.research)
+ const identity=await app.evaluate(({app})=>({appPath:app.getAppPath(),userData:app.getPath('userData')}))
+ assert.equal(identity.appPath,root);assert.equal(identity.userData,path.join(root,'.workspace-os/liam-app-data'))
+ const enter=win.getByRole('button',{name:'Enter',exact:true});await enter.waitFor({state:'visible',timeout:5000}).catch(()=>{});if(await enter.isVisible())await enter.click()
+ const before=await win.evaluate(()=>window.workspace.runs.list());assert(!before.some(j=>['queued','running'].includes(j.status)))
+ const old=before.find(j=>j.id===id);assert.equal(old.status,'error')
+ await win.getByRole('button',{name:'Agents',exact:true}).click();await win.getByTestId('local-research').locator('summary').click()
+ await win.getByTestId('research-job').filter({hasText:id}).getByRole('button',{name:'View research report and handover'}).click()
+ const display=await win.getByTestId('research-result').innerText()
+ assert(display.includes('Authoritative outcome: failed'));assert(display.includes('Recovered from an over-budget run; draft and review passed validation.'))
+ assert(display.includes('recovered-report.md'));assert(display.includes('recovered-handover.md'))
+ const after=await win.evaluate(()=>window.workspace.runs.list());assert.equal(after.find(j=>j.id===id).status,'error');assert.deepEqual(after.map(j=>j.id).sort(),before.map(j=>j.id).sort())
+ fs.writeFileSync(path.join(target,'ui-display.txt'),display)
+ await win.getByTestId('research-result').screenshot({path:path.join(target,'ui-display.png')})
+ fs.writeFileSync(path.join(target,'ui-verification.json'),JSON.stringify({identity,run:id,status:'error',displayedRecovery:true,newJobs:0,inferenceCalls:0},null,2)+'\n')
+ console.log('Recovery displayed through actual UI; original failed status unchanged; no new jobs.')
+}finally{if(app)await app.close()}

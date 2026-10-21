@@ -1,0 +1,6 @@
+
+> workspace-os@0.2.0-beta.1 typecheck
+> node scripts/typecheck.mjs
+
+Typecheck clean against the baseline (70 known errors, baseline 75).
+Fewer errors than the baseline — run `npm run typecheck -- --accept` to tighten it.

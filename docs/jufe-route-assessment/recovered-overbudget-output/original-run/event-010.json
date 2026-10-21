@@ -1,0 +1,46 @@
+{
+  "kind": "tool",
+  "data": {
+    "role": "dana",
+    "action": "researchReport.save",
+    "args": {
+      "findings": [
+        {
+          "statement": "Source 36 was flagged as uncovered: no report has examined its ontology, crosswalk, or operator hierarchy as primary material.",
+          "citation": {
+            "record_id": "jufe-coverage-2026-10-11",
+            "start_line": 1,
+            "end_line": 80,
+            "quote": "no report has examined its actual ontology/crosswalk/hierarchy content as primary material"
+          }
+        },
+        {
+          "statement": "Files 4 and 6 have unverified tails beyond their repeated calibration preamble, not read in this audit pass.",
+          "citation": {
+            "record_id": "jufe-coverage-2026-10-11",
+            "start_line": 1,
+            "end_line": 80,
+            "quote": "were **not read in this pass — mark as unverified**, since this file is markedly longer"
+          }
+        },
+        {
+          "statement": "Source 31's claim that evolution is \"stochastically emergent\" is unsupported by the deterministic source-30 treatment and unflagged elsewhere.",
+          "citation": {
+            "record_id": "jufe-schedule-2026-10-11",
+            "start_line": 1,
+            "end_line": 80,
+            "quote": "Evolution within the manifold is stochastically emergent"
+          }
+        }
+      ],
+      "limitations": "Findings reflect only the first 80 lines read of each dated record, not full-document or current-status verification."
+    },
+    "result": {
+      "ok": true,
+      "result": {
+        "saved": "draft.json"
+      }
+    },
+    "origin": "structured-finalisation"
+  }
+}

@@ -166,3 +166,10 @@ Installed schema and producer establish this as approximate thinking-progress me
 From f197922, Claude Pro auth confirmed; existing two-report/selected-route/subscription-only approval reused. Run `bg-mviqvk8b-utpn8m`: Dana draft passed without correction; Nora retrieved evidence and returned a response, then unchanged run budget stopped validation/save at 32,045 tokens versus 24,000. Dana 15,527; Nora 16,518. No accepted review or completed report. No protocol rejection in this attempt; UI failure handover displayed. Raw returned review preserved as unvalidated. No retry or repair.
 
 Per-stage accounting and diagnostics saved. Six originals verified; four runtime/UI files restored byte-for-byte and live-blocked app rebuilt. Sources and twelve checked prior failures unchanged. No billing/permission/budget changes. [Saved outcome, usage and recovery](../claude-thinking-live/handover.md).
+
+
+## 2026-10-22 — Recovered useful output from 3094397
+
+Saved recovered-report.md and recovered-handover.md in the approved staging directory for bg-mviqvk8b-utpn8m, labelled “Recovered from an over-budget run; draft and review passed validation.” Rendered from the preserved validated draft/review, with dated limitations and no scientific-proof or workflow-success claim. Original failed status, handover, raw responses and usage remain byte-identical; recovered copies hash-verified.
+
+Existing result interface displays the fixed recovery filenames without changing failure/completion rules. Actual UI verified both artifacts and unchanged queue error, zero new jobs/inference. 49 tests passed; no new typecheck errors. Live block unchanged. [Recovery evidence and instructions](../recovered-overbudget-output/handover.md).

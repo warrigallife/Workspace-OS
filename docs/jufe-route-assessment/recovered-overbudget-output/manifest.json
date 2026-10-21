@@ -1,0 +1,157 @@
+[
+  {
+    "original": "src/main/agent/researchResult.ts",
+    "copy": "originals/src/main/agent/researchResult.ts.snapshot",
+    "sha256": "7aa7c6b91e58f8f592d9efeb6286fe7e602a4c004ba67c0306ee505390cd09e1"
+  },
+  {
+    "original": "docs/local-team/implementation-log.md",
+    "copy": "originals/docs/local-team/implementation-log.md.snapshot",
+    "sha256": "2a7ac3f83be0597e00e33743226225be5ab0b6e6b73541da838b06b3d81ad56a"
+  },
+  {
+    "original": "docs/jufe-route-assessment/claude-pair/handover.md",
+    "copy": "originals/docs/jufe-route-assessment/claude-pair/handover.md.snapshot",
+    "sha256": "b4f03c3cef61a313a4bd58c9098008b90fe2c69fbe1baf1a8e3de2e4037877e2"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/event-007.json",
+    "copy": "original-run/event-007.json",
+    "sha256": "54a61521703f057733448dd32d1187632d278afc49a97af9cd2a7cb2e267bab5"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/draft-attempt-1.json",
+    "copy": "original-run/draft-attempt-1.json",
+    "sha256": "acc538565cd08db8588949a270ab700d02141e069c86359c76c0de52c0dc63eb"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/event-011.json",
+    "copy": "original-run/event-011.json",
+    "sha256": "c0d579f583e0c98a3ef4d31b6dcf0ce6684eb90a882db26311cd7a2c39be5e83"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/draft.json",
+    "copy": "original-run/draft.json",
+    "sha256": "acc538565cd08db8588949a270ab700d02141e069c86359c76c0de52c0dc63eb"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/usage.json",
+    "copy": "original-run/usage.json",
+    "sha256": "00183955922679f7bbf2464748e6328a3a1fa6e49fc6ecde060354512483bdf3"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/state.json",
+    "copy": "original-run/state.json",
+    "sha256": "e2f83704cd80808fc7e5140096e869cf7b6bdf6812c4a8c8b8b9a5fa1cc4313a"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/event-010.json",
+    "copy": "original-run/event-010.json",
+    "sha256": "a9431202b3fc4dc11612e09cddf7e9560de47547640bf59dc0b7ea54969c9c43"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/outcome.json",
+    "copy": "original-run/outcome.json",
+    "sha256": "055601cb62e3db24c5f213553f782ba27c7f8a85e2c0ba06c58fbe2bf88176c4"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/event-006.json",
+    "copy": "original-run/event-006.json",
+    "sha256": "83614a583b35f4ebb9d923fa72c729fb7145eb1ae159394db8ca923dc468dfe5"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/event-001.json",
+    "copy": "original-run/event-001.json",
+    "sha256": "e75b76297e4ff7b2c3d1c25499c1fd17ea2bbb55f555d3933ba7865276d7b08c"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/event-017.json",
+    "copy": "original-run/event-017.json",
+    "sha256": "223debb17a828e6768c4a144a04af63089203a30d8680fc059c91c3a0b4b3347"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/input.json",
+    "copy": "original-run/input.json",
+    "sha256": "bec99b4acd754c3e475fbad5745f16c0659dbe6487312ceb8de07d1421c5d09b"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/event-020.json",
+    "copy": "original-run/event-020.json",
+    "sha256": "492e4b3a0f2d776a491362b57e3696a18d82607bb0d69c5cb61ff9c2f21154c1"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/event-016.json",
+    "copy": "original-run/event-016.json",
+    "sha256": "66a8b341888656982e94925bc9d1d59fb75c329f4e057c2ddc11a618590222ea"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/event-000.json",
+    "copy": "original-run/event-000.json",
+    "sha256": "514548bad849536131c29dbe0592030f6c1efba4c91df619ab8e9f2b8266a85e"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/event-015.json",
+    "copy": "original-run/event-015.json",
+    "sha256": "f5505fbeb61b06132b4172e8919528cef33825d464ce998955f7f179bbcd85e1"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/event-003.json",
+    "copy": "original-run/event-003.json",
+    "sha256": "a723bf4e327ce278ec796f686890dbf51e3461bbcb7a64d4e9f6568b3d7c23a9"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/event-019.json",
+    "copy": "original-run/event-019.json",
+    "sha256": "25d2d8bb2632d2c48e466211d35d1b24ff428654241c9e784e21194ab179c380"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/event-018.json",
+    "copy": "original-run/event-018.json",
+    "sha256": "2d265aa305f8174877ca8611391a56d3bfdb49bced0f3b80b4e72a8c9cde74c6"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/event-002.json",
+    "copy": "original-run/event-002.json",
+    "sha256": "1d5b9588760e507a58375c55e81c2a5a2536bada2df9d6027b9c51d490094571"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/event-014.json",
+    "copy": "original-run/event-014.json",
+    "sha256": "699f4df35cb77550f7d10989d897a02993b3622f44366c997825c746e2a7af79"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/event-009.json",
+    "copy": "original-run/event-009.json",
+    "sha256": "10769b7ba9b418f8ea16bb0d90d5b793a80eae36eaba9c03904f926b8209e5e8"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/event-013.json",
+    "copy": "original-run/event-013.json",
+    "sha256": "62283ce4b4720a78cb97be518250e9995b44e99505c6db46d80a2df62c1fb258"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/event-005.json",
+    "copy": "original-run/event-005.json",
+    "sha256": "80df89d8a5fb810e012dff39db7d8ee8d9fc7abc6088f011d3c2c67cad857c56"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/event-004.json",
+    "copy": "original-run/event-004.json",
+    "sha256": "3aabb3a23d1ef13febd8a90b46dcd661e6e17da2b1dd93a1b93c1a2703dd8f76"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/event-012.json",
+    "copy": "original-run/event-012.json",
+    "sha256": "596fbcbe3e257de6126dd04352c077962fd7707ce968476a2a358bc78e15bbec"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/handover.md",
+    "copy": "original-run/handover.md",
+    "sha256": "060f2fa6ad6ba33a0130a934fb4c2e2616624fdda3b3da9f0c657359fa163f4f"
+  },
+  {
+    "original": ".workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m/event-008.json",
+    "copy": "original-run/event-008.json",
+    "sha256": "27d1a8a3b9119582eaacdabe50b3ee4b29239df60699619ac9af516d4c8c2377"
+  }
+]

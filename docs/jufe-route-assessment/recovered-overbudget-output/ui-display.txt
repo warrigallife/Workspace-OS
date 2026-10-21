@@ -1,0 +1,295 @@
+Authoritative outcome: failed
+Research token budget exceeded
+Intermediate artifacts below do not override this outcome.
+
+outcome.json
+{
+  "status": "failed",
+  "error": "Research token budget exceeded",
+  "checkpointId": "0e0ce43d06c8e036b6ceada682a3328cdca7df21",
+  "turns": 4,
+  "totalTokens": 32045,
+  "routes": {
+    "dana": {
+      "provider": "claude",
+      "model": "claude-sonnet-5"
+    },
+    "nora": {
+      "provider": "claude",
+      "model": "claude-sonnet-5"
+    }
+  },
+  "usage": {
+    "dana": {
+      "basis": "cumulative per session",
+      "models": [
+        {
+          "model": "claude-haiku-4-5-20251001",
+          "attribution": "additional aggregate usage; purpose unattributed",
+          "inputTokens": 1631,
+          "outputTokens": 14,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "costUSD": 0.001701
+        },
+        {
+          "model": "claude-sonnet-5",
+          "attribution": "selected answer model",
+          "inputTokens": 4,
+          "outputTokens": 506,
+          "cacheReadInputTokens": 1818,
+          "cacheCreationInputTokens": 11554,
+          "costUSD": 0.0516476
+        }
+      ],
+      "inputTokens": 15007,
+      "outputTokens": 520,
+      "costUSD": 0.0533486
+    },
+    "nora": {
+      "basis": "cumulative per session",
+      "models": [
+        {
+          "model": "claude-haiku-4-5-20251001",
+          "attribution": "additional aggregate usage; purpose unattributed",
+          "inputTokens": 2074,
+          "outputTokens": 14,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "costUSD": 0.002144
+        },
+        {
+          "model": "claude-sonnet-5",
+          "attribution": "selected answer model",
+          "inputTokens": 4,
+          "outputTokens": 317,
+          "cacheReadInputTokens": 2445,
+          "cacheCreationInputTokens": 11664,
+          "costUSD": 0.050323
+        }
+      ],
+      "inputTokens": 16187,
+      "outputTokens": 331,
+      "costUSD": 0.052467
+    }
+  }
+}
+
+handover.md
+# JUFE research handover
+
+Status: failed
+
+Research token budget exceeded
+
+Selected routes: {"dana":{"provider":"claude","model":"claude-sonnet-5"},"nora":{"provider":"claude","model":"claude-sonnet-5"}}
+
+Usage (additional aggregate models have unattributed purpose; cost is an estimate, not a bill): {"dana":{"basis":"cumulative per session","models":[{"model":"claude-haiku-4-5-20251001","attribution":"additional aggregate usage; purpose unattributed","inputTokens":1631,"outputTokens":14,"cacheReadInputTokens":0,"cacheCreationInputTokens":0,"costUSD":0.001701},{"model":"claude-sonnet-5","attribution":"selected answer model","inputTokens":4,"outputTokens":506,"cacheReadInputTokens":1818,"cacheCreationInputTokens":11554,"costUSD":0.0516476}],"inputTokens":15007,"outputTokens":520,"costUSD":0.0533486},"nora":{"basis":"cumulative per session","models":[{"model":"claude-haiku-4-5-20251001","attribution":"additional aggregate usage; purpose unattributed","inputTokens":2074,"outputTokens":14,"cacheReadInputTokens":0,"cacheCreationInputTokens":0,"costUSD":0.002144},{"model":"claude-sonnet-5","attribution":"selected answer model","inputTokens":4,"outputTokens":317,"cacheReadInputTokens":2445,"cacheCreationInputTokens":11664,"costUSD":0.050323}],"inputTokens":16187,"outputTokens":331,"costUSD":0.052467}}
+
+Originals unchanged; no canonical writes. Evidence: /Users/liammcilmurray/Desktop/Workspace-OS/.workspace-os/liam-workspace/JUFE-staging/bg-mviqvk8b-utpn8m
+
+
+recovered-report.md
+# Recovered JUFE research report
+
+**Recovered from an over-budget run; draft and review passed validation.**
+
+Original run: `bg-mviqvk8b-utpn8m` — **failed: Research token budget exceeded**. Recovery does not mark the workflow successful. These are observations from reports dated 11 October 2026, not claims of present-day completeness or independent proof of the underlying science.
+
+## 1. Dated report observation
+
+Source 36 was flagged as uncovered: no report has examined its ontology, crosswalk, or operator hierarchy as primary material.
+
+Source: [jufe-coverage-2026-10-11](/Users/liammcilmurray/Desktop/JUFE/docs/reports/JUFE_Full_Collection_Coverage_Audit_2026-10-11.md), retrieved and cited lines 1–80.
+
+Exact excerpt:
+
+> no report has examined its actual ontology/crosswalk/hierarchy content as primary material
+
+## 2. Dated report observation
+
+Files 4 and 6 have unverified tails beyond their repeated calibration preamble, not read in this audit pass.
+
+Source: [jufe-coverage-2026-10-11](/Users/liammcilmurray/Desktop/JUFE/docs/reports/JUFE_Full_Collection_Coverage_Audit_2026-10-11.md), retrieved and cited lines 1–80.
+
+Exact excerpt:
+
+> were **not read in this pass — mark as unverified**, since this file is markedly longer
+
+## 3. Dated report observation
+
+Source 31's claim that evolution is "stochastically emergent" is unsupported by the deterministic source-30 treatment and unflagged elsewhere.
+
+Source: [jufe-schedule-2026-10-11](/Users/liammcilmurray/Desktop/JUFE/docs/reports/JUFE_Schedule_and_Source31_Coverage_Review_2026-10-11.md), retrieved and cited lines 1–80.
+
+Exact excerpt:
+
+> Evolution within the manifold is stochastically emergent
+
+## Limitations and review
+
+Findings reflect only the first 80 lines read of each dated record, not full-document or current-status verification.
+
+Nora’s preserved verdict: **approve**. Her recorded rationale (reproduced, not a new review):
+
+> All three quotes verbatim match retrieved text at cited ranges, and each statement accurately reflects the source: finding 0 matches row 18 (source 36) exactly, finding 1 matches rows 20/22 (sources 4 and 6) exactly, and finding 2 matches the schedule record's source-31 stochastic claim versus source-30's deterministic treatment exactly.
+
+Offline checks confirmed the review fields, required retrieval receipts and verbatim citations against unchanged source hashes. Application validation and a separate model review do not independently prove scientific claims. No inference or regeneration was used for this recovery.
+
+
+recovered-handover.md
+# Recovered output handover
+
+**Recovered from an over-budget run; draft and review passed validation.**
+
+Run `bg-mviqvk8b-utpn8m` remains failed. Original state/outcome/usage/raw response files and handover are unchanged. No completion or review receipt was inserted into the original workflow.
+
+Recovered files: `recovered-report.md` and `recovered-handover.md`. Content comes from the preserved Dana draft and Nora response, whose unchanged offline validation previously passed with saves blocked. Nora independently retrieved lines 1–80 of both approved reports; her verdict was approve. This is a recovery of useful output, not successful completion or independent scientific proof.
+
+Original accounting: Dana 15,527 tokens; Nora 16,518; total 32,045 against the unchanged 24,000 limit. No budget override, new inference or automatic acceptance. Raw per-stage accounting remains in usage.json.
+
+Use Workspace OS → Agents → JUFE research — Dana → Nora → run bg-mviqvk8b-utpn8m → View research report and handover. The failure header remains authoritative; recovered material is separately labelled. No Run/Retry action is required.
+
+
+state.json
+{
+  "id": "bg-mviqvk8b-utpn8m",
+  "status": "failed",
+  "stage": "nora",
+  "provider": "restricted-hosts",
+  "routes": {
+    "dana": {
+      "provider": "claude",
+      "model": "claude-sonnet-5"
+    },
+    "nora": {
+      "provider": "claude",
+      "model": "claude-sonnet-5"
+    }
+  },
+  "usage": {
+    "dana": {
+      "basis": "cumulative per session",
+      "models": [
+        {
+          "model": "claude-haiku-4-5-20251001",
+          "attribution": "additional aggregate usage; purpose unattributed",
+          "inputTokens": 1631,
+          "outputTokens": 14,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "costUSD": 0.001701
+        },
+        {
+          "model": "claude-sonnet-5",
+          "attribution": "selected answer model",
+          "inputTokens": 4,
+          "outputTokens": 506,
+          "cacheReadInputTokens": 1818,
+          "cacheCreationInputTokens": 11554,
+          "costUSD": 0.0516476
+        }
+      ],
+      "inputTokens": 15007,
+      "outputTokens": 520,
+      "costUSD": 0.0533486
+    },
+    "nora": {
+      "basis": "cumulative per session",
+      "models": [
+        {
+          "model": "claude-haiku-4-5-20251001",
+          "attribution": "additional aggregate usage; purpose unattributed",
+          "inputTokens": 2074,
+          "outputTokens": 14,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "costUSD": 0.002144
+        },
+        {
+          "model": "claude-sonnet-5",
+          "attribution": "selected answer model",
+          "inputTokens": 4,
+          "outputTokens": 317,
+          "cacheReadInputTokens": 2445,
+          "cacheCreationInputTokens": 11664,
+          "costUSD": 0.050323
+        }
+      ],
+      "inputTokens": 16187,
+      "outputTokens": 331,
+      "costUSD": 0.052467
+    }
+  },
+  "task": "Identify outstanding research work recorded in the two approved JUFE coverage reports dated 2026-10-11. Produce exactly three distinct, concise findings with short exact source excerpts and line citations. Cover both approved records. Distinguish reported coverage gaps from inference and unresolved present-day status. Do not inspect or change manuscripts.",
+  "recoveredFrom": null,
+  "sourceHashes": {
+    "jufe-coverage-2026-10-11": "eaa5a95fc910bf016c03f899e2ec7d283d9eb56b9c35ad88aa3a5ba569f4b96d",
+    "jufe-schedule-2026-10-11": "e281c7def2fc5461202f84422771adc6a32300260ee1d2a0928416830fee4772"
+  },
+  "events": [
+    "event-000.json",
+    "event-001.json",
+    "event-002.json",
+    "event-003.json",
+    "event-004.json",
+    "event-005.json",
+    "event-006.json",
+    "event-007.json",
+    "event-008.json",
+    "event-009.json",
+    "event-010.json",
+    "event-011.json",
+    "event-012.json",
+    "event-013.json",
+    "event-014.json",
+    "event-015.json",
+    "event-016.json",
+    "event-017.json",
+    "event-018.json",
+    "event-019.json",
+    "event-020.json"
+  ],
+  "tasks": {
+    "dana": "task-1792625396424-p23umk",
+    "nora": "task-1792625396482-nvsfdd",
+    "handover": "task-1792625396539-vfwoas"
+  },
+  "dependencies": {
+    "task-1792625396482-nvsfdd": [
+      "task-1792625396424-p23umk"
+    ],
+    "task-1792625396539-vfwoas": [
+      "task-1792625396482-nvsfdd"
+    ]
+  },
+  "error": "Research token budget exceeded",
+  "turns": 4,
+  "totalTokens": 32045,
+  "reads": {
+    "dana": [
+      {
+        "record_id": "jufe-coverage-2026-10-11",
+        "start_line": 1,
+        "end_line": 80
+      },
+      {
+        "record_id": "jufe-schedule-2026-10-11",
+        "start_line": 1,
+        "end_line": 80
+      }
+    ],
+    "nora": [
+      {
+        "record_id": "jufe-coverage-2026-10-11",
+        "start_line": 1,
+        "end_line": 80
+      },
+      {
+        "record_id": "jufe-schedule-2026-10-11",
+        "start_line": 1,
+        "end_line": 80
+      }
+    ]
+  }
+}

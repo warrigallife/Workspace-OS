@@ -1,0 +1,13 @@
+{
+  "originalCopiesVerified": 31,
+  "originalRunFilesUnchanged": 28,
+  "recoveredCopyHashes": {
+    "recovered-report.md": "c4ef1ff4ef1365d89e019ea465ef94570bb5bb18c6262239f80bf8d58f76529c",
+    "recovered-handover.md": "d4bef2c61a78a6c5f489c427b0aa231ccc2194b8e65b7e4bca602f4ffcb8141f"
+  },
+  "originalOutcome": "failed",
+  "queueStatus": "error; actual UI verified",
+  "inferenceCalls": 0,
+  "newJobs": 0,
+  "liveBlock": "unchanged"
+}
