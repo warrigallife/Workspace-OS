@@ -1,0 +1,45 @@
+{
+  "status": "failed",
+  "error": "Research token budget exceeded",
+  "checkpointId": "bc5fe4f006bd2d89166ed564fffa8b02006dce6e",
+  "turns": 3,
+  "totalTokens": 49519,
+  "routes": {
+    "dana": {
+      "provider": "claude",
+      "model": "claude-sonnet-5"
+    },
+    "nora": {
+      "provider": "claude",
+      "model": "claude-sonnet-5"
+    }
+  },
+  "usage": {
+    "dana": {
+      "basis": "cumulative per session",
+      "models": [
+        {
+          "model": "claude-haiku-4-5-20251001",
+          "attribution": "additional aggregate usage; purpose unattributed",
+          "inputTokens": 1631,
+          "outputTokens": 15,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "costUSD": 0.001706
+        },
+        {
+          "model": "claude-sonnet-5",
+          "attribution": "selected answer model",
+          "inputTokens": 6,
+          "outputTokens": 959,
+          "cacheReadInputTokens": 14259,
+          "cacheCreationInputTokens": 32649,
+          "costUSD": 0.1430498
+        }
+      ],
+      "inputTokens": 48545,
+      "outputTokens": 974,
+      "costUSD": 0.14475580000000002
+    }
+  }
+}

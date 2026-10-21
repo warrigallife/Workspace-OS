@@ -300,3 +300,10 @@ Result, raw accepted responses, usage and diagnostics saved. Reports and nine ch
 From 0b115b3: Dana may correct one invalid structured draft using exact validation feedback and already-retrieved passages. Original/corrected submissions preserved separately; both pass through unchanged validation/grants. Second failure stops; Nora reviews only a valid draft. Same session, token/action/step/time/spending budgets; no reviewer correction, source expansion or fresh-session retry. Permission/source/save/provider failures remain immediate stops.
 
 159 deterministic tests /7 files passed, including corrected quote, persistent/unsupported citations, cancellation, deadline and exhausted budgets; build passed; no new typecheck errors. Five originals verified. Live execution still blocked, no calls made. [Implementation/recovery](../jufe-route-assessment/draft-correction/handover.md) and [prepared single UI test awaiting explicit approval](../jufe-route-assessment/draft-correction/live-test-preparation.md).
+
+
+## 2026-10-22 — Approved single bounded-correction UI test
+
+From 2a2bbe9, Claude Pro auth confirmed; selected Dana/Nora Claude / claude-sonnet-5 under existing two-report/subscription-only terms. Run `bg-mviq1kty-xiujnx`: original quote rejected, one correction requested and returned, then `Research token budget exceeded` at 49,519 accounted tokens against unchanged 24,000 limit. Third response saved but corrected draft not validated/accepted; no Nora review. Original and returned unvalidated correction, usage, exact failure and UI handover preserved. No further retries or repair.
+
+Six originals verified; four runtime/UI files restored byte-for-byte and live block rebuilt. Reports and ten checked earlier failures unchanged. No broader access or billing changes. [Saved outcome and recovery](../jufe-route-assessment/claude-correction-live/handover.md).

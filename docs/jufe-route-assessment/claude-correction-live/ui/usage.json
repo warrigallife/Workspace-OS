@@ -1,0 +1,28 @@
+{
+  "dana": {
+    "basis": "cumulative per session",
+    "models": [
+      {
+        "model": "claude-haiku-4-5-20251001",
+        "attribution": "additional aggregate usage; purpose unattributed",
+        "inputTokens": 1631,
+        "outputTokens": 15,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "costUSD": 0.001706
+      },
+      {
+        "model": "claude-sonnet-5",
+        "attribution": "selected answer model",
+        "inputTokens": 6,
+        "outputTokens": 959,
+        "cacheReadInputTokens": 14259,
+        "cacheCreationInputTokens": 32649,
+        "costUSD": 0.1430498
+      }
+    ],
+    "inputTokens": 48545,
+    "outputTokens": 974,
+    "costUSD": 0.14475580000000002
+  }
+}
