@@ -42,6 +42,16 @@ export function classifyResearchEvent(event:any):'data'|'lifecycle' {
     return 'lifecycle'
   }
   if(event.type==='system'){
+    if(event.subtype==='thinking_tokens'){
+      // Installed host: approximate per-block progress, not billed usage or an
+      // answer. Never add either estimate to authoritative result accounting.
+      const fields=['type','subtype','estimated_tokens','estimated_tokens_delta','uuid','session_id','user_message_uuid']
+      if(Object.keys(event).some(k=>!fields.includes(k)))return deny('invalid_lifecycle_event')
+      for(const key of ['estimated_tokens','estimated_tokens_delta'])if(!Number.isSafeInteger(event[key])||event[key]<0)return deny('invalid_lifecycle_event')
+      if(event.estimated_tokens_delta>event.estimated_tokens)return deny('invalid_lifecycle_event')
+      for(const key of ['uuid','session_id','user_message_uuid'])if(event[key]!==undefined&&(typeof event[key]!=='string'||event[key].length>128||!event[key].length))return deny('invalid_lifecycle_event')
+      return 'lifecycle'
+    }
     if(event.subtype==='status'){
       if(![null,'requesting','compacting'].includes(event.status))return deny('invalid_lifecycle_event')
       return 'lifecycle'

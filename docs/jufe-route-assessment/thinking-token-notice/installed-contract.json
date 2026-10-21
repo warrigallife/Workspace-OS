@@ -1,0 +1,23 @@
+{
+  "binary": "/opt/homebrew/Caskroom/claude-code/2.1.267/claude",
+  "sha256": "a681f3008f0050029aeebcab3af51bb6a55ddeb625a3af3141a4416d43cd2558",
+  "method": "Read-only static schema and producer inspection; no CLI/model call",
+  "snippets": [
+    {
+      "offset": 160981448,
+      "excerpt": "dless of task type.\"),uuid:ee(),session_id:s()})),due=m(()=>c({type:k(\"system\"),subtype:k(\"thinking_tokens\"),estimated_tokens:A().int(),estimated_tokens_delta:A().int(),user_message_uuid:s().optional().describe(\"Client uuid of the user message that triggered this turn (submitMessage options.uuid), stamped on every thinking_tokens frame of a headless (stream-json / Agent SDK) turn so a consumer can attribute thinking progress to the send it answers before any reply frame arrives. On a synthetic/scheduled (meta) turn it names the last user message folded into the turn so far once one has been, else the turn's own uuid when the host vouches it is the client event's own (delivered content such as a Slack owner ping). Absent on turns that neither had a client uuid nor folded a user message in, on Remote Control (interactive terminal) sessions, and from older producers.\"),uuid:ee(),session_id:s()}).describe(\"Live thinking-token estimate, digested from thinking_delta.estimated_tokens during the redacted-thinking phase (where the API otherwise streams only pings). estimated_tokens is the running total for the current thinking block; estimated_tokens_delta is the increment carried by this frame. Approximate progress for spinners/pills, not the authoritative billed output_tokens.\")),pue=m(()=>c({t"
+    },
+    {
+      "offset": 172510238,
+      "excerpt": "\"){let Ct=Yc(Vt,Fe.event);if(Vt=Ct.estimate,Ct.emission)yield pt({type:\"system\",subtype:\"thinking_tokens\",estimated_tokens:Ct.emission.estimatedTokens,estimated_tokens_delta:Ct.emission.estimatedTokensDelta}),t(\"[engine] yield-twin system/thinking_tokens\",Fo)}if(t(`[engine] yield ${Fe.type}/${\"subtype\"in Fe?Fe.subtype:\"-\"}`,Fo),Fe.type===\"command_lifecycle\")yield pt(Cr(Fe.uuid,Fe.state));else if(Fe.type===\"notification\"){let Ct=Fe.notification;yield pt({type:\"system\",subtype:\"notification\",key:Ct.key"
+    },
+    {
+      "offset": 184559728,
+      "excerpt": "indLast((ae)=>ae.id==null);if(ee?.thinkingTokenEstimate!=null)cc({type:\"system\",subtype:\"thinking_tokens\",estimated_tokens:ee.thinkingTokenEstimate,estimated_tokens_delta:w.estimatedTokensDelta})}else if(P!==void 0){let ee=this._apiMetrics.findLast((ae)=>ae.id==null)?.thinkingTokenEstimate;if(ee!=null&&ee>P)cc({type:\"system\",subtype:\"thinking_tokens\",estimated_tokens:ee,estimated_tokens_delta:ee-P})}};resetMetrics=()=>{this._zeroResponseLength(),this._apiMetrics=[],this._inFlightMessageId=null};clear"
+    },
+    {
+      "offset": 184559975,
+      "excerpt": "t((ae)=>ae.id==null)?.thinkingTokenEstimate;if(ee!=null&&ee>P)cc({type:\"system\",subtype:\"thinking_tokens\",estimated_tokens:ee,estimated_tokens_delta:ee-P})}};resetMetrics=()=>{this._zeroResponseLength(),this._apiMetrics=[],this._inFlightMessageId=null};clearApiMetrics(){this._apiMetrics=[]}applyStreamingText=(w)=>{if(this._disposed){if(w(this._coalescer.peek())===null)this._coalescer.clear();return}this._coalescer.apply(w)};applyTransformedStreamingText=(w)=>{if(!this._isStreamingTextVisible())return"
+    }
+  ]
+}

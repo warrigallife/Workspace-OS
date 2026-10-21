@@ -50,3 +50,9 @@ it('preserves absence and bounded control-request subtype without accepting cont
  expect(protocolMetadata({type:'control_request',request:{subtype:'future_control',token:'SECRET'}}).subtype).toBe('future_control')
  expect(()=>classifyResearchEvent({type:'control_request',request:{subtype:'future_control'}})).toThrow('control_or_tool_event_denied')
 })
+it.each([{estimated_tokens:0,estimated_tokens_delta:0},{estimated_tokens:100,estimated_tokens_delta:10,uuid:'fixture-event',session_id:'fixture-session',user_message_uuid:'fixture-user'}])('accepts only thinking progress metadata: %j',fields=>{
+ expect(classifyResearchEvent({type:'system',subtype:'thinking_tokens',...fields})).toBe('lifecycle')
+})
+it.each([{estimated_tokens:undefined},{estimated_tokens:-1},{estimated_tokens:1.5},{estimated_tokens:Number.MAX_SAFE_INTEGER+1},{estimated_tokens_delta:undefined},{estimated_tokens_delta:-1},{estimated_tokens_delta:101},{session_id:{}},{user_message_uuid:'x'.repeat(129)},{request:{subtype:'can_use_tool'}},{content:'PRIVATE'}])('fails closed on malformed thinking notice: %j',extra=>{
+ expect(()=>classifyResearchEvent({type:'system',subtype:'thinking_tokens',estimated_tokens:100,estimated_tokens_delta:10,...extra})).toThrow('invalid_lifecycle_event')
+})

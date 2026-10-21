@@ -168,3 +168,23 @@ it('sends only new messages and changed controls across three turns; retains wir
  const np=n.request({messages:[{role:'system',content:'NORA'},{role:'user',content:'DRAFT TO REVIEW'}],format:{}},f.controller.signal);f.init();f.result('{}');await np
  expect(wire.messages).toHaveLength(2);expect(JSON.stringify(wire)).not.toContain('PERSONA');s.close();n.close()
 })
+it('thinking notices neither resolve an answer nor contribute usage, including repeats and block resets',async()=>{
+ const f=fixture(),s=await f.driver.open('nora',f.controller.signal);let resolved=false
+ const p=s.request({messages:[],format:{}},f.controller.signal).then(r=>{resolved=true;return r})
+ const notice=(n:number,d:number)=>f.emit({type:'system',subtype:'thinking_tokens',estimated_tokens:n,estimated_tokens_delta:d,user_message_uuid:'PRIVATE IDENTIFIER'})
+ notice(100,100);f.init();notice(100,0);notice(5,5)
+ await Promise.resolve();expect(resolved).toBe(false)
+ f.result('{}');const r=await p
+ expect(r.inputTokens).toBe(10);expect(r.outputTokens).toBe(20)
+ const notices=(r.nativeEvidence as any[]).filter(e=>e.subtype==='thinking_tokens')
+ expect(notices).toHaveLength(3);expect(notices.every(e=>e.classification==='lifecycle')).toBe(true)
+ expect(JSON.stringify(notices)).not.toContain('estimated_tokens');expect(JSON.stringify(notices)).not.toContain('PRIVATE')
+ s.close()
+})
+it('thinking progress cannot replace research answer identity',async()=>{
+ const f=fixture(),s=await f.driver.open('nora',f.controller.signal)
+ const p=s.request({messages:[],format:{}},f.controller.signal),assertion=expect(p).rejects.toThrow('result_without_verified_request')
+ f.init();f.emit({type:'system',subtype:'thinking_tokens',estimated_tokens:100,estimated_tokens_delta:10})
+ f.emit({type:'result',subtype:'success',result:'{}'});await assertion
+ expect(f.children[0].kill).toHaveBeenCalledWith('SIGTERM')
+})

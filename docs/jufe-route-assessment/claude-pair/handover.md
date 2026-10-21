@@ -152,3 +152,10 @@ Completed usage diagnosis showed correct accounting but repeated context. Persis
 From 039ca48, Claude Pro auth confirmed and existing routes/scope/subscription-only limits reused. Run `bg-mviqojx1-tm4ont`: Dana draft passed application validation without correction; Nora then stopped on `system / thinking_tokens / unsupported_system_event`. No accepted Nora review or completed report. Actual UI displayed failure handover. Dana accepted usage 15,579 tokens; Nora usage unknown because no accepted accounting returned. Per-stage usage and full/incremental transcripts saved. No retry or repair.
 
 Six originals verified; four runtime/UI files restored byte-for-byte and live-blocked app rebuilt. Sources and eleven checked earlier failures unchanged. Budgets, permissions and selected routes unchanged. [Saved result, per-stage usage and recovery](../claude-incremental-live/handover.md).
+
+
+## 2026-10-22 — Supported system/thinking_tokens notice
+
+Installed schema and producer establish this as approximate thinking-progress metadata, explicitly not authoritative billed output. Narrow lifecycle handling accepts well-formed estimate fields; malformed/action-bearing events still stop. Notices never count as research answers, execute tools or contribute usage. Sanitized type/subtype only retained; all access, review and budget checks/live block unchanged. Historical event payload remains unavailable.
+
+160 focused deterministic tests passed, build passed, no new typecheck errors; five originals hash-verified. No live calls; live compatibility unverified. [Contract evidence, tests and recovery](../thinking-token-notice/handover.md).
