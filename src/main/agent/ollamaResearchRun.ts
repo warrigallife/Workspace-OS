@@ -77,7 +77,7 @@ export async function launchResearchWithDriver(o:LaunchRunOptions, driver:Resear
       validateRestriction(role,session.receipt,routes)
       record('provider-restrictions',{role,receipt:session.receipt})
       if(ledger)await ledger('task_update',{taskId:tasks[role],status:'in_progress'})
-      let draftAttempts=0
+      let draftAttempts=0,finalisationPrompted=false
       for(let step=0;step<RESEARCH_BUDGET.responsesPerStage;step++) {
         controller.signal.throwIfAborted();if(getWorkspaceRoot()!==RESEARCH_ROOT)throw new Error('Workspace changed')
         if(Buffer.byteLength(JSON.stringify(messages))>RESEARCH_BUDGET.contextBytes)throw new Error('Context limit')
@@ -86,7 +86,8 @@ export async function launchResearchWithDriver(o:LaunchRunOptions, driver:Resear
         const offeredTools=researchTools(role,scope.sources,false)
         const schema=ready?(researchTools(role,scope.sources,true)[1] as any).function.parameters:undefined
         const format=ready?providerOutputSchema(schema):undefined
-        const requestMessages=ready?[...messages,{role:'user',content:'Retrieval prerequisites are satisfied. Return ONLY the JSON object matching this schema: '+JSON.stringify(schema)+'. Use only the actual retrieved evidence. This is '+(role==='dana'?'the cited draft':'your independent review verdict')+'; trusted code will validate and save it. No tool calls or Markdown fences. '+(role==='dana'?CONCISE_DRAFT:'Keep the review reason concise, at most two sentences. Check each of the three findings independently; reject unsupported claims.')}]:messages
+        if(ready&&!finalisationPrompted){messages.push({role:'user',content:'Retrieval prerequisites are satisfied. Return ONLY the JSON object matching this schema: '+JSON.stringify(schema)+'. Use only the actual retrieved evidence. This is '+(role==='dana'?'the cited draft':'your independent review verdict')+'; trusted code will validate and save it. No tool calls or Markdown fences. '+(role==='dana'?CONCISE_DRAFT:'Keep the review reason concise, at most two sentences. Check each of the three findings independently; reject unsupported claims.')});finalisationPrompted=true}
+        const requestMessages=[...messages]
         if(Buffer.byteLength(JSON.stringify(requestMessages))>RESEARCH_BUDGET.contextBytes)throw new Error('Context limit')
         record('request',{role,step,messages:requestMessages,...(ready?{format}:{tools:offeredTools})})
         const response=await withResearchAbort(session.request({messages:requestMessages,...(ready?{format}:{tools:offeredTools as any[]})},controller.signal),controller.signal)
@@ -119,14 +120,14 @@ export async function launchResearchWithDriver(o:LaunchRunOptions, driver:Resear
             if(role!=='dana'||draftAttempts!==1||!validation)throw new Error('Structured finalisation rejected: '+result.error)
             controller.signal.throwIfAborted()
             if(totalTokens>=RESEARCH_BUDGET.tokens||step+1>=RESEARCH_BUDGET.responsesPerStage||calls>=RESEARCH_BUDGET.actionsPerStage)throw new Error('Draft correction budget exhausted: '+result.error)
-            // Reuse only successful granted lookups already supplied to this role.
-            // Never read a caller-selected path or invent a corrected quotation.
-            const passages=messages.filter(m=>m.role==='tool'&&m.tool_name==='lookup').flatMap(m=>{
-              const r=JSON.parse(m.content);return r.ok&&r.result?.excerpt?[r.result]:[]
-            })
-            const feedback={validation_error:result.error,retrieved_passages:passages}
+            // Evidence is already in the complete local transcript and persistent
+            // Claude context. Point to the relevant prior lookup; do not repeat it.
+            const index=/^save\.findings\[(\d+)\]/.exec(result.error)?.[1]
+            const citation=index===undefined?undefined:(args as any)?.findings?.[Number(index)]?.citation
+            const references=scope.reads.dana.filter(r=>!citation||r.record_id===citation.record_id&&r.start_line<=citation.start_line&&r.end_line>=citation.end_line)
+            const feedback={validation_error:result.error,prior_lookup_references:references}
             record('draft-correction',{attempt:1,...feedback})
-            messages.push({role:'user',content:'The draft failed validation. You have ONE correction attempt within the remaining original budgets. Correct the draft using only the retrieved passages below; return the complete draft JSON. Preserve exact source characters; JSON escaping must decode to the source text, not literal extra backslashes. Do not invent support. A second failure stops. '+JSON.stringify(feedback)})
+            messages.push({role:'user',content:'The draft failed validation. You have ONE correction attempt within the remaining original budgets. Use the source passages already retrieved in this conversation, located by the references below; return the complete corrected draft JSON using the previously supplied schema. Preserve exact source characters; JSON escaping must decode to source text, not literal extra backslashes. Do not invent support. A second failure stops. '+JSON.stringify(feedback)})
             continue
           }
           if(ledger && (role==='dana'||scope.review?.decision==='approve')){await ledger('task_complete',{taskId:tasks[role],result:{evidence:role==='dana'?'draft.json':'review.json'}});completedTasks.add(role)}

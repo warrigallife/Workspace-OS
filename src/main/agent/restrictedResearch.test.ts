@@ -137,11 +137,13 @@ it('persistent restricted queue interrupts running/queued jobs, never auto-resum
  expect(fs.existsSync(path.join(mock.directory,'handover.md'))).toBe(true)
 })
 
-it.each(['success','review-rejection','fabricated-citation','failed-save','identity-rejection','protocol-rejection','subtype-rejection','aggregate-additional'])('Claude stream transport and coordinator: %s',async scenario=>{
+it.each(['success','review-rejection','fabricated-citation','failed-save','identity-rejection','protocol-rejection','subtype-rejection','aggregate-additional','correction'])('Claude stream transport and coordinator: %s',async scenario=>{
  const {EventEmitter}=await import('events'),{PassThrough}=await import('stream')
  const {createClaudeResearchDriver}=await import('./providers/claudeResearch')
  const controller=new AbortController(),children:any[]=[],requests:any[]=[]
+ let danaDrafts=0
  const scripted=driver((role,req,reply)=>{
+  if(req.format&&scenario==='correction'&&role==='dana'&&++danaDrafts===1){const v=JSON.parse(reply.message.content);v.findings[0].citation.quote='\\'+quote;reply.message.content=JSON.stringify(v)}
   if(req.format&&scenario==='review-rejection'&&role==='nora'){const v=JSON.parse(reply.message.content);v.decision='reject';reply.message.content=JSON.stringify(v)}
   if(req.format&&scenario==='fabricated-citation'&&role==='dana'){const v=JSON.parse(reply.message.content);v.findings[0].citation.quote='Invented excerpt that does not exist.';reply.message.content=JSON.stringify(v)}
   return reply
@@ -149,32 +151,41 @@ it.each(['success','review-rejection','fabricated-citation','failed-save','ident
  const host=createClaudeResearchDriver({directory:mock.directory,maxBudgetUsd:0.1,launch:()=>{
   const role=children.length===0?'dana':'nora'
   const c=Object.assign(new EventEmitter(),{stdin:new PassThrough(),stdout:new PassThrough(),stderr:new PassThrough(),kill:vi.fn(()=>true)})
-  children.push(c);let streamTurns=0
+  children.push(c);let streamTurns=0;let retained:any={messages:[]}
   c.stdin.on('data',(chunk)=>{void(async()=>{
-   const req=JSON.parse(JSON.parse(chunk.toString()).message.content);requests.push({role,req})
+   const wire=JSON.parse(JSON.parse(chunk.toString()).message.content);retained={...retained,...wire,messages:[...retained.messages,...wire.messages]};const req=retained;requests.push({role,req,wire})
    c.stdout.write(JSON.stringify({type:'system',subtype:'init',model:RESEARCH_ROUTES[role].model,tools:[],mcp_servers:[]})+'\n')
    if(scenario==='subtype-rejection'){c.stdout.write(JSON.stringify({type:'system',subtype:'future_notice',content:'PRIVATE EVENT BODY',token:'SECRET'})+'\n');return}
    if(scenario==='protocol-rejection'){c.stdout.write(JSON.stringify({type:'control_request',request:{subtype:'can_use_tool',input:{secret:'PRIVATE CONTROL CONTENT'}}})+'\n');return}
    if(scenario==='identity-rejection'){c.stdout.write(JSON.stringify({type:'assistant',message:{model:'<synthetic>',content:[{type:'text',text:'PRIVATE HOST ERROR'}]},is_api_error_message:true,api_error_status:403})+'\n');return}
    const session=await scripted.host.open(role,controller.signal),reply=await session.request(req,controller.signal)
    const result=req.format?reply.message.content:JSON.stringify({lookups:reply.message.tool_calls!.map((x:any)=>x.function.arguments)})
-   streamTurns++;c.stdout.write(JSON.stringify({type:'assistant',message:{model:RESEARCH_ROUTES[role].model,content:[{type:'text',text:result}]}})+'\n')
+   retained={...retained,messages:[...retained.messages,reply.message]};streamTurns++;c.stdout.write(JSON.stringify({type:'assistant',message:{model:RESEARCH_ROUTES[role].model,content:[{type:'text',text:result}]}})+'\n')
    c.stdout.write(JSON.stringify({type:'result',subtype:'success',result,usage:{input_tokens:100,output_tokens:50},modelUsage:{[RESEARCH_ROUTES[role].model]:{inputTokens:100*streamTurns,outputTokens:50*streamTurns,cacheReadInputTokens:0,cacheCreationInputTokens:0,costUSD:0.001*streamTurns},...(scenario==='aggregate-additional'?{'claude-haiku-4-5-20251001':{inputTokens:7,outputTokens:3,cacheReadInputTokens:0,cacheCreationInputTokens:0,costUSD:0.001}}:{})}})+'\n')
   })()})
   return c as any
  }})
  if(scenario==='failed-save')mock.failSave='handover.md'
  const s=setup();await launchResearchWithDriver(s.options,host,s.factory)
- expect(await s.result).toBe(['success','aggregate-additional'].includes(scenario)?0:1)
+ expect(await s.result).toBe(['success','aggregate-additional','correction'].includes(scenario)?0:1)
  expect(children).toHaveLength(['fabricated-citation','identity-rejection','protocol-rejection','subtype-rejection'].includes(scenario)?1:2)
  expect(children.every(c=>c.kill.mock.calls.length>0)).toBe(true)
  if(scenario==='subtype-rejection'){for(const text of [outcome().error,fs.readFileSync(path.join(mock.directory,'handover.md'),'utf8'),readResearchResult(mock.directory,'error')]){expect(text).toContain('future_notice');expect(text).toContain('unsupported_system_event');expect(text).not.toContain('PRIVATE EVENT BODY');expect(text).not.toContain('SECRET')}}
  if(scenario==='identity-rejection'){expect(outcome().error).toContain('host-api-error');expect(outcome().error).toContain('<synthetic>');expect(outcome().error).toContain('claude-sonnet-5');expect(fs.readFileSync(path.join(mock.directory,'handover.md'),'utf8')).toContain('host-api-error');expect(outcome().error).not.toContain('PRIVATE HOST ERROR')}
  if(scenario==='protocol-rejection'){expect(outcome().error).toContain('control_request');expect(outcome().error).toContain('can_use_tool');expect(outcome().error).toContain('control_or_tool_event_denied');expect(fs.readFileSync(path.join(mock.directory,'handover.md'),'utf8')).toContain('control_or_tool_event_denied');expect(outcome().error).not.toContain('PRIVATE CONTROL CONTENT')}
- if(['success','aggregate-additional'].includes(scenario)){
+ if(['success','aggregate-additional','correction'].includes(scenario)){
   expect(fs.existsSync(path.join(mock.directory,'handover.md'))).toBe(true)
   expect(readResearchResult(mock.directory,'pending')).toContain('report.md')
   expect(requests.find(x=>x.role==='nora').req.messages).toHaveLength(2)
+  if(scenario==='correction'){
+   const turns=requests.filter(r=>r.role==='dana');expect(turns).toHaveLength(3)
+   expect(turns[2].wire.messages).toHaveLength(1);expect(turns[2].wire.messages[0].content).toContain('must match source verbatim')
+   expect(JSON.stringify(turns[2].wire)).not.toContain(quote);expect(turns[2].wire.format).toBeUndefined()
+   const local=fs.readdirSync(mock.directory).filter(n=>n.startsWith('event-')).map(n=>JSON.parse(fs.readFileSync(path.join(mock.directory,n),'utf8'))).find(e=>e.kind==='request'&&e.data.role==='dana'&&e.data.step===2)
+   expect(local.data.messages.filter((m:any)=>m.role==='tool')).toHaveLength(2)
+   expect(JSON.stringify(local.data.messages)).toContain(quote)
+   expect(fs.existsSync(path.join(mock.directory,'draft-attempt-2.json'))).toBe(true)
+  }
   if(scenario==='aggregate-additional'){expect(outcome().totalTokens).toBe(620);const display=readResearchResult(mock.directory,'pending');expect(display).toContain('claude-haiku-4-5-20251001');expect(display).toContain('purpose unattributed');expect(fs.readFileSync(path.join(mock.directory,'handover.md'),'utf8')).toContain('purpose unattributed')}
  }else expect(readResearchResult(mock.directory,'error')).not.toMatch(/(?:^|\n\n)report\.md\n/)
 })
@@ -213,7 +224,7 @@ it.each(['corrected','persistent','unsupported','cancelled','tokens','actions','
    drafts++
    if(drafts===2){
     const feedback=req.messages.find((m:any)=>m.role==='user'&&m.content.includes('ONE correction attempt'))?.content
-    expect(feedback).toContain('must match source verbatim');expect(feedback).toContain(quote);expect(feedback).toContain('retrieved_passages')
+    expect(feedback).toContain('must match source verbatim');expect(feedback).not.toContain(quote);expect(feedback).toContain('prior_lookup_references')
     if(scenario==='cancelled')controller.abort()
    }
    const v=JSON.parse(reply.message.content)

@@ -38,7 +38,7 @@ it('translates only lookup intents and passes final JSON to existing application
  const p=s.request({messages:[{role:'user',content:'fixture only'}],tools:[]},f.controller.signal);f.init()
  f.result(JSON.stringify({lookups:[{record_id:'fixture',start_line:1,end_line:2}]}))
  expect((await p).message.tool_calls?.[0].function).toEqual({name:'lookup',arguments:{record_id:'fixture',start_line:1,end_line:2}})
- const q=s.request({messages:[],format:{}},f.controller.signal);f.result('{"findings":[]}')
+ const q=s.request({messages:[{role:'user',content:'fixture only'},(await p).message],format:{}},f.controller.signal);f.result('{"findings":[]}')
  expect(await q).toMatchObject({provider:'claude',model,inputTokens:10,outputTokens:20,message:{content:'{"findings":[]}'}})
  s.close()
 })
@@ -128,7 +128,7 @@ it('does not accept a result without an observed answer identity',async()=>{
 it('accepts revalidated initialization on request two without restarting the session or resetting accounting',async()=>{
  const f=fixture(),s=await f.driver.open('dana',f.controller.signal)
  const first=s.request({messages:[],format:{}},f.controller.signal);f.init();f.result('{}');await first
- const second=s.request({messages:[],format:{}},f.controller.signal);f.init();f.result('{}')
+ const second=s.request({messages:[(await first).message],format:{}},f.controller.signal);f.init();f.result('{}')
  expect(await second).toMatchObject({model,inputTokens:10,outputTokens:20})
  expect(f.launch).toHaveBeenCalledTimes(1);s.close()
 })
@@ -141,8 +141,30 @@ it.each([
 ])('revalidates a later init and preserves safe specific rejection: %j',async(extra,reason)=>{
  const f=fixture(),s=await f.driver.open('dana',f.controller.signal)
  const first=s.request({messages:[],format:{}},f.controller.signal);f.init();f.result('{}');await first
- const second=s.request({messages:[],format:{}},f.controller.signal),assertion=expect(second).rejects.toThrow(reason)
+ const second=s.request({messages:[(await first).message],format:{}},f.controller.signal),assertion=expect(second).rejects.toThrow(reason)
  f.emit({type:'system',subtype:'init',model,tools:[],mcp_servers:[],...extra});await assertion
  try{await second}catch(e){expect((e as Error).message).not.toContain('PRIVATE');expect((e as Error).message).toContain('"subtype":"init"')}
  expect(f.children[0].kill).toHaveBeenCalledWith('SIGTERM')
+})
+it('sends only new messages and changed controls across three turns; retains wire evidence and session isolation',async()=>{
+ const f=fixture(),s=await f.driver.open('dana',f.controller.signal),sent:any[]=[]
+ f.children[0].stdin.on('data',(c:any)=>sent.push(JSON.parse(JSON.parse(c.toString()).message.content)))
+ const initial=[{role:'system',content:'PERSONA'},{role:'user',content:'TASK'}]
+ const a=s.request({messages:initial,tools:[{name:'lookup'}]},f.controller.signal);f.init();f.result('{"lookups":[{"record_id":"a","start_line":1,"end_line":1}]}');const ar=await a
+ const evidence={role:'tool',content:'SOURCE PASSAGE'}
+ const history=[...initial,ar.message,evidence,{role:'user',content:'FINALISE'}]
+ const b=s.request({messages:history,format:{type:'object'}},f.controller.signal);f.init();f.result('{"draft":"bad"}');const br=await b
+ const correction={role:'user',content:'Precise validation error and prior lookup reference'}
+ const c=s.request({messages:[...history,br.message,correction],format:{type:'object'}},f.controller.signal);f.init();f.result('{"draft":"corrected"}');const cr=await c
+ expect(sent[0].messages).toEqual(initial)
+ expect(sent[1]).toEqual({messages:[evidence,{role:'user',content:'FINALISE'}],tools:[],format:{type:'object'}})
+ expect(sent[2]).toEqual({messages:[correction]})
+ expect(JSON.stringify(sent[2])).not.toContain('SOURCE PASSAGE');expect(JSON.stringify(sent[2])).not.toContain('draft')
+ expect(cr.nativeEvidence?.[0]).toEqual({type:'workspace_os_request',request:sent[2]})
+ expect(cr.inputTokens).toBe(10);expect(f.launch).toHaveBeenCalledTimes(1)
+ await expect(s.request({messages:[...initial,{role:'user',content:'changed history'}],format:{}},f.controller.signal)).rejects.toThrow('transcript changed')
+ const n=await f.driver.open('nora',f.controller.signal);let wire:any
+ f.children[1].stdin.on('data',(c:any)=>{wire=JSON.parse(JSON.parse(c.toString()).message.content)})
+ const np=n.request({messages:[{role:'system',content:'NORA'},{role:'user',content:'DRAFT TO REVIEW'}],format:{}},f.controller.signal);f.init();f.result('{}');await np
+ expect(wire.messages).toHaveLength(2);expect(JSON.stringify(wire)).not.toContain('PERSONA');s.close();n.close()
 })

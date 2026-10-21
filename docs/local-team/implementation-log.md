@@ -307,3 +307,10 @@ From 0b115b3: Dana may correct one invalid structured draft using exact validati
 From 2a2bbe9, Claude Pro auth confirmed; selected Dana/Nora Claude / claude-sonnet-5 under existing two-report/subscription-only terms. Run `bg-mviq1kty-xiujnx`: original quote rejected, one correction requested and returned, then `Research token budget exceeded` at 49,519 accounted tokens against unchanged 24,000 limit. Third response saved but corrected draft not validated/accepted; no Nora review. Original and returned unvalidated correction, usage, exact failure and UI handover preserved. No further retries or repair.
 
 Six originals verified; four runtime/UI files restored byte-for-byte and live block rebuilt. Reports and ten checked earlier failures unchanged. No broader access or billing changes. [Saved outcome and recovery](../jufe-route-assessment/claude-correction-live/handover.md).
+
+
+## 2026-10-22 — Incremental Claude requests; complete local transcripts
+
+Completed usage diagnosis showed correct accounting but repeated context. Persistent Claude roles now send only new messages and changed metadata after the initial request, rejecting changed history. Finalisation instructions stay once in local history; correction feedback uses exact errors and prior lookup references without copying passages/draft again. Complete local transcripts and both draft attempts remain preserved; actual wire payloads recorded on successful responses. Nora remains independent; stateless Ollama still gets full history.
+
+257 deterministic tests /12 files passed, including three-turn transport/correction/review and retained safety boundaries; build passed; no new typecheck errors. Six originals verified. Validation, permissions, budgets, usage accounting and live block unchanged. No live calls; actual token savings/live compatibility unverified. [Implementation, tests and recovery](../jufe-route-assessment/incremental-claude-requests/handover.md).
