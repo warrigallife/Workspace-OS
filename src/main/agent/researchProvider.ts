@@ -1,18 +1,25 @@
+import { LEGACY_CLAUDE_ROUTES, LOCAL_RESEARCH_ROUTES, snapshotResearchRoutes, hasCloudRoute, type ResearchRoutes, type ResearchRoute, type ResearchRole } from '../../shared/researchRoutes'
+export { snapshotResearchRoutes, hasCloudRoute, LOCAL_RESEARCH_ROUTES }
+export type { ResearchRoutes, ResearchRoute, ResearchRole }
 /** Research stages are app-coordinated, not ordinary specialist Run launches.
  * Native provider tools must be absent; only returned action data reaches grants.
  * No renderer/env/queue field can enable external transmission in this build. */
-export type ResearchRole = 'dana' | 'nora'
 export interface ResearchOptions {
+  routes?: ResearchRoutes
   recoveredFrom?: string
   providerMode?: 'ollama-local' | 'restricted-hosts'
   task?: string
 }
-export const RESEARCH_ROUTES = Object.freeze({
-  dana: Object.freeze({ provider: 'claude', model: 'claude-sonnet-5' }),
-  nora: Object.freeze({ provider: 'claude', model: 'claude-sonnet-5' }),
-})
+/** Compatibility default for previously saved restricted jobs, not answer validation policy. */
+export const RESEARCH_ROUTES = LEGACY_CLAUDE_ROUTES
+export function selectedResearchRoutes(options?:ResearchOptions,kind?:string):ResearchRoutes {
+ if(options?.providerMode && !['ollama-local','restricted-hosts'].includes(options.providerMode))throw new Error('Unknown research provider mode')
+ const routes=snapshotResearchRoutes(options?.routes??((options?.providerMode??kind)==='restricted-hosts'?LEGACY_CLAUDE_ROUTES:LOCAL_RESEARCH_ROUTES))
+ if(options?.providerMode && options.providerMode!==(hasCloudRoute(routes)?'restricted-hosts':'ollama-local'))throw new Error('Research provider mode mismatch')
+ return routes
+}
 export const RESEARCH_BUDGET = Object.freeze({ responsesPerStage: 12, actionsPerStage: 16, deadlineMs: 360000, tokens: 24000, contextBytes: 120000, responseBytes: 65536 })
-export const RESTRICTED_LIVE_BLOCK = 'Restricted Claude → Claude research is locked: live content transmission and spending are not approved; exact model availability remains unverified.'
+export const RESTRICTED_LIVE_BLOCK = 'Cloud research is locked: live content transmission and spending are not approved; exact model availability remains unverified.'
 export class NativeResearchBoundaryError extends Error {
   readonly code = 'RESEARCH_LIVE_NOT_APPROVED'
   constructor() { super(RESTRICTED_LIVE_BLOCK); this.name='NativeResearchBoundaryError' }
@@ -27,9 +34,11 @@ export interface ResearchReply {
   /** Actual provider/model, not requested labels. Required on every external reply. */
   provider?: string; model?: string; inputTokens?: number; outputTokens?: number
   nativeEvidence?: unknown[]
+  aggregateUsage?: import('./providers/claudeResearchUsage').UsageSnapshot
 }
 export interface RestrictionReceipt {
   provider: string; model: string
+  digest?: string
   nativeTools: string[]; connectors: string[]; ambientContext: false
   fallback: false; restrictionsEnforced: true
 }
@@ -39,14 +48,15 @@ export interface ResearchSession {
   close(): void
 }
 export interface ResearchDriver {
+  routes?: ResearchRoutes
   kind: 'ollama-local' | 'restricted-hosts'
   preflight(signal: AbortSignal): Promise<void>
   open(role: ResearchRole, signal: AbortSignal): Promise<ResearchSession>
 }
 /** Receipts come from a trusted host adapter, never from model-generated text.
  * Missing/unknown fields are not interpreted as evidence of restrictions. */
-export function validateRestriction(role: ResearchRole, r: RestrictionReceipt): void {
-  const expected = RESEARCH_ROUTES[role]
+export function validateRestriction(role: ResearchRole, r: RestrictionReceipt, routes:ResearchRoutes=RESEARCH_ROUTES): void {
+  const expected = routes[role]
   if (!r || r.provider !== expected.provider || r.model !== expected.model) throw new Error('Exact provider/model unavailable; no substitution')
   if (r.restrictionsEnforced !== true || r.ambientContext !== false || r.fallback !== false ||
       !Array.isArray(r.nativeTools) || r.nativeTools.length || !Array.isArray(r.connectors) || r.connectors.length) {
@@ -55,8 +65,9 @@ export function validateRestriction(role: ResearchRole, r: RestrictionReceipt): 
 }
 
 /** Workflow-only Claude controls; documented locally, not live verified. */
-export function restrictedHostPlan(role: ResearchRole): {provider:string;model:string;transport:string;status:string;args:string[]} {
-  const route = RESEARCH_ROUTES[role]
+export function restrictedHostPlan(role: ResearchRole, routes:ResearchRoutes=RESEARCH_ROUTES): {provider:string;model:string;transport:string;status:string;args:string[]} {
+  const route = routes[role]
+  if(route.provider!=='claude')throw new Error('Claude host requires a Claude route')
   return {
     ...route, transport: 'claude-stream-json', status: 'controls-documented-not-live-verified',
     args: ['-p', '--input-format', 'stream-json', '--output-format', 'stream-json', '--verbose',

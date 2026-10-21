@@ -1,3 +1,4 @@
+import { selectedResearchRoutes, hasCloudRoute, assertRestrictedLiveApproved, type ResearchOptions } from '../agent/researchProvider'
 import { readResearchResult } from '../agent/researchResult'
 import { RESEARCH_TASK } from '../agent/ollamaResearchRun'
 import { RESEARCH_ROOT, runDirectory } from '../agent/researchScope'
@@ -123,18 +124,23 @@ export function shutdownRunQueue(): void {
 }
 
 export function registerRunsHandlers(ipcMain: IpcMain): void {
-  ipcHandle(ipcMain, IPC.RESEARCH_ENQUEUE, (event, previousId?: unknown) => {
+  ipcHandle(ipcMain, IPC.RESEARCH_ENQUEUE, (event, previousId?: unknown, selection?:unknown) => {
     assertMainFrame(event)
     if (getWorkspaceRoot()!==RESEARCH_ROOT) throw new Error('Open the approved local workspace')
     if (getQueue().list().some(j=>j.research && ['running','queued'].includes(j.status))) throw new Error('Wait for the active research run')
     let recoveredFrom: string|undefined
+    let previous:ResearchOptions|undefined
     if (previousId!==undefined) {
       if (typeof previousId!=='string') throw new Error('Invalid retry')
       const old=getQueue().get(previousId)
       if (!old?.research || !['error','interrupted','cancelled'].includes(old.status)) throw new Error('Only incomplete research runs can be retried')
+      if(selection!==undefined)throw new Error('Retry preserves the saved route selection')
+      previous=old.research
       recoveredFrom=old.id
     }
-    return getQueue().enqueue({prompt:RESEARCH_TASK,label:'JUFE local research: Dana → Nora',agentName:'Dana — JUFE Runtime Keeper',root:RESEARCH_ROOT,capabilities:[],research:{recoveredFrom}})
+    const routes=selectedResearchRoutes(previous??(selection===undefined?{}:{routes:selection as any}))
+    if(hasCloudRoute(routes))assertRestrictedLiveApproved()
+    return getQueue().enqueue({prompt:RESEARCH_TASK,label:'JUFE local research: Dana → Nora',agentName:'Dana — JUFE Runtime Keeper',root:RESEARCH_ROOT,capabilities:[],research:{recoveredFrom,routes}})
   })
   ipcHandle(ipcMain, IPC.RESEARCH_RESULT, (event,id: unknown) => {
     assertMainFrame(event)

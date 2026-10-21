@@ -147,8 +147,17 @@ describe('approved local research queue persistence',()=>{
   it('persists research before launch and never auto-resumes queued/running research after restart',async()=>{
     const f=fakeLauncher(),q=new RunQueue(file,f.launch,{concurrency:1,strictPersistence:true})
     const a=q.enqueue({prompt:'research',research:{}}),b=q.enqueue({prompt:'research queued',research:{recoveredFrom:'old'}})
-    await tick();const saved=JSON.parse(fs.readFileSync(file,'utf8'));expect(saved.find((j:BackgroundJob)=>j.id===a.id).research).toEqual({})
+    await tick();const saved=JSON.parse(fs.readFileSync(file,'utf8'));expect(saved.find((j:BackgroundJob)=>j.id===a.id).research.routes.dana).toEqual({provider:'ollama-local',model:'llama3.2:latest'})
     const recovered=new RunQueue(file,f.launch,{strictPersistence:true});expect(recovered.get(a.id)?.status).toBe('interrupted');expect(recovered.get(b.id)?.status).toBe('interrupted')
     q.cancel(a.id);expect(f.killed).toContain(a.id);q.shutdown();recovered.shutdown()
   })
+})
+it('persists an isolated per-run route snapshot and retains it after restart',async()=>{
+ const f=fakeLauncher(),q=new RunQueue(file,f.launch,{concurrency:1,strictPersistence:true})
+ const routes={dana:{provider:'claude' as const,model:'claude-opus-5'},nora:{provider:'ollama-local' as const,model:'fixture:latest'}}
+ const job=q.enqueue({prompt:'research',research:{routes}});routes.dana.model='claude-sonnet-5'
+ await tick();expect(q.get(job.id)?.research?.routes?.dana.model).toBe('claude-opus-5')
+ const recovered=new RunQueue(file,f.launch,{strictPersistence:true})
+ expect(recovered.get(job.id)?.research?.routes).toEqual({dana:{provider:'claude',model:'claude-opus-5'},nora:{provider:'ollama-local',model:'fixture:latest'}})
+ expect(recovered.get(job.id)?.status).toBe('interrupted');q.cancel(job.id);q.shutdown();recovered.shutdown()
 })

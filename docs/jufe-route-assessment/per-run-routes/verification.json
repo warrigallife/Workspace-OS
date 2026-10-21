@@ -1,0 +1,54 @@
+{
+  "originalsVerified": 16,
+  "unchangedBoundaryAndLaunchInputs": [
+    {
+      "path": "src/main/agent/researchScope.ts",
+      "sha256": "f0cbb7cd46d24d9b373c595695ddbb546c5cc8b75fd5097ac04218a3b7c71a10"
+    },
+    {
+      "path": "src/main/agent/researchContract.ts",
+      "sha256": "ec10d2342770fc804f5b9b0cb2046b0fc9fa71913e0cedd85c389e2c1ff2a8ba"
+    },
+    {
+      "path": "src/main/agent/grants.ts",
+      "sha256": "5bcc34deb604539347d2ce143a49ee76aea0fd38594fc15d1e53e872699762c1"
+    },
+    {
+      "path": "src/main/agent-permissions.ts",
+      "sha256": "7eba8e2195250b6f93b21d2b54ed1a9531e8f960f51d909a20a0e976fb647d9d"
+    },
+    {
+      "path": "/Users/liammcilmurray/.claude/agents/dana-jufe-runtime-keeper.md",
+      "sha256": "ac60846f05a476e718230755b286da12406438600c87f3150f1457cdd29a201f"
+    },
+    {
+      "path": "/Users/liammcilmurray/.claude/agents/nora-workspace-auditor.md",
+      "sha256": "a1245c339974a13878f056632bf792ffd4ef54b7886c2329d49f65685271717a"
+    },
+    {
+      "path": "/Users/liammcilmurray/.claude/agents/liam.md",
+      "sha256": "0cd4d656927341ec09cae7848ec52615fd59b218cbaaea411c0bad1a10f70751"
+    },
+    {
+      "path": "src/main/agent/launchRun.ts",
+      "sha256": "4d625079009492f1b92faa32503c9270f2765e926c885e997848e1a33b86dfee"
+    },
+    {
+      "path": "src/main/agent/providers/ollamaLocal.ts",
+      "sha256": "71e34f1583013da4322812fef5847c2e236e5c072f71c6f62127bcfd9e50f4d3"
+    },
+    {
+      "path": "src/main/agent/providers/claudeResearchProtocol.ts",
+      "sha256": "82648c32a0a1ac4c0d83b1dbad26045cf7a119612a43b6cc12ac099e3d8a9262"
+    }
+  ],
+  "deterministicTests": {
+    "files": 18,
+    "passed": 257
+  },
+  "build": "passed",
+  "typecheck": "70 known errors against 75 baseline; no new errors",
+  "liveProviderCalls": 0,
+  "liveCloudBlock": "unchanged; applies before any stage in cloud or mixed runs",
+  "liveUiVerification": "not performed; not authorised"
+}

@@ -1,4 +1,4 @@
-import type { ResearchOptions } from '../agent/researchProvider'
+import { selectedResearchRoutes, type ResearchOptions } from '../agent/researchProvider'
 import type { LocalTeamOptions } from './localTeamTask'
 import fs from 'fs'
 import path from 'path'
@@ -170,7 +170,7 @@ export class RunQueue {
       id: `bg-${this.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
       label: (input.label ?? prompt.split('\n')[0]).trim().slice(0, 80) || 'Background run',
       prompt,
-      ...(input.research ? {research:input.research} : {}),
+      ...(input.research ? {research:{...input.research,routes:selectedResearchRoutes(input.research)}} : {}),
       ...(input.localTeam ? { localTeam: input.localTeam } : {}),
       agentName: input.agentName ?? null,
       origin: input.origin ?? 'background',

@@ -955,7 +955,7 @@ export interface WorkspaceApi {
     onUpdated: (callback: (routines: Routine[]) => void) => () => void
   }
   /** Background runs — main-owned, survive the window; stream rides agent.* by job id. */
-  research: { enqueue: (previousId?: string) => Promise<BackgroundJob>; result: (id:string) => Promise<string> }
+  research: { enqueue: (previousId?: string, routes?: import('../../../shared/researchRoutes').ResearchRoutes) => Promise<BackgroundJob>; result: (id:string) => Promise<string> }
   localTeam: {
     result: (id: string) => Promise<string>
     enqueue: (task: { description: string; cases: { input: unknown; expected: unknown }[]; reviewCriteria: string }) => Promise<BackgroundJob>

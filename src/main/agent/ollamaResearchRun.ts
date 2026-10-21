@@ -1,11 +1,11 @@
 import { createClaudeResearchDriver } from './providers/claudeResearch'
-import { RESEARCH_ROUTES, RESEARCH_BUDGET, assertRestrictedLiveApproved, withResearchAbort, validateRestriction, type ResearchDriver, type ResearchSession } from './researchProvider'
+import { selectedResearchRoutes, hasCloudRoute, RESEARCH_BUDGET, assertRestrictedLiveApproved, withResearchAbort, validateRestriction, type ResearchDriver, type ResearchSession } from './researchProvider'
 import { researchLedger, type ResearchLedger } from './researchLedger'
 import { researchTools, providerOutputSchema } from './researchContract'
 /** Bounded local provider adapter; existing queue, profiles, bridge and checkpoints own the run. */
 import fs from 'fs'
 import path from 'path'
-import { localOllama } from './providers/ollamaLocal'
+import { createOllamaResearchDriver } from './providers/ollamaResearchDriver'
 import { ChildProcess } from 'child_process'
 import type { LaunchRunOptions } from './launchRun'
 import { readAgentForRun } from '../handlers/agents'
@@ -16,31 +16,27 @@ import { invokeGrantedAction } from './actionBridge'
 import { RESEARCH_ROOT, ResearchScope, runDirectory, registerResearchStage, closeResearchStage, hash } from './researchScope'
 export const RESEARCH_TASK='Identify outstanding research work recorded in the two approved JUFE coverage reports dated 2026-10-11. Produce exactly three distinct, concise findings with short exact source excerpts and line citations. Cover both approved records. Distinguish reported coverage gaps from inference and unresolved present-day status. Do not inspect or change manuscripts.'
 const CONCISE_DRAFT='Produce exactly three findings. Keep each statement to one sentence, at most 35 words. For each quote, copy one short contiguous verbatim excerpt of 12–180 characters from the retrieved source; do not copy a whole table row or paragraph, paraphrase, add ellipses, or change escaping in the source text. Use the actual source line numbers containing that excerpt, not line numbers mentioned inside the report. Cite both approved record IDs across the three findings. Keep limitations to one sentence of 20–180 characters. These are concise generation instructions within the unchanged application acceptance limits.'
-const MODEL='llama3.2:latest'
-const DIGEST='a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72'
 export async function launchOllamaResearch(o:LaunchRunOptions):Promise<{child:ChildProcess;checkpointId:string|null}> {
-  if(o.research?.providerMode && !['ollama-local','restricted-hosts'].includes(o.research.providerMode))throw new Error('Unknown research provider mode')
-  if (o.research?.providerMode === 'restricted-hosts') {
-    assertRestrictedLiveApproved()
-    return launchResearchWithDriver(o, createClaudeResearchDriver({directory:runDirectory(o.runId)}))
-  }
-  return launchResearchWithDriver(o, {
-    kind: 'ollama-local',
-    async preflight(signal) {
-      const tags=await localOllama('/api/tags',null,signal)
-      if(!tags.models?.some((m:any)=>m.name===MODEL&&m.digest===DIGEST))throw new Error('Required installed model unavailable; no fallback')
+  const routes=selectedResearchRoutes(o.research)
+  // A mixed run is also a cloud run: approval must precede even its local stage.
+  if(hasCloudRoute(routes))assertRestrictedLiveApproved()
+  const local=createOllamaResearchDriver(routes)
+  const cloud=createClaudeResearchDriver({directory:runDirectory(o.runId),routes})
+  const driver:ResearchDriver={kind:hasCloudRoute(routes)?'restricted-hosts':'ollama-local',routes,
+    async preflight(signal){
+      if(hasCloudRoute(routes))await cloud.preflight(signal)
+      if(Object.values(routes).some(r=>r.provider==='ollama-local'))await local.preflight(signal)
     },
-    async open() { return {
-      receipt: {provider:'ollama-local',model:MODEL,nativeTools:[],connectors:[],ambientContext:false,fallback:false,restrictionsEnforced:true},
-      request: (request,signal)=>localOllama('/api/chat',{model:MODEL,...request,stream:false,options:{temperature:0,num_ctx:16384,num_predict:2048},keep_alive:'2m'},signal),
-      close() {},
-    } },
-  })
+    open:(role,signal)=>(routes[role].provider==='claude'?cloud:local).open(role,signal),
+  }
+  return launchResearchWithDriver({...o,research:{...o.research,routes}},driver)
 }
 /** Shared coordinator. Driver injection is main-process/test code only, never IPC,
  * persisted queue data, model output or an environment-based approval bypass. */
 export async function launchResearchWithDriver(o:LaunchRunOptions, driver:ResearchDriver, ledgerFactory=researchLedger):Promise<{child:ChildProcess;checkpointId:string|null}> {
-  const restricted=driver.kind==='restricted-hosts'
+  const routes=selectedResearchRoutes(o.research,driver.kind)
+  if(driver.routes && JSON.stringify(driver.routes)!==JSON.stringify(routes))throw new Error('Driver route snapshot mismatch')
+  const restricted=hasCloudRoute(routes)
   if (o.research?.providerMode && o.research.providerMode!==driver.kind)throw new Error('Research provider mode mismatch')
   const task=restricted?(o.research?.task??RESEARCH_TASK):RESEARCH_TASK
   if(typeof task!=='string'||!task.trim()||task.length>4000)throw new Error('Research task must contain 1–4000 characters')
@@ -58,7 +54,7 @@ export async function launchResearchWithDriver(o:LaunchRunOptions, driver:Resear
   let ledger:ResearchLedger|undefined
   const tasks:Record<string,string>={}
   const completedTasks=new Set<string>()
-  const state:any={id:o.runId,status:'running',stage:'preflight',model:restricted?undefined:MODEL,provider:driver.kind,routes:restricted?RESEARCH_ROUTES:undefined,task,recoveredFrom:o.research?.recoveredFrom??null,sourceHashes:Object.fromEntries(Object.entries(scope.sources).map(([id,s])=>[id,s.hash])),events:[]}
+  const state:any={id:o.runId,status:'running',stage:'preflight',provider:driver.kind,routes,usage:{},task,recoveredFrom:o.research?.recoveredFrom??null,sourceHashes:Object.fromEntries(Object.entries(scope.sources).map(([id,s])=>[id,s.hash])),events:[]}
   const record=(kind:string,data:unknown):void=>{const name=`event-${String(seq++).padStart(3,'0')}.json`;scope.write(name,{kind,data});state.events.push(name)}
   async function stage(role:'dana'|'nora'):Promise<void> {
     state.stage=role
@@ -78,7 +74,7 @@ export async function launchResearchWithDriver(o:LaunchRunOptions, driver:Resear
       void opening.then(s=>{if(controller.signal.aborted){try{s.close()}catch{/* aborted */}}},()=>{})
       session=await withResearchAbort(opening,controller.signal)
       sessions.add(session)
-      if(restricted)validateRestriction(role,session.receipt)
+      validateRestriction(role,session.receipt,routes)
       record('provider-restrictions',{role,receipt:session.receipt})
       if(ledger)await ledger('task_update',{taskId:tasks[role],status:'in_progress'})
       for(let step=0;step<RESEARCH_BUDGET.responsesPerStage;step++) {
@@ -96,11 +92,13 @@ export async function launchResearchWithDriver(o:LaunchRunOptions, driver:Resear
         controller.signal.throwIfAborted()
         if(Buffer.byteLength(JSON.stringify(response))>RESEARCH_BUDGET.responseBytes)throw new Error('Provider response too large')
         turns++;record('response',{role,step,response})
-        if(restricted) {
-          const expected=RESEARCH_ROUTES[role]
+        {
+          const expected=routes[role]
           if(response.provider!==expected.provider||response.model!==expected.model)throw new Error('Provider/model substitution denied')
           if(!Number.isSafeInteger(response.inputTokens)||response.inputTokens!<0||!Number.isSafeInteger(response.outputTokens)||response.outputTokens!<0)throw new Error('Missing provider token usage; stop')
           totalTokens+=response.inputTokens!+response.outputTokens!
+          state.usage[role]=response.aggregateUsage??{model:expected.model,provider:expected.provider,inputTokens:(state.usage[role]?.inputTokens??0)+response.inputTokens!,outputTokens:(state.usage[role]?.outputTokens??0)+response.outputTokens!}
+          if(response.aggregateUsage)record('aggregate-usage',{role,...response.aggregateUsage})
           if(totalTokens>RESEARCH_BUDGET.tokens)throw new Error('Research token budget exceeded')
         }
         if(!response.done||response.done_reason==='length'||!response.message)throw new Error('Incomplete local response')
@@ -166,8 +164,9 @@ export async function launchResearchWithDriver(o:LaunchRunOptions, driver:Resear
         }
       }
       try {
+        scope.write('usage.json',state.usage)
         scope.write('state.json',{...state,turns,totalTokens,reads:scope.reads})
-        scope.write('handover.md',`# JUFE research handover\n\nStatus: ${state.status}\n\n${state.error??'Dana produced a cited draft; Nora independently retrieved all citations and approved. Quote fidelity and source hashes checked by trusted code. Semantic review uses a separate stage; see the saved provider identities and receipts.'}\n\nOriginals unchanged; no canonical writes. Evidence: ${dir}\n`)
+        scope.write('handover.md',`# JUFE research handover\n\nStatus: ${state.status}\n\n${state.error??'Dana produced a cited draft; Nora independently retrieved all citations and approved. Quote fidelity and source hashes checked by trusted code. Semantic review uses a separate stage; see the saved provider identities and receipts.'}\n\nSelected routes: ${JSON.stringify(routes)}\n\nUsage (additional aggregate models have unattributed purpose; cost is an estimate, not a bill): ${JSON.stringify(state.usage)}\n\nOriginals unchanged; no canonical writes. Evidence: ${dir}\n`)
         checkpointId=(await cp.createCheckpoint('JUFE research result and handover')).id
         controller.signal.throwIfAborted()
         if(ledger && code===0) {
@@ -178,10 +177,10 @@ export async function launchResearchWithDriver(o:LaunchRunOptions, driver:Resear
       }catch(e){code=1;state.status=controller.signal.aborted?'cancelled':'failed';state.error='Evidence/checkpoint failure: '+(e as Error).message;o.sink.output(state.error+'\n')}
       // Authoritative terminal receipt is written after persistence/ledger operations.
       // A report file alone never signals completion if saving the handover failed.
-      try{scope.write('outcome.json',{status:code===0?'completed':state.status,error:state.error??null,checkpointId,turns,totalTokens})}
+      try{scope.write('outcome.json',{status:code===0?'completed':state.status,error:state.error??null,checkpointId,turns,totalTokens,routes,usage:state.usage})}
       catch(e){code=1;o.sink.output('Terminal receipt failed: '+(e as Error).message+'\n')}
       clearTimeout(timer);o.signal?.removeEventListener('abort',onAbort)
-      const artifacts=['report.md','draft.json','review.json','state.json','outcome.json','handover.md'].filter(n=>(code===0||n!=='report.md')&&fs.existsSync(path.join(dir,n))).map(name=>({name,path:path.join(dir,name),type:'other' as const}))
+      const artifacts=['report.md','draft.json','review.json','state.json','outcome.json','handover.md','usage.json'].filter(n=>(code===0||n!=='report.md')&&fs.existsSync(path.join(dir,n))).map(name=>({name,path:path.join(dir,name),type:'other' as const}))
       o.sink.artifacts(artifacts);o.sink.meta({costUsd:0,costKnown:!restricted,turns,durationMs:Date.now()-startedAt});o.sink.output(`Evidence: ${dir}\nCheckpoint: ${checkpointId}\n`);o.sink.done(code,checkpointId)
     }
   })()})

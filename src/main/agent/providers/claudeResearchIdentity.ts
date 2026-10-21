@@ -25,9 +25,3 @@ export function checkResearchAssistant(requested:string,event:any):void {
   }
   requireResearchModel('assistant',requested,returned)
 }
-export function checkResearchUsageModels(requested:string,usage:unknown):void {
-  if(usage===undefined)return // Identity still checked at init and every assistant event.
-  if(!usage||typeof usage!=='object'||Array.isArray(usage))throw new ResearchIdentityError('result-modelUsage',requested,[],'invalid-model-usage')
-  const ids=Object.keys(usage)
-  if(ids.some(id=>id!==requested))throw new ResearchIdentityError('result-modelUsage',requested,ids)
-}

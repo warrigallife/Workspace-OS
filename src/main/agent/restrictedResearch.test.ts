@@ -44,14 +44,14 @@ function setup(extra:any={}){
  const factory=vi.fn(()=>ledger)
  return {options,result,sink,ledger,factory,calls}
 }
-function driver(change:(role:ResearchRole,request:any,reply:any)=>any=(_r,_q,p)=>p){
+function driver(change:(role:ResearchRole,request:any,reply:any)=>any=(_r,_q,p)=>p,selected=RESEARCH_ROUTES){
  const closed:string[]=[],requests:any[]=[],opened:string[]=[]
- const host:ResearchDriver={kind:'restricted-hosts',preflight:vi.fn(async()=>{}),open:vi.fn(async (role:ResearchRole)=>{
+ const host:ResearchDriver={kind:Object.values(selected).some(r=>r.provider==='claude')?'restricted-hosts':'ollama-local',routes:selected,preflight:vi.fn(async()=>{}),open:vi.fn(async (role:ResearchRole)=>{
   opened.push(role)
-  return {receipt:{...RESEARCH_ROUTES[role],nativeTools:[],connectors:[],ambientContext:false as const,fallback:false as const,restrictionsEnforced:true as const},close:()=>closed.push(role),request:async(req:ResearchRequest,signal:AbortSignal)=>{
+  return {receipt:{...selected[role],nativeTools:[],connectors:[],ambientContext:false as const,fallback:false as const,restrictionsEnforced:true as const},close:()=>closed.push(role),request:async(req:ResearchRequest,signal:AbortSignal)=>{
    requests.push({role,req})
    const content=role==='dana'?{findings:[ids[0],ids[1],ids[0]].map(id=>({statement:'The dated fixture records an unresolved question.',citation:{record_id:id,start_line:1,end_line:1,quote}})),limitations:'These are fixture observations, not current research conclusions.'}:{decision:'approve',reason:'Each fixture statement is supported by the independently retrieved excerpt.',checked_citations:[0,1,2]}
-   const reply={done:true,...RESEARCH_ROUTES[role],inputTokens:100,outputTokens:50,message:req.format?{role:'assistant',content:JSON.stringify(content)}:{role:'assistant',tool_calls:ids.map(record_id=>({function:{name:'lookup',arguments:{record_id,start_line:1,end_line:1}}}))}}
+   const reply={done:true,...selected[role],inputTokens:100,outputTokens:50,message:req.format?{role:'assistant',content:JSON.stringify(content)}:{role:'assistant',tool_calls:ids.map(record_id=>({function:{name:'lookup',arguments:{record_id,start_line:1,end_line:1}}}))}}
    return change(role,{...req,signal},reply)
   }}
  })}
@@ -137,7 +137,7 @@ it('persistent restricted queue interrupts running/queued jobs, never auto-resum
  expect(fs.existsSync(path.join(mock.directory,'handover.md'))).toBe(true)
 })
 
-it.each(['success','review-rejection','fabricated-citation','failed-save','identity-rejection','protocol-rejection'])('Claude stream transport and coordinator: %s',async scenario=>{
+it.each(['success','review-rejection','fabricated-citation','failed-save','identity-rejection','protocol-rejection','aggregate-additional'])('Claude stream transport and coordinator: %s',async scenario=>{
  const {EventEmitter}=await import('events'),{PassThrough}=await import('stream')
  const {createClaudeResearchDriver}=await import('./providers/claudeResearch')
  const controller=new AbortController(),children:any[]=[],requests:any[]=[]
@@ -149,7 +149,7 @@ it.each(['success','review-rejection','fabricated-citation','failed-save','ident
  const host=createClaudeResearchDriver({directory:mock.directory,maxBudgetUsd:0.1,launch:()=>{
   const role=children.length===0?'dana':'nora'
   const c=Object.assign(new EventEmitter(),{stdin:new PassThrough(),stdout:new PassThrough(),stderr:new PassThrough(),kill:vi.fn(()=>true)})
-  children.push(c);let initialized=false
+  children.push(c);let initialized=false,streamTurns=0
   c.stdin.on('data',(chunk)=>{void(async()=>{
    const req=JSON.parse(JSON.parse(chunk.toString()).message.content);requests.push({role,req})
    if(!initialized){c.stdout.write(JSON.stringify({type:'system',subtype:'init',model:RESEARCH_ROUTES[role].model,tools:[],mcp_servers:[]})+'\n');initialized=true}
@@ -157,20 +157,45 @@ it.each(['success','review-rejection','fabricated-citation','failed-save','ident
    if(scenario==='identity-rejection'){c.stdout.write(JSON.stringify({type:'assistant',message:{model:'<synthetic>',content:[{type:'text',text:'PRIVATE HOST ERROR'}]},is_api_error_message:true,api_error_status:403})+'\n');return}
    const session=await scripted.host.open(role,controller.signal),reply=await session.request(req,controller.signal)
    const result=req.format?reply.message.content:JSON.stringify({lookups:reply.message.tool_calls!.map((x:any)=>x.function.arguments)})
-   c.stdout.write(JSON.stringify({type:'result',subtype:'success',result,usage:{input_tokens:100,output_tokens:50}})+'\n')
+   streamTurns++;c.stdout.write(JSON.stringify({type:'assistant',message:{model:RESEARCH_ROUTES[role].model,content:[{type:'text',text:result}]}})+'\n')
+   c.stdout.write(JSON.stringify({type:'result',subtype:'success',result,usage:{input_tokens:100,output_tokens:50},modelUsage:{[RESEARCH_ROUTES[role].model]:{inputTokens:100*streamTurns,outputTokens:50*streamTurns,cacheReadInputTokens:0,cacheCreationInputTokens:0,costUSD:0.001*streamTurns},...(scenario==='aggregate-additional'?{'claude-haiku-4-5-20251001':{inputTokens:7,outputTokens:3,cacheReadInputTokens:0,cacheCreationInputTokens:0,costUSD:0.001}}:{})}})+'\n')
   })()})
   return c as any
  }})
  if(scenario==='failed-save')mock.failSave='handover.md'
  const s=setup();await launchResearchWithDriver(s.options,host,s.factory)
- expect(await s.result).toBe(scenario==='success'?0:1)
+ expect(await s.result).toBe(['success','aggregate-additional'].includes(scenario)?0:1)
  expect(children).toHaveLength(['fabricated-citation','identity-rejection','protocol-rejection'].includes(scenario)?1:2)
  expect(children.every(c=>c.kill.mock.calls.length>0)).toBe(true)
  if(scenario==='identity-rejection'){expect(outcome().error).toContain('host-api-error');expect(outcome().error).toContain('<synthetic>');expect(outcome().error).toContain('claude-sonnet-5');expect(fs.readFileSync(path.join(mock.directory,'handover.md'),'utf8')).toContain('host-api-error');expect(outcome().error).not.toContain('PRIVATE HOST ERROR')}
  if(scenario==='protocol-rejection'){expect(outcome().error).toContain('control_request');expect(outcome().error).toContain('can_use_tool');expect(outcome().error).toContain('control_or_tool_event_denied');expect(fs.readFileSync(path.join(mock.directory,'handover.md'),'utf8')).toContain('control_or_tool_event_denied');expect(outcome().error).not.toContain('PRIVATE CONTROL CONTENT')}
- if(scenario==='success'){
+ if(['success','aggregate-additional'].includes(scenario)){
   expect(fs.existsSync(path.join(mock.directory,'handover.md'))).toBe(true)
   expect(readResearchResult(mock.directory,'pending')).toContain('report.md')
   expect(requests.find(x=>x.role==='nora').req.messages).toHaveLength(2)
+  if(scenario==='aggregate-additional'){expect(outcome().totalTokens).toBe(620);const display=readResearchResult(mock.directory,'pending');expect(display).toContain('claude-haiku-4-5-20251001');expect(display).toContain('purpose unattributed');expect(fs.readFileSync(path.join(mock.directory,'handover.md'),'utf8')).toContain('purpose unattributed')}
  }else expect(readResearchResult(mock.directory,'error')).not.toMatch(/(?:^|\n\n)report\.md\n/)
+})
+it.each([
+ ['claude','claude'],['ollama-local','ollama-local'],['claude','ollama-local'],['ollama-local','claude'],
+] as const)('snapshots %s specialist → %s reviewer and displays the saved result',async(a,b)=>{
+ const {snapshotResearchRoutes}=await import('./researchProvider')
+ const routes=snapshotResearchRoutes({dana:{provider:a,model:a==='claude'?'claude-opus-5':'fixture-a:latest'},nora:{provider:b,model:b==='claude'?'claude-haiku-4-5-20251001':'fixture-b:latest'}})
+ const s=setup({research:{routes}}),d=driver(undefined,routes)
+ await launchResearchWithDriver(s.options,d.host,s.factory);expect(await s.result).toBe(0)
+ expect(state().routes).toEqual(routes);expect(d.opened).toEqual(['dana','nora']);expect(outcome().routes).toEqual(routes)
+ expect(readResearchResult(mock.directory,'pending')).toContain(routes.dana.model)
+ expect(state().reads.nora).toHaveLength(2)
+})
+it('rejects per-run answer mismatch against a nondefault selection',async()=>{
+ const {snapshotResearchRoutes}=await import('./researchProvider')
+ const routes=snapshotResearchRoutes({dana:{provider:'claude',model:'claude-opus-5'},nora:{provider:'claude',model:'claude-opus-5'}})
+ const s=setup({research:{routes}}),d=driver((_r,_q,p)=>({...p,model:'claude-sonnet-5'}),routes)
+ await launchResearchWithDriver(s.options,d.host,s.factory);expect(await s.result).toBe(1);expect(outcome().error).toContain('substitution');expect(d.opened).toEqual(['dana'])
+})
+it('cloud or mixed selections remain blocked before any local or cloud call',async()=>{
+ const {snapshotResearchRoutes}=await import('./researchProvider')
+ const routes=snapshotResearchRoutes({dana:{provider:'ollama-local',model:'fixture:latest'},nora:{provider:'claude',model:'claude-opus-5'}})
+ const s=setup({research:{routes}})
+ await expect(launchOllamaResearch(s.options)).rejects.toMatchObject({code:'RESEARCH_LIVE_NOT_APPROVED'});expect(fs.existsSync(mock.directory)).toBe(false)
 })

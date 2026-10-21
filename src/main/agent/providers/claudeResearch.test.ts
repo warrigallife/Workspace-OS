@@ -11,7 +11,8 @@ function fixture(){
  const controller=new AbortController()
  const emit=(event:any)=>children.at(-1).stdout.write(JSON.stringify(event)+'\n')
  const init=()=>emit({type:'system',subtype:'init',model,tools:[],mcp_servers:[]})
- const result=(result:string,extra:any={})=>emit({type:'result',subtype:'success',result,usage:{input_tokens:10,output_tokens:20},...extra})
+ let count=0
+ const result=(result:string,extra:any={})=>{count++;emit({type:'assistant',message:{model,content:[{type:'text',text:result}]}});emit({type:'result',subtype:'success',result,usage:{input_tokens:10,output_tokens:20},modelUsage:{[model]:{inputTokens:count*10,outputTokens:count*20,cacheReadInputTokens:0,cacheCreationInputTokens:0,costUSD:count*0.001}},...extra})}
  return {driver,controller,children,launch,emit,init,result}
 }
 it('production adapter cannot launch or transmit without separate approval',async()=>{
@@ -104,4 +105,22 @@ it('preserves event metadata on malformed response rejection without copying the
  const p=s.request({messages:[],tools:[]},f.controller.signal),assertion=expect(p).rejects.toThrow('invalid_event_or_response_json')
  f.init();f.result('PRIVATE SECRET invalid JSON');await assertion
  try{await p}catch(e){expect((e as Error).message).toContain('"type":"result"');expect((e as Error).message).toContain('"subtype":"success"');expect((e as Error).message).not.toContain('PRIVATE')}
+})
+it('launches and verifies a selected non-Sonnet model without affecting defaults',async()=>{
+ const f=fixture(),selected='claude-opus-5'
+ const routes={dana:{provider:'claude' as const,model:selected},nora:{provider:'claude' as const,model:'claude-haiku-4-5-20251001'}}
+ const d=createClaudeResearchDriver({directory:'/tmp',maxBudgetUsd:0.1,launch:f.launch,routes})
+ routes.dana.model='claude-sonnet-5' // caller changes cannot redirect a snapshotted run
+ const s=await d.open('dana',f.controller.signal)
+ expect((f.launch.mock.calls as unknown as [string[],unknown][])[0][0]).toContain(selected)
+ const p=s.request({messages:[],format:{}},f.controller.signal)
+ f.emit({type:'system',subtype:'init',model:selected,tools:[],mcp_servers:[]})
+ f.emit({type:'assistant',message:{model:selected,content:[{type:'text',text:'{}'}]}})
+ const u={inputTokens:10,outputTokens:20,cacheReadInputTokens:0,cacheCreationInputTokens:0,costUSD:0.01}
+ f.emit({type:'result',subtype:'success',result:'{}',usage:{input_tokens:10,output_tokens:20},modelUsage:{[selected]:u,'claude-haiku-4-5-20251001':u}})
+ const r=await p;expect(r.model).toBe(selected);expect(r.inputTokens).toBe(20);expect(r.aggregateUsage?.models[1].attribution).toContain('unattributed');s.close()
+})
+it('does not accept a result without an observed answer identity',async()=>{
+ const f=fixture(),s=await f.driver.open('dana',f.controller.signal),p=s.request({messages:[],format:{}},f.controller.signal),assertion=expect(p).rejects.toThrow('result_without_verified_request')
+ f.init();f.emit({type:'result',subtype:'success',result:'{}',usage:{input_tokens:1,output_tokens:1}});await assertion
 })
