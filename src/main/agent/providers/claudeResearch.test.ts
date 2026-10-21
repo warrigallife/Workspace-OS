@@ -90,3 +90,18 @@ it.each([
  try{await p}catch(e){const text=(e as Error).message;expect(text).toContain('"requested":"claude-sonnet-5"');expect(text).not.toContain('DO NOT RECORD PRIVATE BODY');expect(text).not.toContain('private credential text')}
  expect(f.children[0].kill).toHaveBeenCalledWith('SIGTERM')
 })
+it('accepts lifecycle events without resolving a response or exposing their payloads',async()=>{
+ const f=fixture(),s=await f.driver.open('dana',f.controller.signal)
+ let resolved=false
+ const p=s.request({messages:[],format:{}},f.controller.signal).then(r=>{resolved=true;return r})
+ f.emit({type:'keep_alive'});f.emit({type:'rate_limit_event',rate_limit_info:{status:'allowed',privateField:'PRIVATE'}});f.init()
+ f.emit({type:'system',subtype:'status',status:'requesting'});f.emit({type:'system',subtype:'informational',level:'notice',content:'PRIVATE'})
+ await Promise.resolve();expect(resolved).toBe(false)
+ f.result('{}');const r=await p;expect(r.done).toBe(true);expect(JSON.stringify(r.nativeEvidence)).not.toContain('PRIVATE');s.close()
+})
+it('preserves event metadata on malformed response rejection without copying the response',async()=>{
+ const f=fixture(),s=await f.driver.open('dana',f.controller.signal)
+ const p=s.request({messages:[],tools:[]},f.controller.signal),assertion=expect(p).rejects.toThrow('invalid_event_or_response_json')
+ f.init();f.result('PRIVATE SECRET invalid JSON');await assertion
+ try{await p}catch(e){expect((e as Error).message).toContain('"type":"result"');expect((e as Error).message).toContain('"subtype":"success"');expect((e as Error).message).not.toContain('PRIVATE')}
+})

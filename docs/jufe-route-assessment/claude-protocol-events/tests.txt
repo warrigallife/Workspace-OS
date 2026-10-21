@@ -1,0 +1,123 @@
+[1021/194532.190651:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+
+ RUN  v4.1.9 /Users/liammcilmurray/Desktop/Workspace-OS
+
+[1021/194532.672917:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1021/194532.672941:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1021/194532.672928:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1021/194532.673129:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1021/194532.673157:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > accepts the exact approved full ID at every identity surface 1ms
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > does not guess alias, revision or suffix equivalence for sonnet 1ms
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > does not guess alias, revision or suffix equivalence for claude-sonnet-5-20260630 0ms
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > does not guess alias, revision or suffix equivalence for claude-sonnet-5.5 0ms
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > does not guess alias, revision or suffix equivalence for claude-sonnet-5[1m] 0ms
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > does not guess alias, revision or suffix equivalence for claude-opus-5 0ms
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > separates is_api_error_message host errors from model substitution without accepting them 0ms
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > separates isApiErrorMessage host errors from model substitution without accepting them 0ms
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > rejects synthetic messages and missing assistant identity even without error flags 0ms
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > rejects API errors even when they repeat the approved model ID 0ms
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > rejects mixed-model accounting and malformed accounting 0ms
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > bounds and sanitizes diagnostic identifiers without copying arbitrary data 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > classifies documented non-action lifecycle: {"type":"keep_alive"} 1ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > classifies documented non-action lifecycle: {"type":"rate_limit_event","rate_limit_info":{"status":"allowed"}} 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > classifies documented non-action lifecycle: {"type":"rate_limit_event","rate_limit_info":{"status":"allowed_warning","isUsingOverage":false,"overageInUse":false}} 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > classifies documented non-action lifecycle: {"type":"system","subtype":"status","status":null} 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > classifies documented non-action lifecycle: {"type":"system","subtype":"status","status":"requesting"} 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > classifies documented non-action lifecycle: {"type":"system","subtype":"status","status":"compacting"} 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > classifies documented non-action lifecycle: {"type":"system","subtype":"informational","level":"notice","content":"PRIVATE BANNER"} 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > denies control_request without dispatch 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > denies control_response without dispatch 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > denies control_cancel_request without dispatch 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > denies tool_progress without dispatch 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > denies tool_use_summary without dispatch 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > denies update_environment_variables without dispatch 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > never silently ignores system subtype model_refusal_fallback 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > never silently ignores system subtype permission_retry 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > never silently ignores system subtype hook_started 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > never silently ignores system subtype hook_progress 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > never silently ignores system subtype hook_response 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > never silently ignores system subtype stop_hook_summary 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > never silently ignores system subtype task_started 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > never silently ignores system subtype task_notification 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > never silently ignores system subtype compact_boundary 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > never silently ignores system subtype unknown 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > stops invalid, blocked or overage lifecycle: {"type":"rate_limit_event","rate_limit_info":{"status":"rejected"}} 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > stops invalid, blocked or overage lifecycle: {"type":"rate_limit_event","rate_limit_info":{"status":"allowed","isUsingOverage":true}} 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > stops invalid, blocked or overage lifecycle: {"type":"rate_limit_event","rate_limit_info":{"status":"allowed","overageInUse":true}} 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > stops invalid, blocked or overage lifecycle: {"type":"rate_limit_event","rate_limit_info":{"status":"allowed","rateLimitType":"overage"}} 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > stops invalid, blocked or overage lifecycle: {"type":"rate_limit_event","rate_limit_info":{"status":"allowed","isUsingOverage":"false"}} 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > stops invalid, blocked or overage lifecycle: {"type":"system","subtype":"informational","level":"notice","content":"x","prevent_continuation":true} 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > stops invalid, blocked or overage lifecycle: {"type":"system","subtype":"informational","level":"notice","content":"x","tool_use_id":"secret"} 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > stops invalid, blocked or overage lifecycle: {"type":"system","subtype":"status","status":"unknown"} 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > stops invalid, blocked or overage lifecycle: {"type":"keep_alive","request":{"subtype":"can_use_tool"}} 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > fails closed for unsupported auth_status 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > fails closed for unsupported user 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > fails closed for unsupported stream_event 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > fails closed for unsupported session_notice 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > fails closed for unsupported unrecognized 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > redacts unknown type/subtype and never serializes content or credentials 0ms
+ ✓ src/main/agent/providers/claudeResearchProtocol.test.ts > preserves safe control subtype and stable reason, not payload 0ms
+ ✓ src/main/agent/nativeResearchBoundary.test.ts > pins workflow-only Claude routes without default, fallback or model probing 1ms
+ ✓ src/main/agent/nativeResearchBoundary.test.ts > Claude native plan uses documented exclusion controls, not Safe mode alone 1ms
+ ✓ src/main/agent/nativeResearchBoundary.test.ts > Codex schema establishes narrower controls, not a blanket native tool allowlist 0ms
+ ✓ src/main/agent/nativeResearchBoundary.test.ts > keeps live execution locked before either role; no provider process starts 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > production adapter cannot launch or transmit without separate approval 2ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > uses separate fresh restricted sessions, explicit caps, sanitized environment and no fallback 2ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > translates only lookup intents and passes final JSON to existing application validation 1ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > fails closed on tools 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > fails closed on connectors 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > fails closed on model 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > fails closed on native action 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > fails closed on permission request 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > fails closed on missing init 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > rejects usage before save 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > rejects negative usage before save 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > rejects truncation before save 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > rejects provider failure before save 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > rejects substitution before save 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > rejects arbitrary actions, malformed JSON and oversized output 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > cancels pending work and refuses further requests 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > fails on interruption and refuses overlapping requests 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > preserves sanitized requested/returned identity on rejection: <synthetic> 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > preserves sanitized requested/returned identity on rejection: claude-sonnet-5-20260630 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > preserves sanitized requested/returned identity on rejection: private credential text 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > accepts lifecycle events without resolving a response or exposing their payloads 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > preserves event metadata on malformed response rejection without copying the response 0ms
+ ✓ src/main/agent/restrictedResearch.test.ts > runs both exact routes through retrieval/save/review, ledger and saved handover; result display shows report 12ms
+ ✓ src/main/agent/restrictedResearch.test.ts > review rejection blocks final report and handover completion 6ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fabricated quotation fails before reviewer, preserves raw response and failure handover 3ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed draft.json never completes queue or publishes report 3ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed review.json never completes queue or publishes report 5ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed report.md never completes queue or publishes report 5ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed handover.md never completes queue or publishes report 5ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed outcome.json never completes queue or publishes report 5ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed checkpoint is explicit in terminal outcome and suppresses otherwise generated report 6ms
+ ✓ src/main/agent/restrictedResearch.test.ts > cancel closes uncooperative request, revokes grants and prevents reviewer 3ms
+ ✓ src/main/agent/restrictedResearch.test.ts > pre-aborted run does not preflight or open provider 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified nativeTools before sending content 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified connectors before sending content 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified ambientContext before sending content 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified restrictionsEnforced before sending content 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified fallback before sending content 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > never substitutes model in receipt 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > never substitutes model in response 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed for missing token accounting 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed for exceeded token accounting 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > denies arbitrary model action requests 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > production entrypoint refuses restricted execution before source staging or provider calls 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > missing exact provider preflight stops before any model request 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > native launch plans do not inherit normal tools or enable model fallback 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > persistent restricted queue interrupts running/queued jobs, never auto-resumes, preserves route choice and failure evidence 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > Claude stream transport and coordinator: success 7ms
+ ✓ src/main/agent/restrictedResearch.test.ts > Claude stream transport and coordinator: review-rejection 6ms
+ ✓ src/main/agent/restrictedResearch.test.ts > Claude stream transport and coordinator: fabricated-citation 3ms
+ ✓ src/main/agent/restrictedResearch.test.ts > Claude stream transport and coordinator: failed-save 7ms
+ ✓ src/main/agent/restrictedResearch.test.ts > Claude stream transport and coordinator: identity-rejection 3ms
+ ✓ src/main/agent/restrictedResearch.test.ts > Claude stream transport and coordinator: protocol-rejection 2ms
+
+ Test Files  5 passed (5)
+      Tests  108 passed (108)
+   Start at  19:45:32
+   Duration  363ms (transform 318ms, setup 0ms, import 404ms, tests 121ms, environment 0ms)
+

@@ -1,0 +1,47 @@
+{
+  "binary": "/opt/homebrew/Caskroom/claude-code/2.1.267/claude",
+  "sha256": "a681f3008f0050029aeebcab3af51bb6a55ddeb625a3af3141a4416d43cd2558",
+  "method": "Read-only static inspection; no CLI session",
+  "snippets": [
+    {
+      "label": "heartbeat",
+      "offset": 161105163,
+      "excerpt": "DF=m(()=>c({type:k(\"keep_alive\")}).describe(\"Liveness heartbeat with no payload. Either side may send it at any time (the CLI emits it periodically, for example while a long-running control request is in progress); receivers must ignore it.\")),fde=m(()=>c({type:k(\"update_environment_variables\"),variables:fe(s(),s()),request_id:s().optional()}).describe(\"Updates environment variables at runtime.\")),gde=m(()=>c({type:k(\"session_notice\"),uuid:s(),no"
+    },
+    {
+      "label": "rate_limit",
+      "offset": 160907881,
+      "excerpt": "vce=m(()=>c({status:X([\"allowed\",\"allowed_warning\",\"rejected\"]),resetsAt:A().int().optional(),rateLimitType:X([\"five_hour\",\"seven_day\",\"seven_day_opus\",\"seven_day_sonnet\",\"seven_day_overage_included\",\"overage\"]).optional(),utilization:A().optional(),unifiedWindows:c({five_hour:c({utilization:A(),resetsAt:A().int()}).optional(),seven_day:c({utilization:A(),resetsAt:A().int()}).optional(),seven_day_overage_included:c({utilization:A(),resetsAt:A().int()}).optional()}).optional().describe(\"@internal Per-window usage for the session (5-hour), weekly (7-day), and overage-included weekly (per-model bucket; present only for accounts whose responses carry that window) subscription rate-limit windows, as read from the anthropic-ratelimit-unified-* response headers. utilization is the fraction of the window used (usually 0-1, same scale as the top-level utilization field; values above 1 occur when usage legitimately runs past a window's cap, e.g. lower-priority episodes past the 5-hour limit); resetsAt is unix epoch seconds. Unlike the top-level status/utilization fields, which describe the currently limiting window, both windows are tracked on every observation, and events are emitted when a window's rounded percentage or reset time moves, not only on status transitions. Windows absent from the account state are absent here. Absent until the first response carrying these headers is observed, and always absent for API-key, Bedrock, and Vertex sessions, whose responses do not carry them.\"),overageStatus:X([\"allowed\",\"allowed_warning\",\"rejected\"]).optional(),overageResetsAt:A().int().optional(),overageDisabledReason:X([\"overage_not_provisioned\",\"org_level_disabled\",\"org_level_disabled_until\",\"out_of_credits\",\"seat_tier_level_disabled\",\"member_level_disabled\",\"seat_tier_zero_credit_limit\",\"group_zero_credit_limit\",\"member_zero_credit_limit\",\"org_service_level_disabled\",\"no_limits_configured\",\"fetch_error\",\"unknown\"]).optional(),isUsingOverage:I().optional(),overageInUse:I().optional(),surpassedThreshold:A().optional(),rateLimitGraceActive:I().optional().describe(\"@internal Latched usage-limit grace signal, as observed on responses to requests that sent `anthropic-usage-limit: extended` (tengu_lantern_spool): set when such a response reports grace-zone utilization > 0, cleared when one reports it back at zero or, if that response named the grace window's reset, once that reset passes on this machine's \"+\"clock. Otherwise observation-lagged \\u2014 when extended requests \"+'stop (idle session, flag off mid-session), the last observed value persists, so still expire any UI derived from this field via resetsAt. While set, overageStatus allowed / allowed_warning means paid extra usage covers the overflow (nothing will be cut off). Stays true at hard exhaustion (status r"
+    },
+    {
+      "label": "rate_limit_event",
+      "offset": 160924950,
+      "excerpt": "kce=m(()=>c({type:k(\"rate_limit_event\"),rate_limit_info:vce(),uuid:ee(),session_id:s()}).describe(\"Rate limit event emitted when rate limit info changes.\")),pF=m(()=>c({tool_name:s(),tool_use_id:s(),tool_input:fe(s(),se("
+    },
+    {
+      "label": "status_values",
+      "offset": 160895485,
+      "excerpt": "Ace=m(()=>Ne([k(\"compacting\"),k(\"requesting\"),mm()])),cF=m(()=>c({uri:s(),name:s(),title:s().optiona"
+    },
+    {
+      "label": "informational",
+      "offset": 160957392,
+      "excerpt": "Fce=m(()=>c({type:k(\"system\"),subtype:k(\"informational\"),content:s(),level:X([\"info\",\"notice\",\"suggestion\",\"warning\"]).describe(\"Render level. 'info' shows only in transcript mode; 'notice' renders in inactive gray; 'suggestion' and 'warning' are more prominent.\"),tool_use_id:s().optional().describe(\"Dedupes progress messages for the same tool use.\"),prevent_continuation:I().optional().describe(\"When true, execution stops after this message (e.g. a Stop hook denied continuation).\"),uuid:ee(),session_id:s()}).describe(\"Generic text banner emitted by the loop \\u2014 non-error status lines, hook feedback (e.g. a UserPromptSubmit hook's block rea"
+    },
+    {
+      "label": "permission_retry",
+      "offset": 160958129,
+      "excerpt": "Pxe=m(()=>c({type:k(\"system\"),subtype:k(\"permission_retry\"),content:s(),commands:T(s()).describe(\"Display names of the commands that were allowed.\"),uuid:ee(),session_id:s()}).describe(\"@internal Emitted when tool execution retries after a permission-mode change allowed previously-denied commands. REPL renders a 'retrying with <commands>' banner. From internal SystemMessage 'permission_retry'.\")),"
+    },
+    {
+      "label": "fallback",
+      "offset": 172511483,
+      "excerpt": "subtype:\"model_refusal_fallback\",uuid:Fe.uuid,trigger:Fe.trigger,direction:Fe.direction,...Fe.scope!==void 0&&{scope:Fe.scope},original_model:Fe.originalModel,fallback_model:Fe.fallbackModel,request_id:Fe.requestId,api_refusal_category:Fe.apiRefusalCategory??null,api_refusal_explanation:Fe.apiRefusalExplanation??null,...Fe.retractedMessageUuids!==void 0&&{retracted_message_uuids:Fe.retractedMessageUuids},refused_user_message_uuid:Fe.refusedUserMe"
+    },
+    {
+      "label": "control_request",
+      "offset": 166407227,
+      "excerpt": "type:\"control_request\",request_id:`set-thinking-${V$()}`,request:{subtype:\"set_max_thinking_tokens\",...e.thinking.maxThinkingTokens!==void 0&&{max_thinking_tokens:e.thinking.maxThinkingTokens},...e.thinking.display!==void 0&&{thinking_display:e.thinking.display}}}});if(e.permissionMode)n.push({type:"
+    }
+  ]
+}

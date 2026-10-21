@@ -1,0 +1,19 @@
+{
+  "original_copies_verified": 5,
+  "boundary_files_unchanged": [
+    "src/main/agent/researchProvider.ts",
+    "src/main/agent/researchScope.ts",
+    "src/main/agent/researchContract.ts",
+    "src/main/agent/grants.ts",
+    "src/main/agent/ollamaResearchRun.ts",
+    "src/main/agent/providers/claudeResearchIdentity.ts"
+  ],
+  "tests_passed": 108,
+  "test_files": 5,
+  "build": "passed",
+  "new_typecheck_errors": 0,
+  "inference_calls": 0,
+  "live_retries": 0,
+  "live_execution": "blocked",
+  "old_event_reconstructed": false
+}

@@ -68,3 +68,10 @@ Live block remained unchanged, corrected identity diagnostics preserved, no runt
 Run `bg-mvhn6ipe-w74jo5` failed in Dana's first request: `Unexpected Claude protocol/control event`. No accepted response, retrieval, draft or Nora review. The generic failure path did not retain event type/body, so further cause is unproven; no retry was made. Corrected identity diagnostics remained intact. UI result/handover displayed; source reports and checked prior failures unchanged. Run checkpoint `ad65b230d9b1e7f501ba94cd30f97a4b0101a591`.
 
 Before launch, 63 deterministic tests passed; typecheck had no new errors. Eight originals hash-verified; temporary runtime/UI routing restored and live-blocked app rebuilt. No billing/credential changes, automatic retries or alternate model selected. Usage totals unverified. Saved evidence: `docs/jufe-route-assessment/claude-live-after-signin/handover.md` and adjacent files. Stopped after one submission.
+
+
+## 2026-10-21 — Deterministic Claude protocol classification and rejection evidence
+
+Static installed-contract inspection confirms explicit non-action lifecycle events; the old adapter rejected non-system notices indiscriminately and silently ignored all system subtypes. Added narrow lifecycle handling (heartbeat, validated status/informational and allowed non-overage rate-limit notices). Controls/tools, unsupported system events, fallback/permission changes, blocked rate limits and active paid overage remain rejected. No grants, model policy, sources or budgets broadened.
+
+Rejections now persist sanitized event type/subtype and fixed reason; corrected model-identity diagnostics retained. Event bodies, credentials/research content and JSON parser excerpts are excluded. The event behind 0eb5708 **cannot be reconstructed** from existing evidence; no live cause is claimed. 108 deterministic tests in five files passed; build passed; no new typecheck errors (70 known /75 baseline). Five originals hash-verified. No calls or UI retry; live block unchanged. See `docs/jufe-route-assessment/claude-protocol-events/handover.md` and evidence.

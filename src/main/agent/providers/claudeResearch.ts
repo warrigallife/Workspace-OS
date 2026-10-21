@@ -1,4 +1,5 @@
-import { requireResearchModel, checkResearchAssistant, checkResearchUsageModels } from './claudeResearchIdentity'
+import { classifyResearchEvent, protocolMetadata, ResearchProtocolError } from './claudeResearchProtocol'
+import { requireResearchModel, checkResearchAssistant, checkResearchUsageModels, ResearchIdentityError } from './claudeResearchIdentity'
 /** Text-only Claude transport. Native tools never dispatch research actions.
  * Only the existing coordinator interprets returned intents through its grants. */
 import {spawn, type ChildProcess, type SpawnOptions} from 'child_process'
@@ -50,39 +51,42 @@ export function createClaudeResearchDriver(options:Options):ResearchDriver {
       child.stdout?.setEncoding('utf8')
       child.stdout?.on('data',(chunk:string)=>{
         if(closed)return
-        bytes+=Buffer.byteLength(chunk);if(bytes>RESEARCH_BUDGET.responseBytes){fail('Claude response size limit');return}
+        bytes+=Buffer.byteLength(chunk);if(bytes>RESEARCH_BUDGET.responseBytes){fail(new ResearchProtocolError(undefined,'response_size_limit').message);return}
         buffer+=chunk
+        let currentEvent:unknown
         try {
           while(buffer.includes('\n')) {
             const index=buffer.indexOf('\n'),line=buffer.slice(0,index);buffer=buffer.slice(index+1);if(!line.trim())continue
-            const event=JSON.parse(line)
+            currentEvent=undefined
+            const event=JSON.parse(line);currentEvent=event
+            if(classifyResearchEvent(event)==='lifecycle'){events.push({...protocolMetadata(event),classification:'lifecycle'});continue}
             events.push(event)
             if(event.type==='system'&&event.subtype==='init') {
               requireResearchModel('init',route.model,event.model)
-              if(initialized||!Array.isArray(event.tools)||event.tools.length||!Array.isArray(event.mcp_servers)||event.mcp_servers.length)throw new Error('Claude effective restrictions/model mismatch')
+              if(initialized||!Array.isArray(event.tools)||event.tools.length||!Array.isArray(event.mcp_servers)||event.mcp_servers.length)throw new ResearchProtocolError(event,'restrictions_mismatch')
               initialized=true
             } else if(event.type==='assistant') {
               checkResearchAssistant(route.model,event)
-              if(!Array.isArray(event.message?.content)||event.message.content.some((b:any)=>!['text','thinking'].includes(b.type)))throw new Error('Claude native tool action denied')
+              if(!Array.isArray(event.message?.content)||event.message.content.some((b:any)=>!['text','thinking'].includes(b.type)))throw new ResearchProtocolError(event,'native_tool_action_denied')
             } else if(event.type==='result') {
-              if(!initialized||!pending)throw new Error('Claude result without verified initialization/request')
-              if(event.subtype!=='success'||event.is_error||event.stop_reason==='max_tokens'||typeof event.result!=='string')throw new Error('Incomplete or failed Claude response')
+              if(!initialized||!pending)throw new ResearchProtocolError(event,'result_without_verified_request')
+              if(event.subtype!=='success'||event.is_error||event.stop_reason==='max_tokens'||typeof event.result!=='string')throw new ResearchProtocolError(event,'incomplete_response')
               const usage=event.usage
-              if(!usage||!Number.isInteger(usage.input_tokens)||usage.input_tokens<0||!Number.isInteger(usage.output_tokens)||usage.output_tokens<0)throw new Error('Claude token usage missing or invalid')
+              if(!usage||!Number.isInteger(usage.input_tokens)||usage.input_tokens<0||!Number.isInteger(usage.output_tokens)||usage.output_tokens<0)throw new ResearchProtocolError(event,'invalid_token_usage')
               let input=usage.input_tokens
-              for(const key of ['cache_creation_input_tokens','cache_read_input_tokens'])if(usage[key]!==undefined){if(!Number.isInteger(usage[key])||usage[key]<0)throw new Error('Claude cache usage invalid');input+=usage[key]}
+              for(const key of ['cache_creation_input_tokens','cache_read_input_tokens'])if(usage[key]!==undefined){if(!Number.isInteger(usage[key])||usage[key]<0)throw new ResearchProtocolError(event,'invalid_token_usage');input+=usage[key]}
               checkResearchUsageModels(route.model,event.modelUsage)
               const message:ResearchReply['message']={role:'assistant',content:event.result}
               if(pending.request.format===undefined){
                 const value=JSON.parse(event.result)
-                if(!value||Object.keys(value).join()!=='lookups'||!Array.isArray(value.lookups)||!value.lookups.length||value.lookups.length>RESEARCH_BUDGET.actionsPerStage)throw new Error('Expected bounded lookup intents')
+                if(!value||Object.keys(value).join()!=='lookups'||!Array.isArray(value.lookups)||!value.lookups.length||value.lookups.length>RESEARCH_BUDGET.actionsPerStage)throw new ResearchProtocolError(event,'invalid_lookup_intents')
                 message.content='';message.tool_calls=value.lookups.map((args:unknown)=>({function:{name:'lookup',arguments:args}}))
               }
               const p=pending;pending=undefined;p.cleanup()
               p.resolve({done:true,done_reason:'stop',message,provider:route.provider,model:route.model,inputTokens:input,outputTokens:usage.output_tokens,nativeEvidence:events})
-            } else if(event.type!=='system')throw new Error('Unexpected Claude protocol/control event')
+            }
           }
-        }catch(e){fail(e instanceof Error?e.message:'Invalid Claude protocol')}
+        }catch(e){fail(e instanceof ResearchProtocolError?e.message:e instanceof ResearchIdentityError?new ResearchProtocolError(currentEvent,'model_identity_rejected',e.message).message:new ResearchProtocolError(currentEvent,'invalid_event_or_response_json').message)}
       })
       const session:ResearchSession={
         receipt:{...route,nativeTools:[],connectors:[],ambientContext:false,fallback:false,restrictionsEnforced:true},close,
