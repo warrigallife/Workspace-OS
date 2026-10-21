@@ -1,0 +1,77 @@
+[1021/145816.195954:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+
+ RUN  v4.1.9 /Users/liammcilmurray/Desktop/Workspace-OS
+
+[1021/145816.695210:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1021/145816.695269:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1021/145816.695343:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1021/145816.695528:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > accepts the exact approved full ID at every identity surface 1ms
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > does not guess alias, revision or suffix equivalence for sonnet 1ms
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > does not guess alias, revision or suffix equivalence for claude-sonnet-5-20260630 0ms
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > does not guess alias, revision or suffix equivalence for claude-sonnet-5.5 0ms
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > does not guess alias, revision or suffix equivalence for claude-sonnet-5[1m] 0ms
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > does not guess alias, revision or suffix equivalence for claude-opus-5 0ms
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > separates is_api_error_message host errors from model substitution without accepting them 0ms
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > separates isApiErrorMessage host errors from model substitution without accepting them 0ms
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > rejects synthetic messages and missing assistant identity even without error flags 0ms
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > rejects API errors even when they repeat the approved model ID 0ms
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > rejects mixed-model accounting and malformed accounting 0ms
+ ✓ src/main/agent/providers/claudeResearchIdentity.test.ts > bounds and sanitizes diagnostic identifiers without copying arbitrary data 0ms
+ ✓ src/main/agent/researchOnce.test.ts > consumes exactly once and rejects forged/missing permits across restart 3ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > production adapter cannot launch or transmit without separate approval 2ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > uses separate fresh restricted sessions, explicit caps, sanitized environment and no fallback 2ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > translates only lookup intents and passes final JSON to existing application validation 1ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > fails closed on tools 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > fails closed on connectors 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > fails closed on model 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > fails closed on native action 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > fails closed on permission request 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > fails closed on missing init 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > rejects usage before save 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > rejects negative usage before save 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > rejects truncation before save 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > rejects provider failure before save 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > rejects substitution before save 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > rejects arbitrary actions, malformed JSON and oversized output 1ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > cancels pending work and refuses further requests 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > fails on interruption and refuses overlapping requests 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > preserves sanitized requested/returned identity on rejection: <synthetic> 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > preserves sanitized requested/returned identity on rejection: claude-sonnet-5-20260630 0ms
+ ✓ src/main/agent/providers/claudeResearch.test.ts > preserves sanitized requested/returned identity on rejection: private credential text 0ms
+ ✓ src/main/agent/restrictedResearch.test.ts > runs both exact routes through retrieval/save/review, ledger and saved handover; result display shows report 14ms
+ ✓ src/main/agent/restrictedResearch.test.ts > review rejection blocks final report and handover completion 6ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fabricated quotation fails before reviewer, preserves raw response and failure handover 3ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed draft.json never completes queue or publishes report 3ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed review.json never completes queue or publishes report 4ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed report.md never completes queue or publishes report 4ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed handover.md never completes queue or publishes report 6ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed outcome.json never completes queue or publishes report 6ms
+ ✓ src/main/agent/restrictedResearch.test.ts > failed checkpoint is explicit in terminal outcome and suppresses otherwise generated report 6ms
+ ✓ src/main/agent/restrictedResearch.test.ts > cancel closes uncooperative request, revokes grants and prevents reviewer 3ms
+ ✓ src/main/agent/restrictedResearch.test.ts > pre-aborted run does not preflight or open provider 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified nativeTools before sending content 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified connectors before sending content 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified ambientContext before sending content 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified restrictionsEnforced before sending content 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed on unverified fallback before sending content 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > never substitutes model in receipt 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > never substitutes model in response 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed for missing token accounting 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > fails closed for exceeded token accounting 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > denies arbitrary model action requests 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > production entrypoint refuses restricted execution before source staging or provider calls 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > missing exact provider preflight stops before any model request 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > native launch plans do not inherit normal tools or enable model fallback 1ms
+ ✓ src/main/agent/restrictedResearch.test.ts > persistent restricted queue interrupts running/queued jobs, never auto-resumes, preserves route choice and failure evidence 2ms
+ ✓ src/main/agent/restrictedResearch.test.ts > Claude stream transport and coordinator: success 8ms
+ ✓ src/main/agent/restrictedResearch.test.ts > Claude stream transport and coordinator: review-rejection 6ms
+ ✓ src/main/agent/restrictedResearch.test.ts > Claude stream transport and coordinator: fabricated-citation 4ms
+ ✓ src/main/agent/restrictedResearch.test.ts > Claude stream transport and coordinator: failed-save 6ms
+ ✓ src/main/agent/restrictedResearch.test.ts > Claude stream transport and coordinator: identity-rejection 3ms
+
+ Test Files  4 passed (4)
+      Tests  63 passed (63)
+   Start at  14:58:16
+   Duration  356ms (transform 273ms, setup 0ms, import 349ms, tests 120ms, environment 0ms)
+

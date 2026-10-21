@@ -1,0 +1,7 @@
+{
+  "status": "failed",
+  "error": "Unexpected Claude protocol/control event",
+  "checkpointId": "ad65b230d9b1e7f501ba94cd30f97a4b0101a591",
+  "turns": 0,
+  "totalTokens": 0
+}

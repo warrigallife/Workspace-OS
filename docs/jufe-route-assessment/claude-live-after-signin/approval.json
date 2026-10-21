@@ -1,0 +1,8 @@
+{
+  "scope": "One approved two-report Claude Pro UI attempt after successful sign-in; credits off per user confirmation",
+  "exact_model": "claude-sonnet-5",
+  "estimated_usd_stop_threshold_per_session": 0.5,
+  "additional_paid_usage_authorized": false,
+  "automatic_retries": 0,
+  "authentication": "Both normal and restricted environments returned loggedIn=true, claude.ai, firstParty, pro in immediately preceding metadata verification"
+}
