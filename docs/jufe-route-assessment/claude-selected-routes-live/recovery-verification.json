@@ -1,0 +1,13 @@
+{
+  "originalsHashVerified": 8,
+  "runtimeFilesRestoredByteForByte": [
+    "src/main/agent/ollamaResearchRun.ts",
+    "src/main/agent/providers/claudeResearch.ts",
+    "src/main/agent/providers/claudeResearch.test.ts",
+    "src/main/agent/restrictedResearch.test.ts",
+    "src/main/handlers/runs.ts",
+    "src/renderer/src/components/Agents/LocalResearch.tsx"
+  ],
+  "temporaryFilesRemovedFromActiveCode": true,
+  "consumptionMarkerPreserved": true
+}

@@ -1,0 +1,30 @@
+{
+  "base": "fe8ada6",
+  "approval": "One UI attempt; recorded two-report transmission and subscription-only limits reused",
+  "authentication": {
+    "loggedIn": true,
+    "authMethod": "claude.ai",
+    "apiProvider": "firstParty",
+    "subscriptionType": "pro"
+  },
+  "executable": "/opt/homebrew/Caskroom/claude-code/2.1.267/claude",
+  "billing": "Recorded user confirmation: credits off, zero balance. No setting changes. Status metadata does not independently verify credits.",
+  "routes": {
+    "dana": {
+      "provider": "claude",
+      "model": "claude-sonnet-5"
+    },
+    "nora": {
+      "provider": "claude",
+      "model": "claude-sonnet-5"
+    }
+  },
+  "limits": {
+    "estimatedUsdPerRole": 0.5,
+    "deadlineMs": 360000,
+    "tokens": 24000,
+    "responsesPerStage": 12,
+    "actionsPerStage": 16,
+    "automaticRetries": 0
+  }
+}
