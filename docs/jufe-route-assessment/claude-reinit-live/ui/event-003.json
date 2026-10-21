@@ -1,0 +1,256 @@
+{
+  "kind": "response",
+  "data": {
+    "role": "dana",
+    "step": 0,
+    "response": {
+      "done": true,
+      "done_reason": "stop",
+      "message": {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "function": {
+              "name": "lookup",
+              "arguments": {
+                "record_id": "jufe-coverage-2026-10-11",
+                "start_line": 1,
+                "end_line": 80
+              }
+            }
+          },
+          {
+            "function": {
+              "name": "lookup",
+              "arguments": {
+                "record_id": "jufe-schedule-2026-10-11",
+                "start_line": 1,
+                "end_line": 80
+              }
+            }
+          }
+        ]
+      },
+      "provider": "claude",
+      "model": "claude-sonnet-5",
+      "inputTokens": 3406,
+      "outputTokens": 96,
+      "aggregateUsage": {
+        "basis": "cumulative per session",
+        "models": [
+          {
+            "model": "claude-haiku-4-5-20251001",
+            "attribution": "additional aggregate usage; purpose unattributed",
+            "inputTokens": 1631,
+            "outputTokens": 15,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0,
+            "costUSD": 0.001706
+          },
+          {
+            "model": "claude-sonnet-5",
+            "attribution": "selected answer model",
+            "inputTokens": 2,
+            "outputTokens": 81,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 1773,
+            "costUSD": 0.007906
+          }
+        ],
+        "inputTokens": 3406,
+        "outputTokens": 96,
+        "costUSD": 0.009611999999999999
+      },
+      "nativeEvidence": [
+        {
+          "type": "system",
+          "subtype": "init",
+          "cwd": "/Users/liammcilmurray/Desktop/Workspace-OS/.workspace-os/liam-workspace/JUFE-staging/bg-mvimbs76-yofh6q",
+          "session_id": "12d22721-5958-41dd-becb-fbca34a43aea",
+          "tools": [],
+          "mcp_servers": [],
+          "model": "claude-sonnet-5",
+          "permissionMode": "default",
+          "slash_commands": [],
+          "apiKeySource": "none",
+          "claude_code_version": "2.1.267",
+          "output_style": "default",
+          "agents": [
+            "claude",
+            "Explore",
+            "general-purpose",
+            "Plan"
+          ],
+          "skills": [],
+          "plugins": [],
+          "capabilities": [
+            "interrupt_receipt_v1",
+            "interrupt_cancel_queued_v1",
+            "msg_lifecycle_v1"
+          ],
+          "analytics_disabled": false,
+          "product_feedback_disabled": false,
+          "uuid": "c2b8ed5b-6c0d-456a-a179-af27af4c6ec4",
+          "messaging_socket_path": "/tmp/cc-socks/76234.sock",
+          "fast_mode_state": "off",
+          "fast_mode_disabled_reason": "sdk_opt_in_required"
+        },
+        {
+          "type": "rate_limit_event",
+          "subtype": "<absent>",
+          "classification": "lifecycle"
+        },
+        {
+          "type": "assistant",
+          "message": {
+            "model": "claude-sonnet-5",
+            "id": "msg_011CgG5sFDXytRGx2GtENier",
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "{\"lookups\":[{\"record_id\":\"jufe-coverage-2026-10-11\",\"start_line\":1,\"end_line\":80},{\"record_id\":\"jufe-schedule-2026-10-11\",\"start_line\":1,\"end_line\":80}]}"
+              }
+            ],
+            "container": null,
+            "stop_reason": null,
+            "stop_sequence": null,
+            "stop_details": null,
+            "usage": {
+              "input_tokens": 2,
+              "cache_creation_input_tokens": 1773,
+              "cache_read_input_tokens": 0,
+              "cache_creation": {
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 1773
+              },
+              "output_tokens": 1,
+              "service_tier": "standard",
+              "inference_geo": "global",
+              "speed": "standard"
+            },
+            "diagnostics": null,
+            "context_management": null
+          },
+          "parent_tool_use_id": null,
+          "session_id": "12d22721-5958-41dd-becb-fbca34a43aea",
+          "uuid": "e761bbb1-55bd-45a2-9f76-d8ada62cd656",
+          "timestamp": "2026-10-21T21:22:39.468Z",
+          "request_id": "req_011CgG5sEsC81ryAWMvntn3J"
+        },
+        {
+          "duration_api_ms": 4861,
+          "stop_reason": "end_turn",
+          "session_id": "12d22721-5958-41dd-becb-fbca34a43aea",
+          "total_cost_usd": 0.009611999999999999,
+          "usage": {
+            "input_tokens": 2,
+            "cache_creation_input_tokens": 1773,
+            "cache_read_input_tokens": 0,
+            "output_tokens": 81,
+            "output_tokens_details": {
+              "thinking_tokens": 0
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 1773,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "global",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 81,
+                "cache_read_input_tokens": 0,
+                "cache_creation_input_tokens": 1773,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 1773
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard"
+          },
+          "modelUsage": {
+            "claude-haiku-4-5-20251001": {
+              "inputTokens": 1631,
+              "outputTokens": 15,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0,
+              "webSearchRequests": 0,
+              "costUSD": 0.001706,
+              "contextWindow": 200000,
+              "maxOutputTokens": 32000,
+              "thinkingTokens": 0,
+              "canonicalModel": "claude-haiku-4-5",
+              "provider": "firstParty",
+              "costBasis": "list"
+            },
+            "claude-sonnet-5": {
+              "inputTokens": 2,
+              "outputTokens": 81,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 1773,
+              "webSearchRequests": 0,
+              "costUSD": 0.007906,
+              "contextWindow": 1000000,
+              "maxOutputTokens": 64000,
+              "thinkingTokens": 0,
+              "canonicalModel": "claude-sonnet-5",
+              "provider": "firstParty",
+              "costBasis": "list"
+            }
+          },
+          "permission_denials": [],
+          "terminal_reason": "completed",
+          "fast_mode_state": "off",
+          "fast_mode_disabled_reason": "sdk_opt_in_required",
+          "subagent_stats": {
+            "spawned": 0,
+            "requested": {
+              "background": 0,
+              "foreground": 0,
+              "unset": 0
+            },
+            "started_in_background": 0,
+            "max_depth": 0,
+            "spawned_by_subagents": 0,
+            "completed": 0,
+            "failed": 0,
+            "killed": {
+              "parent": 0,
+              "user": 0,
+              "system": 0
+            },
+            "refused": {
+              "depth_limit": 0,
+              "concurrency_limit": 0,
+              "budget": 0
+            },
+            "by_type": {}
+          },
+          "is_error": false,
+          "num_turns": 1,
+          "subtype": "success",
+          "api_error_status": null,
+          "result": "{\"lookups\":[{\"record_id\":\"jufe-coverage-2026-10-11\",\"start_line\":1,\"end_line\":80},{\"record_id\":\"jufe-schedule-2026-10-11\",\"start_line\":1,\"end_line\":80}]}",
+          "ttft_ms": 3582,
+          "type": "result",
+          "duration_ms": 3622,
+          "uuid": "21277cea-3528-4619-83e8-0ac1605773a7",
+          "ttft_stream_ms": 2502,
+          "time_to_request_ms": 384,
+          "first_content_frame_ms": 2504,
+          "queued_turn_count": 0
+        }
+      ]
+    }
+  }
+}

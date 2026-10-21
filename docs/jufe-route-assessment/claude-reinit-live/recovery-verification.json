@@ -1,0 +1,12 @@
+{
+  "originalsHashVerified": 6,
+  "runtimeFilesRestoredByteForByte": [
+    "src/main/agent/ollamaResearchRun.ts",
+    "src/main/agent/providers/claudeResearch.ts",
+    "src/main/handlers/runs.ts",
+    "src/renderer/src/components/Agents/LocalResearch.tsx"
+  ],
+  "temporaryFilesRemovedFromActiveCode": true,
+  "consumptionMarkerPreserved": true,
+  "tests": "Passed tests not repeated as instructed"
+}

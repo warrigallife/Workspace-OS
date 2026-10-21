@@ -1,0 +1,91 @@
+{
+  "id": "bg-mvimbs76-yofh6q",
+  "status": "failed",
+  "stage": "dana",
+  "provider": "restricted-hosts",
+  "routes": {
+    "dana": {
+      "provider": "claude",
+      "model": "claude-sonnet-5"
+    },
+    "nora": {
+      "provider": "claude",
+      "model": "claude-sonnet-5"
+    }
+  },
+  "usage": {
+    "dana": {
+      "basis": "cumulative per session",
+      "models": [
+        {
+          "model": "claude-haiku-4-5-20251001",
+          "attribution": "additional aggregate usage; purpose unattributed",
+          "inputTokens": 1631,
+          "outputTokens": 15,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "costUSD": 0.001706
+        },
+        {
+          "model": "claude-sonnet-5",
+          "attribution": "selected answer model",
+          "inputTokens": 2,
+          "outputTokens": 81,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 1773,
+          "costUSD": 0.007906
+        }
+      ],
+      "inputTokens": 3406,
+      "outputTokens": 96,
+      "costUSD": 0.009611999999999999
+    }
+  },
+  "task": "Identify outstanding research work recorded in the two approved JUFE coverage reports dated 2026-10-11. Produce exactly three distinct, concise findings with short exact source excerpts and line citations. Cover both approved records. Distinguish reported coverage gaps from inference and unresolved present-day status. Do not inspect or change manuscripts.",
+  "recoveredFrom": null,
+  "sourceHashes": {
+    "jufe-coverage-2026-10-11": "eaa5a95fc910bf016c03f899e2ec7d283d9eb56b9c35ad88aa3a5ba569f4b96d",
+    "jufe-schedule-2026-10-11": "e281c7def2fc5461202f84422771adc6a32300260ee1d2a0928416830fee4772"
+  },
+  "events": [
+    "event-000.json",
+    "event-001.json",
+    "event-002.json",
+    "event-003.json",
+    "event-004.json",
+    "event-005.json",
+    "event-006.json",
+    "event-007.json"
+  ],
+  "tasks": {
+    "dana": "task-1792617755222-fozvdy",
+    "nora": "task-1792617755283-nz1pm0",
+    "handover": "task-1792617755344-hpu597"
+  },
+  "dependencies": {
+    "task-1792617755283-nz1pm0": [
+      "task-1792617755222-fozvdy"
+    ],
+    "task-1792617755344-hpu597": [
+      "task-1792617755283-nz1pm0"
+    ]
+  },
+  "error": "Claude protocol rejected: {\"type\":\"system\",\"subtype\":\"<redacted-unrecognized>\",\"reason\":\"unsupported_system_event\"}",
+  "turns": 1,
+  "totalTokens": 3502,
+  "reads": {
+    "dana": [
+      {
+        "record_id": "jufe-coverage-2026-10-11",
+        "start_line": 1,
+        "end_line": 80
+      },
+      {
+        "record_id": "jufe-schedule-2026-10-11",
+        "start_line": 1,
+        "end_line": 80
+      }
+    ],
+    "nora": []
+  }
+}

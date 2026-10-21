@@ -1,0 +1,15 @@
+{
+  "kind": "provider-restrictions",
+  "data": {
+    "role": "dana",
+    "receipt": {
+      "provider": "claude",
+      "model": "claude-sonnet-5",
+      "nativeTools": [],
+      "connectors": [],
+      "ambientContext": false,
+      "fallback": false,
+      "restrictionsEnforced": true
+    }
+  }
+}

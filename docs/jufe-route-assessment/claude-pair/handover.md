@@ -103,3 +103,10 @@ Additional Haiku aggregate usage was disclosed as unattributed. Accepted account
 From 5b07a7b: first init accepted, then second-request init necessarily hit the old `initialized || ...` rejection before tools/MCP declarations could be checked. This is a demonstrated false rejection; actual rejected declarations are unavailable, so no claim that they were empty or that live success is assured. The working launcher does not reject repeated init but uses one-shot stdin / resume; importing its broader launch environment would violate this boundary. Existing restricted stream transport retained.
 
 Every init now revalidates the selected model and empty tool/MCP arrays; repetition alone is accepted. Missing/malformed and nonempty declarations receive distinct safe reasons. All access/control/billing/citation/review gates and the live block remain. 142 deterministic tests /8 files passed, build passed, no new typecheck errors (70 known /75 baseline). Six originals hash-verified; prior failure preserved. No calls or retries. [Diagnosis, evidence and recovery](../repeated-init-fix/handover.md).
+
+
+## 2026-10-22 — Single UI verification after repeated-init repair
+
+From 9ed5b37, auth metadata confirmed Claude Pro. One approved UI submission with selected Claude / claude-sonnet-5 for Dana and Nora, recorded two-report and subscription-only bounds. Run `bg-mvimbs76-yofh6q` failed after one accepted response and both report lookups (1–80): `system / <redacted-unrecognized> / unsupported_system_event`. Raw subtype unavailable; no cause inferred. No draft or Nora review. UI failure handover displayed; stopped without retry or another repair cycle.
+
+Six originals verified, four runtime/UI files restored byte-for-byte and live-blocked app rebuilt. Reports and eight checked earlier failures unchanged. Passed tests not repeated. No purchases, credits, fallback or broader access. [Saved outcome and sanitized diagnostics](../claude-reinit-live/handover.md).
