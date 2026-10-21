@@ -1,0 +1,10 @@
+{
+  "dana": {
+    "provider": "claude",
+    "model": "claude-sonnet-5"
+  },
+  "nora": {
+    "provider": "claude",
+    "model": "claude-sonnet-5"
+  }
+}

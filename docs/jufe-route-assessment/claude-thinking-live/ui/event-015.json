@@ -1,0 +1,30 @@
+{
+  "kind": "aggregate-usage",
+  "data": {
+    "role": "nora",
+    "basis": "cumulative per session",
+    "models": [
+      {
+        "model": "claude-haiku-4-5-20251001",
+        "attribution": "additional aggregate usage; purpose unattributed",
+        "inputTokens": 2074,
+        "outputTokens": 14,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "costUSD": 0.002144
+      },
+      {
+        "model": "claude-sonnet-5",
+        "attribution": "selected answer model",
+        "inputTokens": 2,
+        "outputTokens": 163,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 2445,
+        "costUSD": 0.011414
+      }
+    ],
+    "inputTokens": 4521,
+    "outputTokens": 177,
+    "costUSD": 0.013558
+  }
+}

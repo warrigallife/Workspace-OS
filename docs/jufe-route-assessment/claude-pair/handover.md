@@ -159,3 +159,10 @@ Six originals verified; four runtime/UI files restored byte-for-byte and live-bl
 Installed schema and producer establish this as approximate thinking-progress metadata, explicitly not authoritative billed output. Narrow lifecycle handling accepts well-formed estimate fields; malformed/action-bearing events still stop. Notices never count as research answers, execute tools or contribute usage. Sanitized type/subtype only retained; all access, review and budget checks/live block unchanged. Historical event payload remains unavailable.
 
 160 focused deterministic tests passed, build passed, no new typecheck errors; five originals hash-verified. No live calls; live compatibility unverified. [Contract evidence, tests and recovery](../thinking-token-notice/handover.md).
+
+
+## 2026-10-22 — One UI attempt after thinking-notice handling
+
+From f197922, Claude Pro auth confirmed; existing two-report/selected-route/subscription-only approval reused. Run `bg-mviqvk8b-utpn8m`: Dana draft passed without correction; Nora retrieved evidence and returned a response, then unchanged run budget stopped validation/save at 32,045 tokens versus 24,000. Dana 15,527; Nora 16,518. No accepted review or completed report. No protocol rejection in this attempt; UI failure handover displayed. Raw returned review preserved as unvalidated. No retry or repair.
+
+Per-stage accounting and diagnostics saved. Six originals verified; four runtime/UI files restored byte-for-byte and live-blocked app rebuilt. Sources and twelve checked prior failures unchanged. No billing/permission/budget changes. [Saved outcome, usage and recovery](../claude-thinking-live/handover.md).

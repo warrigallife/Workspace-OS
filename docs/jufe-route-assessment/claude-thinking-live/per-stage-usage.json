@@ -1,0 +1,65 @@
+{
+  "stages": {
+    "dana": {
+      "tokens": 15527,
+      "usage": {
+        "basis": "cumulative per session",
+        "models": [
+          {
+            "model": "claude-haiku-4-5-20251001",
+            "attribution": "additional aggregate usage; purpose unattributed",
+            "inputTokens": 1631,
+            "outputTokens": 14,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0,
+            "costUSD": 0.001701
+          },
+          {
+            "model": "claude-sonnet-5",
+            "attribution": "selected answer model",
+            "inputTokens": 4,
+            "outputTokens": 506,
+            "cacheReadInputTokens": 1818,
+            "cacheCreationInputTokens": 11554,
+            "costUSD": 0.0516476
+          }
+        ],
+        "inputTokens": 15007,
+        "outputTokens": 520,
+        "costUSD": 0.0533486
+      }
+    },
+    "nora": {
+      "tokens": 16518,
+      "usage": {
+        "basis": "cumulative per session",
+        "models": [
+          {
+            "model": "claude-haiku-4-5-20251001",
+            "attribution": "additional aggregate usage; purpose unattributed",
+            "inputTokens": 2074,
+            "outputTokens": 14,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0,
+            "costUSD": 0.002144
+          },
+          {
+            "model": "claude-sonnet-5",
+            "attribution": "selected answer model",
+            "inputTokens": 4,
+            "outputTokens": 317,
+            "cacheReadInputTokens": 2445,
+            "cacheCreationInputTokens": 11664,
+            "costUSD": 0.050323
+          }
+        ],
+        "inputTokens": 16187,
+        "outputTokens": 331,
+        "costUSD": 0.052467
+      }
+    }
+  },
+  "runTokens": 32045,
+  "limit": 24000,
+  "note": "Authoritative accepted provider accounting; review response failed run budget before validation/save. Cost figures are estimates, not bills."
+}

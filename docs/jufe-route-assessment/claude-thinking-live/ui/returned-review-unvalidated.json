@@ -1,0 +1,13 @@
+{
+  "status": "not validated or accepted; run token budget exceeded first",
+  "responseStep": 1,
+  "review": {
+    "decision": "approve",
+    "reason": "All three quotes verbatim match retrieved text at cited ranges, and each statement accurately reflects the source: finding 0 matches row 18 (source 36) exactly, finding 1 matches rows 20/22 (sources 4 and 6) exactly, and finding 2 matches the schedule record's source-31 stochastic claim versus source-30's deterministic treatment exactly.",
+    "checked_citations": [
+      0,
+      1,
+      2
+    ]
+  }
+}
