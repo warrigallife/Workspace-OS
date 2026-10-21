@@ -77,6 +77,7 @@ export async function launchResearchWithDriver(o:LaunchRunOptions, driver:Resear
       validateRestriction(role,session.receipt,routes)
       record('provider-restrictions',{role,receipt:session.receipt})
       if(ledger)await ledger('task_update',{taskId:tasks[role],status:'in_progress'})
+      let draftAttempts=0
       for(let step=0;step<RESEARCH_BUDGET.responsesPerStage;step++) {
         controller.signal.throwIfAborted();if(getWorkspaceRoot()!==RESEARCH_ROOT)throw new Error('Workspace changed')
         if(Buffer.byteLength(JSON.stringify(messages))>RESEARCH_BUDGET.contextBytes)throw new Error('Context limit')
@@ -108,9 +109,26 @@ export async function launchResearchWithDriver(o:LaunchRunOptions, driver:Resear
           let args:unknown
           try {args=JSON.parse(message.content??'')}catch {throw new Error('Structured finalisation returned invalid JSON')}
           controller.signal.throwIfAborted();if(++calls>RESEARCH_BUDGET.actionsPerStage)throw new Error('Tool-call budget exceeded')
+          if(role==='dana')scope.write(`draft-attempt-${++draftAttempts}.json`,args)
           const result=await invokeGrantedAction({cmd:'run',actionId:'researchReport.save',args,token})
           record('tool',{role,action:'researchReport.save',args,result,origin:'structured-finalisation'})
-          if(!result.ok)throw new Error('Structured finalisation rejected: '+result.error)
+          if(!result.ok) {
+            // Only application draft-validation errors qualify. Authorization,
+            // source-integrity and persistence failures never trigger correction.
+            const validation=typeof result.error==='string'&&(/^(save\.|Cite both approved records$)/.test(result.error))
+            if(role!=='dana'||draftAttempts!==1||!validation)throw new Error('Structured finalisation rejected: '+result.error)
+            controller.signal.throwIfAborted()
+            if(totalTokens>=RESEARCH_BUDGET.tokens||step+1>=RESEARCH_BUDGET.responsesPerStage||calls>=RESEARCH_BUDGET.actionsPerStage)throw new Error('Draft correction budget exhausted: '+result.error)
+            // Reuse only successful granted lookups already supplied to this role.
+            // Never read a caller-selected path or invent a corrected quotation.
+            const passages=messages.filter(m=>m.role==='tool'&&m.tool_name==='lookup').flatMap(m=>{
+              const r=JSON.parse(m.content);return r.ok&&r.result?.excerpt?[r.result]:[]
+            })
+            const feedback={validation_error:result.error,retrieved_passages:passages}
+            record('draft-correction',{attempt:1,...feedback})
+            messages.push({role:'user',content:'The draft failed validation. You have ONE correction attempt within the remaining original budgets. Correct the draft using only the retrieved passages below; return the complete draft JSON. Preserve exact source characters; JSON escaping must decode to the source text, not literal extra backslashes. Do not invent support. A second failure stops. '+JSON.stringify(feedback)})
+            continue
+          }
           if(ledger && (role==='dana'||scope.review?.decision==='approve')){await ledger('task_complete',{taskId:tasks[role],result:{evidence:role==='dana'?'draft.json':'review.json'}});completedTasks.add(role)}
           return
         }
@@ -180,7 +198,7 @@ export async function launchResearchWithDriver(o:LaunchRunOptions, driver:Resear
       try{scope.write('outcome.json',{status:code===0?'completed':state.status,error:state.error??null,checkpointId,turns,totalTokens,routes,usage:state.usage})}
       catch(e){code=1;o.sink.output('Terminal receipt failed: '+(e as Error).message+'\n')}
       clearTimeout(timer);o.signal?.removeEventListener('abort',onAbort)
-      const artifacts=['report.md','draft.json','review.json','state.json','outcome.json','handover.md','usage.json'].filter(n=>(code===0||n!=='report.md')&&fs.existsSync(path.join(dir,n))).map(name=>({name,path:path.join(dir,name),type:'other' as const}))
+      const artifacts=['report.md','draft.json','review.json','state.json','outcome.json','handover.md','usage.json','draft-attempt-1.json','draft-attempt-2.json'].filter(n=>(code===0||n!=='report.md')&&fs.existsSync(path.join(dir,n))).map(name=>({name,path:path.join(dir,name),type:'other' as const}))
       o.sink.artifacts(artifacts);o.sink.meta({costUsd:0,costKnown:!restricted,turns,durationMs:Date.now()-startedAt});o.sink.output(`Evidence: ${dir}\nCheckpoint: ${checkpointId}\n`);o.sink.done(code,checkpointId)
     }
   })()})

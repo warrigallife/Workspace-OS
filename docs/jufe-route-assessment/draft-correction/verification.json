@@ -1,0 +1,18 @@
+{
+  "originalsVerified": 5,
+  "unchangedValidationBoundaryBudgetProviderAndNormalLaunch": [
+    "src/main/agent/researchScope.ts",
+    "src/main/agent/researchContract.ts",
+    "src/main/agent/researchProvider.ts",
+    "src/main/agent/providers/claudeResearch.ts",
+    "src/main/agent/providers/claudeResearchProtocol.ts",
+    "src/main/agent/grants.ts",
+    "src/main/agent/launchRun.ts"
+  ],
+  "tests": {
+    "passed": 159,
+    "files": 7
+  },
+  "liveCalls": 0,
+  "liveBlock": "unchanged"
+}

@@ -293,3 +293,10 @@ Diagnostic-only fix: safe lowercase snake-case subtype identifiers up to 64 char
 From 061c10a, restricted-environment auth confirmed Claude Pro. Selected Claude / claude-sonnet-5 for Dana and Nora under the recorded two-report/subscription-only bounds. Run `bg-mvip8uzc-elb3nt` failed after two accepted Dana responses: `Structured finalisation rejected: save.findings[0].citation.quote: must match source verbatim`. No accepted draft or Nora review. Actual UI displayed the failure handover. No protocol-event rejection in this attempt; earlier subtype remains unknown. No retry or repair cycle.
 
 Result, raw accepted responses, usage and diagnostics saved. Reports and nine checked prior failed runs unchanged. Six originals hash-verified; four runtime/UI files restored byte-for-byte and live-blocked app rebuilt. No permanent code changes, billing changes or broader access. [Saved outcome and recovery](../jufe-route-assessment/claude-subtype-live/handover.md).
+
+
+## 2026-10-22 — One bounded Dana draft-validation correction
+
+From 0b115b3: Dana may correct one invalid structured draft using exact validation feedback and already-retrieved passages. Original/corrected submissions preserved separately; both pass through unchanged validation/grants. Second failure stops; Nora reviews only a valid draft. Same session, token/action/step/time/spending budgets; no reviewer correction, source expansion or fresh-session retry. Permission/source/save/provider failures remain immediate stops.
+
+159 deterministic tests /7 files passed, including corrected quote, persistent/unsupported citations, cancellation, deadline and exhausted budgets; build passed; no new typecheck errors. Five originals verified. Live execution still blocked, no calls made. [Implementation/recovery](../jufe-route-assessment/draft-correction/handover.md) and [prepared single UI test awaiting explicit approval](../jufe-route-assessment/draft-correction/live-test-preparation.md).

@@ -201,3 +201,53 @@ it('cloud or mixed selections remain blocked before any local or cloud call',asy
  const s=setup({research:{routes}})
  await expect(launchOllamaResearch(s.options)).rejects.toMatchObject({code:'RESEARCH_LIVE_NOT_APPROVED'});expect(fs.existsSync(mock.directory)).toBe(false)
 })
+it.each(['corrected','persistent','unsupported','cancelled','tokens','actions','steps'])('one bounded draft correction: %s',async scenario=>{
+ const controller=new AbortController(),s=setup({signal:controller.signal});let drafts=0,lookups=0
+ const d=driver((role,req,reply)=>{
+  if(role!=='dana')return reply
+  if(!req.format){
+   lookups++
+   if(scenario==='actions')reply.message.tool_calls=Array.from({length:15},(_,i)=>({function:{name:'lookup',arguments:{record_id:ids[i%2],start_line:1,end_line:1}}}))
+   if(scenario==='steps')reply.message.tool_calls=[{function:{name:'lookup',arguments:{record_id:ids[lookups<11?0:1],start_line:1,end_line:1}}}]
+  }else{
+   drafts++
+   if(drafts===2){
+    const feedback=req.messages.find((m:any)=>m.role==='user'&&m.content.includes('ONE correction attempt'))?.content
+    expect(feedback).toContain('must match source verbatim');expect(feedback).toContain(quote);expect(feedback).toContain('retrieved_passages')
+    if(scenario==='cancelled')controller.abort()
+   }
+   const v=JSON.parse(reply.message.content)
+   if(drafts===1||scenario==='persistent')v.findings[0].citation.quote='\\'+quote
+   if(drafts===2&&scenario==='unsupported')v.findings[0].citation.record_id='unapproved-source'
+   reply.message.content=JSON.stringify(v)
+  }
+  if(scenario==='tokens'){reply.inputTokens=11950;reply.outputTokens=50}
+  return reply
+ })
+ await launchResearchWithDriver(s.options,d.host,s.factory);expect(await s.result).toBe(scenario==='corrected'?0:1)
+ expect(drafts).toBe(['tokens','actions','steps'].includes(scenario)?1:2)
+ const original=JSON.parse(fs.readFileSync(path.join(mock.directory,'draft-attempt-1.json'),'utf8'));expect(original.findings[0].citation.quote).toBe('\\'+quote)
+ if(['corrected','persistent','unsupported'].includes(scenario))expect(fs.existsSync(path.join(mock.directory,'draft-attempt-2.json'))).toBe(true)
+ if(scenario==='corrected'){
+  const corrected=JSON.parse(fs.readFileSync(path.join(mock.directory,'draft-attempt-2.json'),'utf8'));expect(corrected.findings[0].citation.quote).toBe(quote)
+  expect(d.opened).toEqual(['dana','nora']);expect(outcome().totalTokens).toBe(750);expect(outcome().status).toBe('completed')
+ }else{
+  expect(d.opened).toEqual(['dana']);expect(fs.existsSync(path.join(mock.directory,'report.md'))).toBe(false);expect(fs.existsSync(path.join(mock.directory,'handover.md'))).toBe(true)
+ }
+})
+it('original deadline cancels a pending correction without opening a reviewer',async()=>{
+ vi.useFakeTimers({toFake:['setTimeout','clearTimeout']})
+ try{
+  let drafts=0,started!:()=>void;const correctionStarted=new Promise<void>(r=>started=r)
+  const s=setup(),d=driver((role,req,reply)=>{
+   if(role==='dana'&&req.format){
+    if(++drafts===2){started();return new Promise(()=>{})}
+    const v=JSON.parse(reply.message.content);v.findings[0].citation.quote='An invented quotation not in the fixture.';reply.message.content=JSON.stringify(v)
+   }
+   return reply
+  })
+  await launchResearchWithDriver(s.options,d.host,s.factory);await correctionStarted
+  await vi.advanceTimersByTimeAsync(360000)
+  expect(await s.result).toBe(1);expect(outcome().status).toBe('cancelled');expect(d.opened).toEqual(['dana']);expect(drafts).toBe(2)
+ }finally{vi.useRealTimers()}
+})

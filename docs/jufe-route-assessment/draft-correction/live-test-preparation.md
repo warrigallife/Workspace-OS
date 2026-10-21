@@ -1,0 +1,11 @@
+# Prepared single UI verification — awaiting explicit approval
+
+**Blocked: do not execute yet.** No live permit installed and no authentication or inference calls made for this preparation.
+
+Proposed routes remain selectable: Dana → Claude / claude-sonnet-5; Nora → Claude / claude-sonnet-5, using existing Claude Pro. Before any execution, confirm restricted-environment authentication metadata and display the selected routes. Reuse the recorded credits-off/zero-balance and subscription-only conditions; if prerequisites cannot be confirmed, stop. No purchases, paid credits, fallback, model substitution or broader access.
+
+Transmission: existing Dana/Nora task/persona and schemas; only the approved jufe-coverage-2026-10-11 and jufe-schedule-2026-10-11 reports via granted bounded lookups; generated draft to Nora for independent review. The one added correction sends Dana its precise validation error and successful lookup excerpts already retrieved for that run, plus its original generated draft already in conversation. No new sources or permissions.
+
+One UI submission through the existing Desktop launcher / .workspace-os/liam-app-data, with at most one Dana draft correction inside that same run. No fresh-session retry or second workflow submission. Keep 360-second total deadline, 24,000-token run budget, 12 responses and 16 actions per stage, existing context/response limits and 2,048 host output-token cap. Reuse the $1 estimated run threshold split at $0.50 per Claude role; correction shares Dana's original process/session budget. This cost estimate is not an invoice ceiling. Actual billing conditions remain subscription-only with credits off.
+
+After approval, reuse the saved one-use UI procedure in ../claude-subtype-live/temporary-files/scripts/research/check-claude-once.mjs.snapshot and temporary permit pattern, with a fresh evidence directory and durable consumed marker. Keep selection configurable. Preserve original and corrected draft attempts and every result; verify source hashes, prior failures, saved review/handover and actual UI display. A second validation failure, provider/billing failure, cancellation or exhausted budget stops. Restore live-blocked sources and rebuild afterward, checkpoint once and stop. This document authorizes nothing by itself.

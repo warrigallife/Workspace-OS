@@ -55,9 +55,9 @@ it.each([
  ['invented quotes',JSON.stringify({findings:['jufe-coverage-2026-10-11','jufe-schedule-2026-10-11','jufe-coverage-2026-10-11'].map(record_id=>({statement:'An unsupported fixture statement.',citation:{record_id,start_line:1,end_line:1,quote:'This quotation does not exist in either source.'}})),limitations:'Only dated records were inspected.'}),'match source verbatim'],
 ])('rejects structured %s without starting review',async(_label,content,error)=>{
  const {options,result}=setup()
- mock.request.mockResolvedValueOnce(tags).mockResolvedValueOnce({done:true,message:{role:'assistant',tool_calls:['jufe-coverage-2026-10-11','jufe-schedule-2026-10-11'].map(record_id=>({function:{name:'lookup',arguments:{record_id,start_line:1,end_line:1}}}))}}).mockResolvedValueOnce({done:true,message:{role:'assistant',content}})
+ mock.request.mockResolvedValueOnce(tags).mockResolvedValueOnce({done:true,message:{role:'assistant',tool_calls:['jufe-coverage-2026-10-11','jufe-schedule-2026-10-11'].map(record_id=>({function:{name:'lookup',arguments:{record_id,start_line:1,end_line:1}}}))}}).mockResolvedValue({done:true,message:{role:'assistant',content}})
  await launchOllamaResearch(options);expect(await result).toBe(1)
- expect(mock.request).toHaveBeenCalledTimes(3)
+ expect(mock.request).toHaveBeenCalledTimes(_label==='invalid JSON'?3:4)
  const state=JSON.parse(fs.readFileSync(path.join(mock.directory,'state.json'),'utf8'))
  expect(state.stage).toBe('dana');expect(state.error).toContain(error)
  expect(fs.existsSync(path.join(mock.directory,'report.md'))).toBe(false);expect(grants.size()).toBe(0)
