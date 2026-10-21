@@ -1,0 +1,33 @@
+{
+  "originalsVerified": 6,
+  "unchangedFiles": [
+    "src/main/agent/launchRun.ts",
+    "src/main/agent/researchProvider.ts",
+    "src/main/agent/researchScope.ts",
+    "src/main/agent/researchContract.ts",
+    "src/main/agent/grants.ts",
+    "src/main/handlers/runs.ts"
+  ],
+  "savedFailureHashes": {
+    "docs/jufe-route-assessment/claude-selected-routes-live/ui/event-007.json": "54a61521703f057733448dd32d1187632d278afc49a97af9cd2a7cb2e267bab5",
+    "docs/jufe-route-assessment/claude-selected-routes-live/ui/usage.json": "d8200846690f582a1039177099adcc77b8dcd4d983e9ff2044dfb88328570088",
+    "docs/jufe-route-assessment/claude-selected-routes-live/ui/state.json": "f2413bbcb97543b89e61cb15d4fd9c890465a6443b2131ae224908c4a06a2099",
+    "docs/jufe-route-assessment/claude-selected-routes-live/ui/outcome.json": "41d9792d46b7bf4db8934352b8da840e278fb4e48991c72973fb735cfc9d398b",
+    "docs/jufe-route-assessment/claude-selected-routes-live/ui/event-006.json": "83614a583b35f4ebb9d923fa72c729fb7145eb1ae159394db8ca923dc468dfe5",
+    "docs/jufe-route-assessment/claude-selected-routes-live/ui/event-001.json": "e75b76297e4ff7b2c3d1c25499c1fd17ea2bbb55f555d3933ba7865276d7b08c",
+    "docs/jufe-route-assessment/claude-selected-routes-live/ui/input.json": "ff3a2e1a9b65bef3cf9b0acd913d5c4bc3666fb26dece82fda0a2fb17d027ad3",
+    "docs/jufe-route-assessment/claude-selected-routes-live/ui/chosen-routes.png": "340235edd4b026bf10cfb008f09e697f6b8433180facfa006d307f7f3d1fbc6a",
+    "docs/jufe-route-assessment/claude-selected-routes-live/ui/chosen-routes.json": "f4d074794d5708bd09b669c907f62af024cb38089dd187badd138535d758ab60",
+    "docs/jufe-route-assessment/claude-selected-routes-live/ui/event-000.json": "514548bad849536131c29dbe0592030f6c1efba4c91df619ab8e9f2b8266a85e",
+    "docs/jufe-route-assessment/claude-selected-routes-live/ui/event-003.json": "12e3993353ec299458fd6405b26c6fbe14bedb29f02a2b023f67568ff875a002",
+    "docs/jufe-route-assessment/claude-selected-routes-live/ui/ui-result.json": "7c205248280dc09cddcacad730c23dde83bb6029dbcfbedb8b8664c29b3e8ff4",
+    "docs/jufe-route-assessment/claude-selected-routes-live/ui/event-002.json": "1d5b9588760e507a58375c55e81c2a5a2536bada2df9d6027b9c51d490094571",
+    "docs/jufe-route-assessment/claude-selected-routes-live/ui/event-005.json": "80df89d8a5fb810e012dff39db7d8ee8d9fc7abc6088f011d3c2c67cad857c56",
+    "docs/jufe-route-assessment/claude-selected-routes-live/ui/event-004.json": "be456e6cf29124cd6e544e75ef926bc41fcb6be0873879089795cb6da6d6d40d",
+    "docs/jufe-route-assessment/claude-selected-routes-live/ui/handover.md": "e30fbfb7b7f097bb59bf5a99b7e8f8b261f17c8f49e49bb367db36b238d65e41"
+  },
+  "testsPassed": 142,
+  "testFiles": 8,
+  "inferenceCalls": 0,
+  "liveBlock": "unchanged"
+}

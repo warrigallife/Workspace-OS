@@ -8,7 +8,7 @@ function label(value:unknown,known:Set<string>):string {
 export function protocolMetadata(event:any):{type:string;subtype:string} {
   return {type:label(event?.type,types),subtype:label(event?.subtype??event?.request?.subtype,subtypes)}
 }
-export type ProtocolReason = 'malformed_event'|'unsupported_event'|'unsupported_system_event'|'control_or_tool_event_denied'|'invalid_lifecycle_event'|'rate_limit_rejected'|'paid_overage_denied'|'continuation_denied'|'restrictions_mismatch'|'native_tool_action_denied'|'result_without_verified_request'|'incomplete_response'|'invalid_token_usage'|'invalid_lookup_intents'|'invalid_event_or_response_json'|'model_identity_rejected'|'response_size_limit'
+export type ProtocolReason = 'malformed_event'|'unsupported_event'|'unsupported_system_event'|'control_or_tool_event_denied'|'invalid_lifecycle_event'|'rate_limit_rejected'|'paid_overage_denied'|'continuation_denied'|'restrictions_mismatch'|'init_tools_invalid'|'init_tools_not_empty'|'init_mcp_invalid'|'init_mcp_not_empty'|'native_tool_action_denied'|'result_without_verified_request'|'incomplete_response'|'invalid_token_usage'|'invalid_lookup_intents'|'invalid_event_or_response_json'|'model_identity_rejected'|'response_size_limit'
 export class ResearchProtocolError extends Error {
   readonly code='RESEARCH_PROTOCOL_REJECTED'
   constructor(event:unknown,reason:ProtocolReason,identityDiagnostic?:string){

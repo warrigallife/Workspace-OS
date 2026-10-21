@@ -149,10 +149,10 @@ it.each(['success','review-rejection','fabricated-citation','failed-save','ident
  const host=createClaudeResearchDriver({directory:mock.directory,maxBudgetUsd:0.1,launch:()=>{
   const role=children.length===0?'dana':'nora'
   const c=Object.assign(new EventEmitter(),{stdin:new PassThrough(),stdout:new PassThrough(),stderr:new PassThrough(),kill:vi.fn(()=>true)})
-  children.push(c);let initialized=false,streamTurns=0
+  children.push(c);let streamTurns=0
   c.stdin.on('data',(chunk)=>{void(async()=>{
    const req=JSON.parse(JSON.parse(chunk.toString()).message.content);requests.push({role,req})
-   if(!initialized){c.stdout.write(JSON.stringify({type:'system',subtype:'init',model:RESEARCH_ROUTES[role].model,tools:[],mcp_servers:[]})+'\n');initialized=true}
+   c.stdout.write(JSON.stringify({type:'system',subtype:'init',model:RESEARCH_ROUTES[role].model,tools:[],mcp_servers:[]})+'\n')
    if(scenario==='protocol-rejection'){c.stdout.write(JSON.stringify({type:'control_request',request:{subtype:'can_use_tool',input:{secret:'PRIVATE CONTROL CONTENT'}}})+'\n');return}
    if(scenario==='identity-rejection'){c.stdout.write(JSON.stringify({type:'assistant',message:{model:'<synthetic>',content:[{type:'text',text:'PRIVATE HOST ERROR'}]},is_api_error_message:true,api_error_status:403})+'\n');return}
    const session=await scripted.host.open(role,controller.signal),reply=await session.request(req,controller.signal)

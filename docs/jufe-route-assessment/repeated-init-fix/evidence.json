@@ -1,0 +1,18 @@
+{
+  "runId": "bg-mvikmp3b-xric67",
+  "acceptedTurns": 1,
+  "firstInit": {
+    "type": "system",
+    "subtype": "init",
+    "model": "claude-sonnet-5",
+    "tools": [],
+    "mcp_servers": []
+  },
+  "nextRequest": {
+    "role": "dana",
+    "step": 1
+  },
+  "rejection": "Claude protocol rejected: {\"type\":\"system\",\"subtype\":\"init\",\"reason\":\"restrictions_mismatch\"}",
+  "rejectedInitFieldsRetained": false,
+  "conclusion": "initialized was true; the old disjunction short-circuited before testing second-init tool/MCP fields. Repetition was sufficient, actual second-init fields remain unknown."
+}

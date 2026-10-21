@@ -124,3 +124,25 @@ it('does not accept a result without an observed answer identity',async()=>{
  const f=fixture(),s=await f.driver.open('dana',f.controller.signal),p=s.request({messages:[],format:{}},f.controller.signal),assertion=expect(p).rejects.toThrow('result_without_verified_request')
  f.init();f.emit({type:'result',subtype:'success',result:'{}',usage:{input_tokens:1,output_tokens:1}});await assertion
 })
+
+it('accepts revalidated initialization on request two without restarting the session or resetting accounting',async()=>{
+ const f=fixture(),s=await f.driver.open('dana',f.controller.signal)
+ const first=s.request({messages:[],format:{}},f.controller.signal);f.init();f.result('{}');await first
+ const second=s.request({messages:[],format:{}},f.controller.signal);f.init();f.result('{}')
+ expect(await second).toMatchObject({model,inputTokens:10,outputTokens:20})
+ expect(f.launch).toHaveBeenCalledTimes(1);s.close()
+})
+it.each([
+ [{tools:undefined},'init_tools_invalid'],[{tools:{}},'init_tools_invalid'],
+ [{tools:['PRIVATE TOOL']},'init_tools_not_empty'],
+ [{mcp_servers:undefined},'init_mcp_invalid'],[{mcp_servers:{}},'init_mcp_invalid'],
+ [{mcp_servers:['PRIVATE CONNECTOR']},'init_mcp_not_empty'],
+ [{model:'claude-opus-5'},'model_identity_rejected'],
+])('revalidates a later init and preserves safe specific rejection: %j',async(extra,reason)=>{
+ const f=fixture(),s=await f.driver.open('dana',f.controller.signal)
+ const first=s.request({messages:[],format:{}},f.controller.signal);f.init();f.result('{}');await first
+ const second=s.request({messages:[],format:{}},f.controller.signal),assertion=expect(second).rejects.toThrow(reason)
+ f.emit({type:'system',subtype:'init',model,tools:[],mcp_servers:[],...extra});await assertion
+ try{await second}catch(e){expect((e as Error).message).not.toContain('PRIVATE');expect((e as Error).message).toContain('"subtype":"init"')}
+ expect(f.children[0].kill).toHaveBeenCalledWith('SIGTERM')
+})

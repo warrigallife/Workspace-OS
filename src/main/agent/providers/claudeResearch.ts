@@ -67,7 +67,12 @@ export function createClaudeResearchDriver(options:Options):ResearchDriver {
             events.push(event)
             if(event.type==='system'&&event.subtype==='init') {
               requireResearchModel('init',route.model,event.model)
-              if(initialized||!Array.isArray(event.tools)||event.tools.length||!Array.isArray(event.mcp_servers)||event.mcp_servers.length)throw new ResearchProtocolError(event,'restrictions_mismatch')
+              // Init may recur on a later request in the same stream. Revalidate
+              // every declaration; repetition itself does not expand authority.
+              if(!Array.isArray(event.tools))throw new ResearchProtocolError(event,'init_tools_invalid')
+              if(event.tools.length)throw new ResearchProtocolError(event,'init_tools_not_empty')
+              if(!Array.isArray(event.mcp_servers))throw new ResearchProtocolError(event,'init_mcp_invalid')
+              if(event.mcp_servers.length)throw new ResearchProtocolError(event,'init_mcp_not_empty')
               initialized=true
             } else if(event.type==='assistant') {
               checkResearchAssistant(route.model,event)
