@@ -1,0 +1,9 @@
+{
+  "originalCopiesVerified": 9,
+  "testsPassed": 110,
+  "build": "passed; saved build.txt",
+  "typecheck": "baseline passed; 70 known errors",
+  "unapprovedRuns": "blocked; deterministic tests",
+  "liveCalls": 0,
+  "guiApproval": "not exercised"
+}

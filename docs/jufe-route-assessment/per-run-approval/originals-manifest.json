@@ -1,0 +1,47 @@
+[
+  {
+    "original": "src/main/agent/researchProvider.ts",
+    "copy": "docs/jufe-route-assessment/per-run-approval/originals/src/main/agent/researchProvider.ts.snapshot",
+    "sha256": "7e880da1930dbdc8a893270e09b9bffc70ff2058ba5e602be5163a24cd16f8bc"
+  },
+  {
+    "original": "src/main/agent/ollamaResearchRun.ts",
+    "copy": "docs/jufe-route-assessment/per-run-approval/originals/src/main/agent/ollamaResearchRun.ts.snapshot",
+    "sha256": "50a3c75fa7e97107885c684097ea86fa7e51655c547a158823a40fd3db20bb1d"
+  },
+  {
+    "original": "src/main/agent/providers/claudeResearch.ts",
+    "copy": "docs/jufe-route-assessment/per-run-approval/originals/src/main/agent/providers/claudeResearch.ts.snapshot",
+    "sha256": "7f4d4197613c2d412c978c839a0575ce5244fb95f23402ff3bfa99a8a5b21ac5"
+  },
+  {
+    "original": "src/main/handlers/runs.ts",
+    "copy": "docs/jufe-route-assessment/per-run-approval/originals/src/main/handlers/runs.ts.snapshot",
+    "sha256": "b740b2264eb93ae4b7ebe5544b6e2acf663f0acfd4a971571a80106f9125b31c"
+  },
+  {
+    "original": "src/renderer/src/components/Agents/LocalResearch.tsx",
+    "copy": "docs/jufe-route-assessment/per-run-approval/originals/src/renderer/src/components/Agents/LocalResearch.tsx.snapshot",
+    "sha256": "93537228d4a6213d99ef125d16c0cd4f38795beab6c33fa508687cb455ae2cfe"
+  },
+  {
+    "original": "docs/jufe-route-assessment/claude-pair/handover.md",
+    "copy": "docs/jufe-route-assessment/per-run-approval/originals/docs/jufe-route-assessment/claude-pair/handover.md.snapshot",
+    "sha256": "aa698e860684a46bffd65791f58c3ebb2c68217c0aea7d2add794d79a1f56868"
+  },
+  {
+    "original": "docs/local-team/implementation-log.md",
+    "copy": "docs/jufe-route-assessment/per-run-approval/originals/docs/local-team/implementation-log.md.snapshot",
+    "sha256": "645ffcbda710562427f96408c5b5f0756833c81b12e9817590f5edad8ef53804"
+  },
+  {
+    "original": "src/main/agent/providers/claudeResearch.test.ts",
+    "copy": "docs/jufe-route-assessment/per-run-approval/originals/src/main/agent/providers/claudeResearch.test.ts.snapshot",
+    "sha256": "624922f6ede65613c3d733b57250cc15ac46cd02af9896b7caa5ab044aaf2353"
+  },
+  {
+    "original": "src/renderer/tsconfig.json",
+    "copy": "docs/jufe-route-assessment/per-run-approval/originals/src/renderer/tsconfig.json.snapshot",
+    "sha256": "fdbb333f13d433fa63048dea27af2451d47ce9ae8c79d7ba5e3651ea6993bbf6"
+  }
+]

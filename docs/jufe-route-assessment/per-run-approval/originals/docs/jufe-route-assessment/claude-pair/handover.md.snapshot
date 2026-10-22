@@ -1,0 +1,227 @@
+# Restricted Claude → Claude handover — 2026-10-21
+
+Implemented following explicit workflow-only approval. Dana and Nora both select `claude / claude-sonnet-5`; each opens a fresh process/session, with no resume, fallback or shared transcript. This is separate-context review, not provider/model diversity. Global profiles and normal specialist routing are unchanged.
+
+## Connection and boundary
+
+`src/main/agent/providers/claudeResearch.ts` implements streaming JSON transport using the controls already documented in `../native-host-boundary/claude-help.txt` (Claude Code 2.1.267). Both sessions disable native tools (`--tools ''`), ambient customizations (`--safe-mode`, empty settings sources, disabled slash commands), and MCP connections (strict empty configuration). Restricted mode, no Chrome and no session persistence are explicit. The child environment is constructed without inherited cloud keys, bridge tokens, connector variables or proxy overrides. Existing Claude authentication is not modified.
+
+Lookup intents are returned as JSON text and dispatched only by the existing coordinator through its exact grants. Final JSON still passes the existing save handler, source/quotation checks and independent review gate. Only approved staging outputs can be saved. The adapter rejects unexpected native tool/control events, nonempty initialized tools/connectors, model substitution, missing usage, malformed lookup output, truncation, oversized responses and interrupted sessions. Cancellation closes the process and escalates termination after two seconds. Normalized successful replies retain native event evidence in existing event records.
+
+Existing action/step/deadline/context/token budgets remain unchanged. An explicit future dollar cap is required and divided equally between sessions using documented `--max-budget-usd`; test values are synthetic, not authorization. Token accounting remains the coordinator's post-response ceiling, not a promise that a provider can never overshoot a token ceiling within one response.
+
+## Verified scope
+
+- 99 deterministic tests in 11 files passed, including the new stream transport and end-to-end adapter/coordinator fixtures for success, rejection, fabricated quotation and failed handover save. Existing queue interruption, cancellation, failed-save, grant and citation regressions passed.
+- 75 additional Liam–Ada tests in two files passed. Total: **174 tests / 13 files**.
+- Build passed. Typecheck: no new errors (70 known; baseline 75, unchanged). `git diff --check` passed.
+- Six preserved originals verified by SHA-256. Seven protected inputs (scope, contract, grants, permission definitions and Dana/Nora/Liam profiles) hash-identical.
+- Zero live provider sessions, inference calls or research-content transmissions. No downloads, global permission/profile edits or pushes.
+
+## Blocked / exact next action
+
+Live execution is deliberately blocked both at the production research entrypoint and at the adapter's default launcher with `RESEARCH_LIVE_NOT_APPROVED`. There is no UI, queue, environment or IPC unlock. Only trusted test injection can exercise the transport today. The pinned installed binary path is dormant; this work did not start it.
+
+Deterministic tests establish our protocol handling and coordinator boundaries, not actual host behavior, model availability, authentication, spending or semantic review quality. The saved control documentation supports the requested flags; installed runtime compatibility and exact model identity remain to be verified live. No alternative model is selected if unavailable.
+
+Next action: obtain explicit approval for one bounded Claude → Claude UI test, transmission of the two already-approved records, and a numeric total USD ceiling. Then add the narrowly scoped live authorization connection, confirm the pinned host and exact model without substitutions, and perform that single test. Fail closed if the host cannot meet the controls or exact model. Do not present this checkpoint as a working live research team.
+
+Recovery: `originals/manifest.json` identifies preserved pre-change files and hashes; `preservation-verification.json` records verification. Earlier checkpoints and failure evidence remain intact. Restore individual originals only if needed; do not overwrite later user work.
+
+
+## 2026-10-21 — Authentication discovery correction
+
+The restricted child environment now preserves `USER` alongside its four existing variables. No other environment inclusion or restriction changed. Normal Workspace OS inherits this metadata; the restricted adapter previously omitted it. Both executable paths resolve to the same Claude Code binary. Metadata-only comparisons established that adding USER alone restores discovery of the existing account; adding LOGNAME alone did not. Earlier unauthenticated results described the restricted environment, not the user's normal Claude account.
+
+Verified after the fix using `claude auth status --json` outside the sandbox with the exact restricted environment: loggedIn=true, authMethod=claude.ai, apiProvider=firstParty, subscriptionType=pro. Saved evidence contains only those status fields and environment variable names. No inference, credential or billing changes occurred. This establishes authentication discovery, not model entitlement, paid-extra-usage settings or end-to-end inference compatibility.
+
+68 focused deterministic tests passed across six files, including the exact environment allowlist, separate sessions, native tool rejection, cancellation, failed saves, grant/source checks and production live gate. Four pre-change originals were SHA-256 verified in [recovery evidence](../claude-user-auth/manifest.json). See [status metadata](../claude-user-auth/auth-status.json) and [test results](../claude-user-auth/tests.txt).
+
+Live inference remains blocked. Before any live UI test, confirm exact model entitlement and billing controls and obtain specific content/spending approval. Correction to the prior spending wording: `--max-budget-usd` is a client-estimated stop threshold, not a guaranteed invoice ceiling; Anthropic documents possible overshoot (https://code.claude.com/docs/en/cli-reference). No new ceiling or billing setting is approved by this authentication fix.
+
+
+## 2026-10-21 — Single approved subscription-only UI verification failed
+
+Run `bg-mvhme2ov-p65r04` failed in Dana's first response with `Claude model substitution`. No accepted response, retrieval, draft or Nora review. The offending native model identifier was not retained by the failure path, so an identifier mismatch versus actual substitution cannot be distinguished from saved evidence. No retries or model substitutions were initiated. Subscription credits remained off per user confirmation; no billing/credential changes. Token/cost usage is unverified.
+
+The UI used the existing local app/data directory and displayed the failure handover; reports and checked prior failures were unchanged. Run checkpoint: `9894f5b86720af2667920ca160ddb0c980de322a`. Temporary one-use routing was restored to the prior live-blocked source after the attempt. Detailed evidence and recovery copies: `docs/jufe-route-assessment/claude-live-once/` (including `handover.md`). Stopped after this one attempt.
+
+
+## 2026-10-21 — Deterministic model-identity diagnostics
+
+Installed Claude Code 2.1.267 inspection confirms full IDs and configurable short aliases are distinct, and host-generated assistant/API-error messages can report `<synthetic>`. The old adapter mislabelled that sentinel as substitution. No evidence establishes that this caused the c66a79d failure; its native event remains unavailable.
+
+Exact approved `claude-sonnet-5` matching remains required. No alias/date/suffix normalization or fallback was added. Synthetic/error messages fail with accurate classifications, and sanitized bounded requested/returned IDs plus safe HTTP status now survive in state/outcome/handover. Missing identity also fails closed. Arbitrary error bodies and unsafe model strings are excluded.
+
+66 deterministic tests passed across four files; build passed; no new typecheck errors (70 known /75 baseline). Five originals hash-verified. Live execution remains blocked; no calls or workflow repeat. Evidence: `docs/jufe-route-assessment/claude-model-identity/handover.md`, installed-contract excerpts, tests and recovery manifest.
+
+
+## 2026-10-21 — Further approved attempt stopped before inference
+
+From 8e3a940, the required preflight reported loggedIn=false / authMethod=none / firstParty / no subscription type in the restricted environment including USER, outside the sandbox. Required Claude Pro subscription-only execution could not be confirmed. Stopped before UI submission, inference or research transmission; no retry. Prior successful auth and the user's credits-off/zero-balance confirmation remain evidence, but do not override this failed preflight. Cause not diagnosed.
+
+Live block remained unchanged, corrected identity diagnostics preserved, no runtime/credential/billing changes. Saved result and recovery copies: `docs/jufe-route-assessment/claude-live-identity-preflight/`. No automatic pending attempt.
+
+
+## 2026-10-21 — Approved UI attempt after sign-in stopped on protocol event
+
+Run `bg-mvhn6ipe-w74jo5` failed in Dana's first request: `Unexpected Claude protocol/control event`. No accepted response, retrieval, draft or Nora review. The generic failure path did not retain event type/body, so further cause is unproven; no retry was made. Corrected identity diagnostics remained intact. UI result/handover displayed; source reports and checked prior failures unchanged. Run checkpoint `ad65b230d9b1e7f501ba94cd30f97a4b0101a591`.
+
+Before launch, 63 deterministic tests passed; typecheck had no new errors. Eight originals hash-verified; temporary runtime/UI routing restored and live-blocked app rebuilt. No billing/credential changes, automatic retries or alternate model selected. Usage totals unverified. Saved evidence: `docs/jufe-route-assessment/claude-live-after-signin/handover.md` and adjacent files. Stopped after one submission.
+
+
+## 2026-10-21 — Deterministic Claude protocol classification and rejection evidence
+
+Static installed-contract inspection confirms explicit non-action lifecycle events; the old adapter rejected non-system notices indiscriminately and silently ignored all system subtypes. Added narrow lifecycle handling (heartbeat, validated status/informational and allowed non-overage rate-limit notices). Controls/tools, unsupported system events, fallback/permission changes, blocked rate limits and active paid overage remain rejected. No grants, model policy, sources or budgets broadened.
+
+Rejections now persist sanitized event type/subtype and fixed reason; corrected model-identity diagnostics retained. Event bodies, credentials/research content and JSON parser excerpts are excluded. The event behind 0eb5708 **cannot be reconstructed** from existing evidence; no live cause is claimed. 108 deterministic tests in five files passed; build passed; no new typecheck errors (70 known /75 baseline). Five originals hash-verified. No calls or UI retry; live block unchanged. See `docs/jufe-route-assessment/claude-protocol-events/handover.md` and evidence.
+
+
+## 2026-10-21 — Single UI attempt from 7062aa9 rejected mixed-model usage
+
+Run `bg-mvhxrby3-v7n62j` stopped on sanitized diagnostic: type=result, subtype=success, reason=model_identity_rejected, phase=result-modelUsage; requested claude-sonnet-5; returned usage IDs claude-haiku-4-5-20251001 and claude-sonnet-5. No alternate model selected by the application. Ancillary host use versus task-generation substitution is not established; no further calls or retry. No accepted lookup/draft or Nora review.
+
+Pro authentication confirmed before submission; no billing/credential changes. Actual UI displayed the failed handover. Run checkpoint `fc419a91ab43797e74c29061a1a7c356be1c1904`. Reports and checked prior failures unchanged. 105 deterministic preflight tests passed; typecheck no new errors. Eight originals hash-verified; live-blocked source restored and rebuilt. Evidence: `docs/jufe-route-assessment/claude-live-protocol-check/handover.md` and adjacent files. Stopped after one submission; no push.
+
+
+## 2026-10-22 — Per-run Claude/Ollama research routes (deterministic only)
+
+Supersedes the pending Sonnet-only proposal. Dana and Nora now each have an explicit provider/model selection, snapshotted in the queue and saved outcome. Exact initialization/answer identity follows the selection. Additional aggregate usage is disclosed as unattributed in evidence, handover and result display, with cumulative deltas preventing double-counting. Malformed required accounting still fails closed. Only installed local GGUF metadata is accepted for Ollama; no subscription requirement on local-only runs. Llama 3.2 is not research-qualified.
+
+257 deterministic tests /18 files passed, production build passed, typecheck no new errors (70 known /75 baseline). Original snapshots: 16/16 hash verified. Approved sources, grants, review/citation/persistence gates, profiles, Liam–Ada and normal launch path preserved. All cloud/mixed runs remain blocked before any stage; no live calls, model availability claims or UI inference verification. Subscription-only/credits-off, model-access and approved spending prerequisites remain for cloud. Full implementation/limitations/recovery: [per-run route handover](../per-run-routes/handover.md).
+
+
+## 2026-10-22 — One selected-route Claude Pro UI attempt from fe8ada6
+
+Authentication metadata confirmed Pro; reused the recorded two-report/subscription-only approval, credits-off confirmation and existing bounds. Selected Dana and Nora as Claude / claude-sonnet-5 in the configurable UI; no fixed-model policy, fallback or retries. Run `bg-mvikmp3b-xric67` failed in Dana after one accepted response and both report lookups (lines 1–80): `system/init/restrictions_mismatch` on the following request. No draft or Nora review. First accepted init had empty tools/MCP; repeated-init rejection is possible, but rejected fields are unavailable, so actual restriction drift is not established.
+
+Additional Haiku aggregate usage was disclosed as unattributed. Accepted accounting totals: 3,405 input /97 output, estimated $0.009613; not billing proof or a complete total for rejected processing. Actual UI displayed failure handover. Source reports and seven earlier failed runs unchanged. 131 preflight tests and 66 restored boundary tests passed; typecheck no new errors. Eight originals verified, six runtime files restored byte-for-byte; live block rebuilt and one-use marker retained. No further calls. Evidence and specific next action: [selected-route UI handover](../claude-selected-routes-live/handover.md).
+
+
+## 2026-10-22 — Repeated-init defect corrected deterministically
+
+From 5b07a7b: first init accepted, then second-request init necessarily hit the old `initialized || ...` rejection before tools/MCP declarations could be checked. This is a demonstrated false rejection; actual rejected declarations are unavailable, so no claim that they were empty or that live success is assured. The working launcher does not reject repeated init but uses one-shot stdin / resume; importing its broader launch environment would violate this boundary. Existing restricted stream transport retained.
+
+Every init now revalidates the selected model and empty tool/MCP arrays; repetition alone is accepted. Missing/malformed and nonempty declarations receive distinct safe reasons. All access/control/billing/citation/review gates and the live block remain. 142 deterministic tests /8 files passed, build passed, no new typecheck errors (70 known /75 baseline). Six originals hash-verified; prior failure preserved. No calls or retries. [Diagnosis, evidence and recovery](../repeated-init-fix/handover.md).
+
+
+## 2026-10-22 — Single UI verification after repeated-init repair
+
+From 9ed5b37, auth metadata confirmed Claude Pro. One approved UI submission with selected Claude / claude-sonnet-5 for Dana and Nora, recorded two-report and subscription-only bounds. Run `bg-mvimbs76-yofh6q` failed after one accepted response and both report lookups (1–80): `system / <redacted-unrecognized> / unsupported_system_event`. Raw subtype unavailable; no cause inferred. No draft or Nora review. UI failure handover displayed; stopped without retry or another repair cycle.
+
+Six originals verified, four runtime/UI files restored byte-for-byte and live-blocked app rebuilt. Reports and eight checked earlier failures unchanged. Passed tests not repeated. No purchases, credits, fallback or broader access. [Saved outcome and sanitized diagnostics](../claude-reinit-live/handover.md).
+
+
+## 2026-10-22 — Bounded unknown-subtype diagnostics
+
+Diagnostic-only fix: safe lowercase snake-case subtype identifiers up to 64 characters now survive rejection; malformed, oversized and free-text values stay redacted, with no payload copied. Unknown events still stop; classifier and all access/live-block checks unchanged. Installed Claude contract was statically checked and the existing launcher compared; no new transport. The original bg-mvimbs76-yofh6q event cannot be recovered, and no identity is guessed. Live compatibility remains unverified.
+
+132 focused deterministic tests passed, build passed, no new typecheck errors. Five originals hash-verified. No live calls or permission changes. [Evidence and handover](../subtype-diagnostics/handover.md).
+
+
+## 2026-10-22 — One UI attempt with safe subtype diagnostics
+
+From 061c10a, restricted-environment auth confirmed Claude Pro. Selected Claude / claude-sonnet-5 for Dana and Nora under the recorded two-report/subscription-only bounds. Run `bg-mvip8uzc-elb3nt` failed after two accepted Dana responses: `Structured finalisation rejected: save.findings[0].citation.quote: must match source verbatim`. No accepted draft or Nora review. Actual UI displayed the failure handover. No protocol-event rejection in this attempt; earlier subtype remains unknown. No retry or repair cycle.
+
+Result, raw accepted responses, usage and diagnostics saved. Reports and nine checked prior failed runs unchanged. Six originals hash-verified; four runtime/UI files restored byte-for-byte and live-blocked app rebuilt. No permanent code changes, billing changes or broader access. [Saved outcome and recovery](../claude-subtype-live/handover.md).
+
+
+## 2026-10-22 — One bounded Dana draft-validation correction
+
+From 0b115b3: Dana may correct one invalid structured draft using exact validation feedback and already-retrieved passages. Original/corrected submissions preserved separately; both pass through unchanged validation/grants. Second failure stops; Nora reviews only a valid draft. Same session, token/action/step/time/spending budgets; no reviewer correction, source expansion or fresh-session retry. Permission/source/save/provider failures remain immediate stops.
+
+159 deterministic tests /7 files passed, including corrected quote, persistent/unsupported citations, cancellation, deadline and exhausted budgets; build passed; no new typecheck errors. Five originals verified. Live execution still blocked, no calls made. [Implementation/recovery](../draft-correction/handover.md) and [prepared single UI test awaiting explicit approval](../draft-correction/live-test-preparation.md).
+
+
+## 2026-10-22 — Approved single bounded-correction UI test
+
+From 2a2bbe9, Claude Pro auth confirmed; selected Dana/Nora Claude / claude-sonnet-5 under existing two-report/subscription-only terms. Run `bg-mviq1kty-xiujnx`: original quote rejected, one correction requested and returned, then `Research token budget exceeded` at 49,519 accounted tokens against unchanged 24,000 limit. Third response saved but corrected draft not validated/accepted; no Nora review. Original and returned unvalidated correction, usage, exact failure and UI handover preserved. No further retries or repair.
+
+Six originals verified; four runtime/UI files restored byte-for-byte and live block rebuilt. Reports and ten checked earlier failures unchanged. No broader access or billing changes. [Saved outcome and recovery](../claude-correction-live/handover.md).
+
+
+## 2026-10-22 — Incremental Claude requests; complete local transcripts
+
+Completed usage diagnosis showed correct accounting but repeated context. Persistent Claude roles now send only new messages and changed metadata after the initial request, rejecting changed history. Finalisation instructions stay once in local history; correction feedback uses exact errors and prior lookup references without copying passages/draft again. Complete local transcripts and both draft attempts remain preserved; actual wire payloads recorded on successful responses. Nora remains independent; stateless Ollama still gets full history.
+
+257 deterministic tests /12 files passed, including three-turn transport/correction/review and retained safety boundaries; build passed; no new typecheck errors. Six originals verified. Validation, permissions, budgets, usage accounting and live block unchanged. No live calls; actual token savings/live compatibility unverified. [Implementation, tests and recovery](../incremental-claude-requests/handover.md).
+
+
+## 2026-10-22 — Single incremental-context UI attempt
+
+From 039ca48, Claude Pro auth confirmed and existing routes/scope/subscription-only limits reused. Run `bg-mviqojx1-tm4ont`: Dana draft passed application validation without correction; Nora then stopped on `system / thinking_tokens / unsupported_system_event`. No accepted Nora review or completed report. Actual UI displayed failure handover. Dana accepted usage 15,579 tokens; Nora usage unknown because no accepted accounting returned. Per-stage usage and full/incremental transcripts saved. No retry or repair.
+
+Six originals verified; four runtime/UI files restored byte-for-byte and live-blocked app rebuilt. Sources and eleven checked earlier failures unchanged. Budgets, permissions and selected routes unchanged. [Saved result, per-stage usage and recovery](../claude-incremental-live/handover.md).
+
+
+## 2026-10-22 — Supported system/thinking_tokens notice
+
+Installed schema and producer establish this as approximate thinking-progress metadata, explicitly not authoritative billed output. Narrow lifecycle handling accepts well-formed estimate fields; malformed/action-bearing events still stop. Notices never count as research answers, execute tools or contribute usage. Sanitized type/subtype only retained; all access, review and budget checks/live block unchanged. Historical event payload remains unavailable.
+
+160 focused deterministic tests passed, build passed, no new typecheck errors; five originals hash-verified. No live calls; live compatibility unverified. [Contract evidence, tests and recovery](../thinking-token-notice/handover.md).
+
+
+## 2026-10-22 — One UI attempt after thinking-notice handling
+
+From f197922, Claude Pro auth confirmed; existing two-report/selected-route/subscription-only approval reused. Run `bg-mviqvk8b-utpn8m`: Dana draft passed without correction; Nora retrieved evidence and returned a response, then unchanged run budget stopped validation/save at 32,045 tokens versus 24,000. Dana 15,527; Nora 16,518. No accepted review or completed report. No protocol rejection in this attempt; UI failure handover displayed. Raw returned review preserved as unvalidated. No retry or repair.
+
+Per-stage accounting and diagnostics saved. Six originals verified; four runtime/UI files restored byte-for-byte and live-blocked app rebuilt. Sources and twelve checked prior failures unchanged. No billing/permission/budget changes. [Saved outcome, usage and recovery](../claude-thinking-live/handover.md).
+
+
+## 2026-10-22 — Recovered useful output from 3094397
+
+Saved recovered-report.md and recovered-handover.md in the approved staging directory for bg-mviqvk8b-utpn8m, labelled “Recovered from an over-budget run; draft and review passed validation.” Rendered from the preserved validated draft/review, with dated limitations and no scientific-proof or workflow-success claim. Original failed status, handover, raw responses and usage remain byte-identical; recovered copies hash-verified.
+
+Existing result interface displays the fixed recovery filenames without changing failure/completion rules. Actual UI verified both artifacts and unchanged queue error, zero new jobs/inference. 49 tests passed; no new typecheck errors. Live block unchanged. [Recovery evidence and instructions](../recovered-overbudget-output/handover.md).
+
+
+## 2026-10-22 — Recovered output and installed Qwen; benchmark pending
+
+Checkpoint 46823db preserves recovered-report.md and recovered-handover.md for bg-mviqvk8b-utpn8m and verifies their display through Workspace OS. Original over-budget failure remains unchanged; offline draft/review validation does not mark automatic completion or independently prove scientific claims. Working capabilities include restricted retrieval, selected Claude routes, incremental requests, draft validation, separate reviewer execution, saved usage/evidence and recovery display. End-to-end automatic completion under the unchanged token budget remains unresolved (32,045 accounted versus 24,000); no completion claim.
+
+Confirmed installed local model: `qwen2.5:7b-instruct-q4_K_M`, ID `845dbda0ea48`, 4.7 GB (4,683,087,332 bytes), GGUF Q4_K_M. Installation is not model-capability or coordination proof. Memory checked first: 18 GiB RAM, 40% memory-pressure free, approximately 5.6 GB swap used; no Ollama model loaded, 237 GiB disk available. The frozen four-call component benchmark is prepared separately, no retries/cloud/downloads; expected generation answers and review verdicts withheld. Results will be appended without altering earlier entries.
+
+
+## 2026-10-22 — Qwen frozen benchmark complete: not suitable for unattended workflow
+
+`qwen2.5:7b-instruct-q4_K_M` (845dbda0ea48, 4.7 GB) completed exactly four local calls, no retries/cloud/downloads. Frozen requests matched baseline apart from model; expected generation answers and review verdicts withheld, source hashes unchanged. Dana: three findings/both records, but 0/3 verbatim quotes; two quotes exceed the concise-excerpt instruction. Nora: quotation decisions 4/6, semantic verdicts 4/6, supported accepted 1/3, unsupported rejected 3/3, false acceptances 0. Both roles fail the frozen all-criteria standard. Raw outputs, scoring and manual semantic assessment preserved separately.
+
+Installation/local execution confirmed, research qualification and end-to-end coordination not established. Recovered report at 46823db remains useful with its failure label; automatic completion/token-budget issue remains unresolved. One next action: evaluate a different locally runnable model against the same frozen benchmark before further local-team integration, separately approving any acquisition. Four-call budget exhausted; no prompt experiments continued. [Qwen assessment and evidence](../qwen-role-evaluation/assessment.md).
+
+
+## 2026-10-22 — Trusted quotation extraction from saved snapshots
+
+Dana selects only a retrieved record ID and inclusive line span; trusted code supplies quotation text from hashed per-run source snapshots. Original and snapshot integrity, receipt containment, both-record retrieval, grant/workspace/token checks, quotation limits and Nora's independent semantic review gate remain enforced. Raw selections are preserved separately from the resolved draft. Injected quotes, invented IDs, inaccessible ranges and altered/missing sources fail closed. No provider calls, changed permissions or budgets.
+
+170 deterministic Electron tests passed across 11 suites; build and baseline typecheck passed. Qwen's failed benchmark is unchanged and does not qualify it as a semantic reviewer. Quotation correctness does not establish claim support; automatic completion/token-budget issue and live verification remain unresolved. Next action: review the deterministic evidence before any separately authorised bounded live verification. [Change, limits and verification](../trusted-quotations/handover.md).
+
+
+## 2026-10-22 — Evidence-backed request context reduction; 24,000-token completion unproven
+
+Used the saved 32,045-token run (Dana 15,527; Nora 16,518). Replaced full general-purpose personas plus overrides with compact run-specific instructions while retaining full profiles in local evidence. Removed duplicated finalisation schema prose; structure remains in format and all field bounds remain in prose/application validation. Nora starts with exact trusted citation spans and may retrieve wider context whenever needed; no evidence truncation or weakened independent review. Quotation selection, source integrity, grants, routes, budgets and live block unchanged.
+
+61 focused deterministic tests passed, including unchanged shared budget boundaries at 23,999 / 24,000 / 24,001 and multi-turn request construction. Baseline typecheck passes. Instruction reduction: 5,935 weighted characters, roughly 1,187–1,978 tokens under a 3–5 characters/token assumption. Conditional narrower Nora reads project 25,541–28,142 total, optimistically excluding increased full-line quote context and further reads/corrections. Evidence does NOT justify fitting within 24,000 or claim automatic completion/reviewer reserve. Next action: decide on a smaller substantive task/evidence scope before another live attempt; no such scope change implemented. Original failed run, Qwen benchmark and recovery remain unchanged. [Evidence, assumptions and verification](../context-reduction/handover.md).
+
+
+## 2026-10-22 — Existing executor comparison; no replacement integration justified
+
+Traced existing Run dispatch/permissions, installed Agentic Kit supervised dependencies/structured handoffs, and downloaded CoWork-OS tool execution, access policies and durable handoffs using saved inventory paths. Both external projects contain actual execution code (MIT), but neither inspected path is a drop-in for approved stable IDs, hash-checked snapshots, independent retrieval/review and shared accounting. Workspace OS already connects the queue, separate stages, grants, Ruflo ledger and result display; ordinary Safe native tools are broader than this task. No missing handoff wire was demonstrated. Remaining gap: verified completion with adequate semantic review inside 24,000 tokens, not task tracking. No runtime changes or new framework. Reused existing deterministic results; no model calls or repeated suite runs. Next action: agree a smaller substantive task/evidence scope before a separately approved live attempt. [Single comparison handover and code evidence](../existing-executor-comparison/handover.md).
+
+
+## 2026-10-22 — Pre-call reviewer reserve and visible partial results
+
+Added evidence-derived pre-call checks: reserve 16,518 tokens while Dana runs and require that remaining capacity before Nora begins; estimate requests using full context bytes, observed input floors/previous input and the existing output allowance. All calls/corrections retain the shared 24,000 actual-usage cap, configurable routes and existing access/review checks. This is planning, not a guaranteed provider ceiling; complete-task fit remains unproven. Further prompt compaction measured 592 bytes removed across four saved full-context envelopes, not verified live token savings. Failed runs display saved validated draft/usage with an explicit incomplete-review label; no success promotion. Originals verified. 59 focused tests passed plus final five-test reserve check; baseline typecheck passed. No inference or budget increase. [Concise handover, evidence and limits](../cost-controls/handover.md).
+
+
+## 2026-10-22 — Same-question hash-bound excerpt plan
+
+Trusted grant-backed retrieval supplies coverage 47–59 and schedule 58–73 before Dana generation; Nora separately retrieves these complete support passages and every extra cited span. Removes two lookup-only model turns without changing RESEARCH_TASK, citations, source integrity or semantic review. Different questions/revisions retain existing retrieval. Insufficient context must be labelled/rejected; selected excerpts are not exhaustive.
+
+Offline request envelopes: 55,763 → 24,260 bytes versus saved historical requests (31,503 fewer). Conditional forecast 16,301–19,296 tokens; with illustrative 2,048 contingency, 18,349–21,344. Live savings unverified. Explicit plan-specific allocation: 12,000 reserved for Nora, at least 10,000 estimated per request; other tasks retain 16,518 reserve. Shared actual limit unchanged at 24,000. Plausible fit only without unexpected host cost, correction or further evidence needs; no completion/model-qualification claim. 60 focused tests and baseline typecheck passed, originals hash-verified; no live calls. [Single handover and reproducible estimate](../planned-excerpts/handover.md).
+
+
+## 2026-10-22 — Reduced-context live UI run completed; 169-token margin
+
+One approved subscription-only UI attempt from 99915f0: bg-mvjgjpy9-2rgs1f completed with Dana/Nora selected Claude / claude-sonnet-5. Restricted auth confirmed Pro; recorded credits-off approval reused (auth is not a billing-setting check). Two responses, no correction/retry. Dana 11,663 tokens; Nora 12,168; total 23,831 / 24,000. Estimated USD 0.082489, not an invoice; additional aggregate model usage purpose remains unattributed. Actual usage exceeds forecast and leaves only 169 tokens, so no claim of robust spare capacity.
+
+Draft validation, separate retrieval, Nora approval and automatic report/handover saves succeeded. Report did not open automatically; existing View research report and handover displayed it successfully. Three citations/source hashes verified, prior runs preserved. Source app and existing app-data route verified. Live block restored, temporary activation removed, consumed marker retained and blocked app rebuilt. No roster expansion or further attempt. [Result, usage, restoration and exact view clicks](../planned-excerpts-live/handover.md).

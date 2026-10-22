@@ -1,5 +1,6 @@
+import {claimResearchApproval,researchApprovalReceipt} from './researchApproval'
 import { createClaudeResearchDriver } from './providers/claudeResearch'
-import { selectedResearchRoutes, hasCloudRoute, RESEARCH_BUDGET, assertRestrictedLiveApproved, withResearchAbort, validateRestriction, type ResearchDriver, type ResearchSession } from './researchProvider'
+import { selectedResearchRoutes, hasCloudRoute, RESEARCH_BUDGET, withResearchAbort, validateRestriction, type ResearchDriver, type ResearchSession } from './researchProvider'
 import { researchLedger, type ResearchLedger } from './researchLedger'
 import { plannedResearchExcerpts } from './researchExcerpts'
 import { researchCostPlan } from './researchCost'
@@ -21,9 +22,9 @@ export const RESEARCH_TASK='Identify outstanding research work recorded in the t
 export async function launchOllamaResearch(o:LaunchRunOptions):Promise<{child:ChildProcess;checkpointId:string|null}> {
   const routes=selectedResearchRoutes(o.research)
   // A mixed run is also a cloud run: approval must precede even its local stage.
-  if(hasCloudRoute(routes))assertRestrictedLiveApproved()
+  const livePermit=claimResearchApproval(o.research?.approvalId,o.runId,{routes,workspace:RESEARCH_ROOT,task:o.research?.task??RESEARCH_TASK})
   const local=createOllamaResearchDriver(routes)
-  const cloud=createClaudeResearchDriver({directory:runDirectory(o.runId),routes})
+  const cloud=createClaudeResearchDriver({directory:runDirectory(o.runId),routes,maxBudgetUsd:1,livePermit})
   const driver:ResearchDriver={kind:hasCloudRoute(routes)?'restricted-hosts':'ollama-local',routes,
     async preflight(signal){
       if(hasCloudRoute(routes))await cloud.preflight(signal)
@@ -45,6 +46,7 @@ export async function launchResearchWithDriver(o:LaunchRunOptions, driver:Resear
   if (getWorkspaceRoot()!==RESEARCH_ROOT) throw new Error('Open the approved local workspace before running research')
   const dir=runDirectory(o.runId);fs.mkdirSync(path.dirname(dir),{recursive:true});fs.mkdirSync(dir,{mode:0o700})
   const scope=new ResearchScope(dir),controller=new AbortController()
+  const approval=researchApprovalReceipt(o.runId);if(approval)scope.write('approval.json',approval)
   // Existing callers only need a cancellable ChildProcess handle; no executable is spawned.
   const sessions=new Set<ResearchSession>()
   const child=new ChildProcess();child.kill=()=>{controller.abort();scope.active=false;for(const role of ['dana','nora'])grants.revoke(o.runId+':'+role);for(const session of sessions){try{session.close()}catch{/* cancellation remains authoritative */}}return true}

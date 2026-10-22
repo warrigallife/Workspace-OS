@@ -27,7 +27,7 @@ it('uses separate fresh restricted sessions, explicit caps, sanitized environmen
   expect(args).toEqual(expect.arrayContaining(['--tools','','--safe-mode','--strict-mcp-config','--no-session-persistence','--max-budget-usd','0.05']))
   expect(args).not.toContain('--resume');expect(args).not.toContain('--fallback-model')
   expect(opts.env.USER).toBe(process.env.USER)
-  expect(Object.keys(opts.env).sort()).toEqual(['CLAUDE_CODE_MAX_OUTPUT_TOKENS','HOME','LANG','PATH','USER'])
+  expect(Object.keys(opts.env).sort()).toEqual(['CLAUDE_CODE_MAX_OUTPUT_TOKENS','CLAUDE_CODE_MAX_RETRIES','HOME','LANG','PATH','USER'])
  }
  expect(a.receipt).toEqual(b.receipt)
  await expect(f.driver.open('dana',f.controller.signal)).rejects.toThrow('already opened')

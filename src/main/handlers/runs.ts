@@ -1,8 +1,10 @@
-import { selectedResearchRoutes, hasCloudRoute, assertRestrictedLiveApproved, type ResearchOptions } from '../agent/researchProvider'
+import {approveResearchRun,revokeResearchApproval} from '../agent/researchApproval'
+import {researchApprovalText} from '../../shared/researchApproval'
+import { selectedResearchRoutes, hasCloudRoute, type ResearchOptions } from '../agent/researchProvider'
 import { readResearchResult } from '../agent/researchResult'
 import { RESEARCH_TASK } from '../agent/ollamaResearchRun'
 import { RESEARCH_ROOT, runDirectory } from '../agent/researchScope'
-import { app, type IpcMain } from 'electron'
+import { app, dialog, type IpcMain } from 'electron'
 import path from 'path'
 import { IPC } from '../ipc-channels'
 import { ipcHandle } from '../ipc-registry'
@@ -124,7 +126,8 @@ export function shutdownRunQueue(): void {
 }
 
 export function registerRunsHandlers(ipcMain: IpcMain): void {
-  ipcHandle(ipcMain, IPC.RESEARCH_ENQUEUE, (event, previousId?: unknown, selection?:unknown) => {
+  let approvingResearch=false
+  ipcHandle(ipcMain, IPC.RESEARCH_ENQUEUE, async (event, previousId?: unknown, selection?:unknown) => {
     assertMainFrame(event)
     if (getWorkspaceRoot()!==RESEARCH_ROOT) throw new Error('Open the approved local workspace')
     if (getQueue().list().some(j=>j.research && ['running','queued'].includes(j.status))) throw new Error('Wait for the active research run')
@@ -139,8 +142,16 @@ export function registerRunsHandlers(ipcMain: IpcMain): void {
       recoveredFrom=old.id
     }
     const routes=selectedResearchRoutes(previous??(selection===undefined?{}:{routes:selection as any}))
-    if(hasCloudRoute(routes))assertRestrictedLiveApproved()
-    return getQueue().enqueue({prompt:RESEARCH_TASK,label:'JUFE local research: Dana → Nora',agentName:'Dana — JUFE Runtime Keeper',root:RESEARCH_ROOT,capabilities:[],research:{recoveredFrom,routes}})
+    if(approvingResearch)throw new Error('Research approval already open')
+    approvingResearch=true
+    try {
+      const cloud=hasCloudRoute(routes)
+      const answer=await dialog.showMessageBox({type:'question',title:'Approve one JUFE research run',message:'Confirm these routes, evidence and limits',detail:researchApprovalText(routes),buttons:['Cancel','Approve this run'],defaultId:0,cancelId:0,noLink:true,...(cloud?{checkboxLabel:'I confirm Claude Pro subscription only and usage credits OFF; no paid fallback.',checkboxChecked:false}:{})})
+      if(answer.response!==1||(cloud&&!answer.checkboxChecked))throw new Error('Research not approved; no run started')
+      if(getWorkspaceRoot()!==RESEARCH_ROOT||getQueue().list().some(j=>j.research&&['running','queued'].includes(j.status)))throw new Error('Workspace or active run changed; approve again')
+      const approvalId=approveResearchRun({routes,workspace:RESEARCH_ROOT,task:RESEARCH_TASK})
+      try{return getQueue().enqueue({prompt:RESEARCH_TASK,label:'JUFE local research: Dana → Nora',agentName:'Dana — JUFE Runtime Keeper',root:RESEARCH_ROOT,capabilities:[],research:{recoveredFrom,routes,approvalId}})}catch(e){revokeResearchApproval(approvalId);throw e}
+    }finally{approvingResearch=false}
   })
   ipcHandle(ipcMain, IPC.RESEARCH_RESULT, (event,id: unknown) => {
     assertMainFrame(event)

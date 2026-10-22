@@ -3,8 +3,10 @@ export { snapshotResearchRoutes, hasCloudRoute, LOCAL_RESEARCH_ROUTES }
 export type { ResearchRoutes, ResearchRoute, ResearchRole }
 /** Research stages are app-coordinated, not ordinary specialist Run launches.
  * Native provider tools must be absent; only returned action data reaches grants.
- * No renderer/env/queue field can enable external transmission in this build. */
+ * Renderer/env/queue values alone cannot authorize external transmission. */
 export interface ResearchOptions {
+  /** Audit ID only: approval authority lives in main-process memory. */
+  approvalId?:string
   routes?: ResearchRoutes
   recoveredFrom?: string
   providerMode?: 'ollama-local' | 'restricted-hosts'
@@ -19,12 +21,12 @@ export function selectedResearchRoutes(options?:ResearchOptions,kind?:string):Re
  return routes
 }
 export const RESEARCH_BUDGET = Object.freeze({ responsesPerStage: 12, actionsPerStage: 16, deadlineMs: 360000, tokens: 24000, contextBytes: 120000, responseBytes: 65536 })
-export const RESTRICTED_LIVE_BLOCK = 'Cloud research is locked: live content transmission and spending are not approved; exact model availability remains unverified.'
+export const RESTRICTED_LIVE_BLOCK = 'Research requires fresh per-run approval in the panel; exact model availability remains unverified.'
 export class NativeResearchBoundaryError extends Error {
   readonly code = 'RESEARCH_LIVE_NOT_APPROVED'
   constructor() { super(RESTRICTED_LIVE_BLOCK); this.name='NativeResearchBoundaryError' }
 }
-/** No IPC, environment or queue value can unlock live inference. */
+/** Legacy calls without a main-process per-run permit remain blocked. */
 export function assertRestrictedNativeHosts(): never { throw new NativeResearchBoundaryError() }
 export function assertRestrictedLiveApproved(): never { throw new NativeResearchBoundaryError() }
 
