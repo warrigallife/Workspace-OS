@@ -9,7 +9,8 @@ import {handleRequest} from './actionBridge'
 const dirs:string[]=[]
 function fixture(){const dir=fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()),'jufe-test-'));dirs.push(dir);const a=path.join(dir,'a.md'),b=path.join(dir,'b.md');fs.writeFileSync(a,'Outstanding first record work.\nMore source content.\n');fs.writeFileSync(b,'Outstanding second record work.\n');return {dir,a,b,scope:new ResearchScope(dir,{first:a,second:b})}}
 const citations=[{record_id:'first',start_line:1,end_line:1,quote:'Outstanding first record work.'},{record_id:'second',start_line:1,end_line:1,quote:'Outstanding second record work.'}]
-const draft={findings:[{statement:'First recorded outstanding work.',citation:citations[0]},{statement:'Second recorded outstanding work.',citation:citations[1]},{statement:'These remain reported gaps only.',citation:citations[0]}],limitations:'Only the supplied dated records were examined.'}
+const selection=({quote,...range}:typeof citations[number])=>range
+const draft={findings:[{statement:'First recorded outstanding work.',citation:selection(citations[0])},{statement:'Second recorded outstanding work.',citation:selection(citations[1])},{statement:'These remain reported gaps only.',citation:selection(citations[0])}],limitations:'Only the supplied dated records were examined.'}
 function read(scope:ResearchScope,role:'dana'|'nora'){for(const c of citations){const {quote,...range}=c;scope.action(role,'researchRecords.lookup',range)}}
 afterEach(()=>{for(const d of dirs.splice(0))fs.rmSync(d,{recursive:true,force:true});closeResearchStage('test')})
 describe('approved research scope',()=>{
@@ -47,4 +48,34 @@ it('retains all acceptance bounds removed only from provider grammar',()=>{
  scope.save('dana',draft);read(scope,'nora')
  for(const n of [19,4001])expect(()=>scope.save('nora',{decision:'approve',checked_citations:[0,1,2],reason:'x'.repeat(n)})).toThrow('save.reason')
  expect(scope.review).toBeUndefined()
+})
+
+it('copies exact selected snapshot lines including escaping and whitespace without mutating the submitted draft',()=>{
+ const {dir,a,b}=fixture(),dest=path.join(dir,'fresh');fs.mkdirSync(dest)
+ const text='Exact \\hat{X} and "quoted" source.  \nSecond line with **markup**.\n'
+ fs.writeFileSync(a,text)
+ const s=new ResearchScope(dest,{first:a,second:b});s.lookup('dana',{record_id:'first',start_line:1,end_line:2});s.lookup('dana',{record_id:'second',start_line:1,end_line:1})
+ const input=structuredClone(draft);input.findings[0].citation.end_line=2;const original=JSON.stringify(input)
+ s.save('dana',input)
+ expect(JSON.stringify(input)).toBe(original)
+ expect(s.draft?.findings[0].citation.quote).toBe(text.slice(0,-1))
+ expect(fs.readFileSync(s.sources.first.snapshot,'utf8')).toBe(text)
+ expect(JSON.parse(fs.readFileSync(path.join(dest,'source-snapshots.json'),'utf8')).first.sha256).toBe(s.sources.first.hash)
+ expect(s.review).toBeUndefined()
+})
+it('rejects invented IDs, unreturned spans, injected quotations and oversized trusted excerpts',()=>{
+ const {scope}=fixture();read(scope,'dana')
+ for(const citation of [{record_id:'invented',start_line:1,end_line:1},{record_id:'first',start_line:2,end_line:2},{record_id:'first',start_line:1,end_line:99},{...selection(citations[0]),quote:citations[0].quote}])expect(()=>scope.resolveCitation(citation)).toThrow()
+ expect(scope.draft).toBeUndefined()
+ const {dir,a,b}=fixture(),dest=path.join(dir,'large');fs.mkdirSync(dest);fs.writeFileSync(a,'x'.repeat(2001)+'\nshort\n')
+ const s=new ResearchScope(dest,{first:a,second:b});s.lookup('dana',{record_id:'first',start_line:1,end_line:2})
+ for(const n of [1,2])expect(()=>s.resolveCitation({record_id:'first',start_line:n,end_line:n})).toThrow('citation.quote')
+})
+it('fails closed on altered or missing saved snapshots, and changed originals after retrieval',()=>{
+ for(const mutation of ['snapshot','missing','original']){
+  const {scope,a}=fixture();read(scope,'dana')
+  if(mutation==='missing')fs.unlinkSync(scope.sources.first.snapshot)
+  else fs.writeFileSync(mutation==='snapshot'?scope.sources.first.snapshot:a,'Changed source text.')
+  expect(()=>scope.save('dana',draft)).toThrow();expect(scope.draft).toBeUndefined()
+ }
 })

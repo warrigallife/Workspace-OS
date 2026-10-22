@@ -8,7 +8,8 @@ const saved=JSON.parse(fs.readFileSync('docs/jufe-route-assessment/concise-findi
 const dirs:string[]=[]
 function scope(){const dir=fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()),'jufe-evaluation-'));dirs.push(dir);return new ResearchScope(dir)}
 function read(s:ResearchScope,role:'dana'|'nora'){for(const c of fixture.cases){const {exact_excerpt,...range}=c.context;s.lookup(role,range)}}
-const draft=()=>({findings:fixture.cases.map((c:any)=>c.supported_finding),limitations:fixture.limitations})
+const selection=(f:any)=>{const {quote,...citation}=f.citation;return {...f,citation}}
+const draft=()=>({findings:fixture.cases.map((c:any)=>selection(c.supported_finding)),limitations:fixture.limitations})
 afterEach(()=>{for(const d of dirs.splice(0))fs.rmSync(d,{recursive:true,force:true})})
 it('verifies all dated contexts, exact excerpts, source identities and hashes against approved disk records',()=>{
  const s=scope()
@@ -42,7 +43,7 @@ it('separately rejects the saved inaccurate citation as non-verbatim, independen
 })
 it('documents the semantic boundary: false statements paired with real quotations can pass mechanical draft checks',()=>{
  const s=scope();read(s,'dana')
- const unsupported={findings:fixture.cases.map((c:any)=>({...c.supported_finding,statement:c.unsupported_claim})),limitations:fixture.limitations}
+ const unsupported={findings:fixture.cases.map((c:any)=>({...selection(c.supported_finding),statement:c.unsupported_claim})),limitations:fixture.limitations}
  expect(()=>s.save('dana',unsupported)).not.toThrow()
  expect(s.review).toBeUndefined()
  expect(fs.existsSync(path.join(s.directory,'report.md'))).toBe(false)

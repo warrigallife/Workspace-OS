@@ -50,7 +50,7 @@ function driver(change:(role:ResearchRole,request:any,reply:any)=>any=(_r,_q,p)=
   opened.push(role)
   return {receipt:{...selected[role],nativeTools:[],connectors:[],ambientContext:false as const,fallback:false as const,restrictionsEnforced:true as const},close:()=>closed.push(role),request:async(req:ResearchRequest,signal:AbortSignal)=>{
    requests.push({role,req})
-   const content=role==='dana'?{findings:[ids[0],ids[1],ids[0]].map(id=>({statement:'The dated fixture records an unresolved question.',citation:{record_id:id,start_line:1,end_line:1,quote}})),limitations:'These are fixture observations, not current research conclusions.'}:{decision:'approve',reason:'Each fixture statement is supported by the independently retrieved excerpt.',checked_citations:[0,1,2]}
+   const content=role==='dana'?{findings:[ids[0],ids[1],ids[0]].map(id=>({statement:'The dated fixture records an unresolved question.',citation:{record_id:id,start_line:1,end_line:1}})),limitations:'These are fixture observations, not current research conclusions.'}:{decision:'approve',reason:'Each fixture statement is supported by the independently retrieved excerpt.',checked_citations:[0,1,2]}
    const reply={done:true,...selected[role],inputTokens:100,outputTokens:50,message:req.format?{role:'assistant',content:JSON.stringify(content)}:{role:'assistant',tool_calls:ids.map(record_id=>({function:{name:'lookup',arguments:{record_id,start_line:1,end_line:1}}}))}}
    return change(role,{...req,signal},reply)
   }}
@@ -76,7 +76,7 @@ it('review rejection blocks final report and handover completion',async()=>{
 })
 it('fabricated quotation fails before reviewer, preserves raw response and failure handover',async()=>{
  const s=setup(),d=driver((_role,req,reply)=>{if(req.format){const v=JSON.parse(reply.message.content);v.findings[0].citation.quote='An invented quotation absent from the source.';reply.message.content=JSON.stringify(v)}return reply})
- await launchResearchWithDriver(s.options,d.host,s.factory);expect(await s.result).toBe(1);expect(outcome().error).toContain('match source verbatim');expect(d.opened).toEqual(['dana'])
+ await launchResearchWithDriver(s.options,d.host,s.factory);expect(await s.result).toBe(1);expect(outcome().error).toContain('unexpected field');expect(d.opened).toEqual(['dana'])
  expect(fs.readdirSync(mock.directory).filter(n=>n.startsWith('event-')).map(n=>fs.readFileSync(path.join(mock.directory,n),'utf8')).join()).toContain('An invented quotation')
 })
 it.each(['draft.json','review.json','report.md','handover.md','outcome.json'])('failed %s never completes queue or publishes report',async name=>{
@@ -179,7 +179,7 @@ it.each(['success','review-rejection','fabricated-citation','failed-save','ident
   expect(requests.find(x=>x.role==='nora').req.messages).toHaveLength(2)
   if(scenario==='correction'){
    const turns=requests.filter(r=>r.role==='dana');expect(turns).toHaveLength(3)
-   expect(turns[2].wire.messages).toHaveLength(1);expect(turns[2].wire.messages[0].content).toContain('must match source verbatim')
+   expect(turns[2].wire.messages).toHaveLength(1);expect(turns[2].wire.messages[0].content).toContain('unexpected field')
    expect(JSON.stringify(turns[2].wire)).not.toContain(quote);expect(turns[2].wire.format).toBeUndefined()
    const local=fs.readdirSync(mock.directory).filter(n=>n.startsWith('event-')).map(n=>JSON.parse(fs.readFileSync(path.join(mock.directory,n),'utf8'))).find(e=>e.kind==='request'&&e.data.role==='dana'&&e.data.step===2)
    expect(local.data.messages.filter((m:any)=>m.role==='tool')).toHaveLength(2)
@@ -224,7 +224,7 @@ it.each(['corrected','persistent','unsupported','cancelled','tokens','actions','
    drafts++
    if(drafts===2){
     const feedback=req.messages.find((m:any)=>m.role==='user'&&m.content.includes('ONE correction attempt'))?.content
-    expect(feedback).toContain('must match source verbatim');expect(feedback).not.toContain(quote);expect(feedback).toContain('prior_lookup_references')
+    expect(feedback).toContain('unexpected field');expect(feedback).not.toContain(quote);expect(feedback).toContain('prior_lookup_references')
     if(scenario==='cancelled')controller.abort()
    }
    const v=JSON.parse(reply.message.content)
@@ -240,7 +240,7 @@ it.each(['corrected','persistent','unsupported','cancelled','tokens','actions','
  const original=JSON.parse(fs.readFileSync(path.join(mock.directory,'draft-attempt-1.json'),'utf8'));expect(original.findings[0].citation.quote).toBe('\\'+quote)
  if(['corrected','persistent','unsupported'].includes(scenario))expect(fs.existsSync(path.join(mock.directory,'draft-attempt-2.json'))).toBe(true)
  if(scenario==='corrected'){
-  const corrected=JSON.parse(fs.readFileSync(path.join(mock.directory,'draft-attempt-2.json'),'utf8'));expect(corrected.findings[0].citation.quote).toBe(quote)
+  const corrected=JSON.parse(fs.readFileSync(path.join(mock.directory,'draft-attempt-2.json'),'utf8'));expect(corrected.findings[0].citation.quote).toBeUndefined()
   expect(d.opened).toEqual(['dana','nora']);expect(outcome().totalTokens).toBe(750);expect(outcome().status).toBe('completed')
  }else{
   expect(d.opened).toEqual(['dana']);expect(fs.existsSync(path.join(mock.directory,'report.md'))).toBe(false);expect(fs.existsSync(path.join(mock.directory,'handover.md'))).toBe(true)

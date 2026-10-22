@@ -24,9 +24,7 @@ it('missing installed model fails before inference and never falls back',async()
 it('offers lookup only until BOTH reads succeed, then independently gates Nora and preserves message history',async()=>{
  const {options,result}=setup()
  const ids=['jufe-coverage-2026-10-11','jufe-schedule-2026-10-11']
- const {RECORDS}=await import('./researchScope')
- const quote=(id:string)=>fs.readFileSync(RECORDS[id],'utf8').split('\n')[0]
- const findings=[ids[0],ids[1],ids[0]].map(id=>({statement:'Fixture observation of this dated source.',citation:{record_id:id,start_line:1,end_line:1,quote:quote(id)}}))
+ const findings=[ids[0],ids[1],ids[0]].map(id=>({statement:'Fixture observation of this dated source.',citation:{record_id:id,start_line:1,end_line:1}}))
  const requests:any[]=[]
  let turn=0
  const plans=[['save',{findings,limitations:'Fixture covers dated records only.'}],['lookup',{record_id:ids[0],start_line:1,end_line:1}],['lookup',{record_id:ids[1],start_line:1,end_line:1}],['save',{findings,limitations:'Fixture covers dated records only.'}],['lookup',{record_id:ids[0],start_line:1,end_line:1}],['lookup',{record_id:ids[1],start_line:1,end_line:1}],['save',{decision:'approve',reason:'Fixture review checked the exact source quotations.',checked_citations:[0,1,2]}]]
@@ -43,7 +41,7 @@ it('offers lookup only until BOTH reads succeed, then independently gates Nora a
  expect(requests[1].messages.at(-1).role).toBe('tool');expect(requests[1].messages.at(-1).content).toContain('not independently retrieved')
  expect(requests[0].messages[0].content).toContain('suspend the persona requirements to check Git status')
  expect(requests[3].messages.at(-1).content).toContain('Produce exactly three findings')
- expect(requests[3].messages.at(-1).content).toContain('12–180 characters')
+ expect(requests[3].messages.at(-1).content).toContain('12–2000 characters')
  expect(requests[3].options.num_predict).toBe(2048)
  expect(requests[6].messages.at(-1).content).toContain('Check each of the three findings independently')
  const state=JSON.parse(fs.readFileSync(path.join(mock.directory,'state.json'),'utf8'));expect(state.status).toBe('completed');expect(state.reads.nora.length).toBe(2)
@@ -52,7 +50,7 @@ it('offers lookup only until BOTH reads succeed, then independently gates Nora a
 it.each([
  ['invalid JSON','not JSON','invalid JSON'],
  ['invalid fields',JSON.stringify({findings:[],limitations:'short'}),'save.findings'],
- ['invented quotes',JSON.stringify({findings:['jufe-coverage-2026-10-11','jufe-schedule-2026-10-11','jufe-coverage-2026-10-11'].map(record_id=>({statement:'An unsupported fixture statement.',citation:{record_id,start_line:1,end_line:1,quote:'This quotation does not exist in either source.'}})),limitations:'Only dated records were inspected.'}),'match source verbatim'],
+ ['invented quotes',JSON.stringify({findings:['jufe-coverage-2026-10-11','jufe-schedule-2026-10-11','jufe-coverage-2026-10-11'].map(record_id=>({statement:'An unsupported fixture statement.',citation:{record_id,start_line:1,end_line:1,quote:'This quotation does not exist in either source.'}})),limitations:'Only dated records were inspected.'}),'unexpected field'],
 ])('rejects structured %s without starting review',async(_label,content,error)=>{
  const {options,result}=setup()
  mock.request.mockResolvedValueOnce(tags).mockResolvedValueOnce({done:true,message:{role:'assistant',tool_calls:['jufe-coverage-2026-10-11','jufe-schedule-2026-10-11'].map(record_id=>({function:{name:'lookup',arguments:{record_id,start_line:1,end_line:1}}}))}}).mockResolvedValue({done:true,message:{role:'assistant',content}})

@@ -1,0 +1,52 @@
+[
+  {
+    "original": "src/main/agent/researchScope.ts",
+    "copy": "docs/jufe-route-assessment/trusted-quotations/originals/src/main/agent/researchScope.ts.snapshot",
+    "sha256": "f0cbb7cd46d24d9b373c595695ddbb546c5cc8b75fd5097ac04218a3b7c71a10"
+  },
+  {
+    "original": "src/main/agent/researchContract.ts",
+    "copy": "docs/jufe-route-assessment/trusted-quotations/originals/src/main/agent/researchContract.ts.snapshot",
+    "sha256": "ec10d2342770fc804f5b9b0cb2046b0fc9fa71913e0cedd85c389e2c1ff2a8ba"
+  },
+  {
+    "original": "src/main/agent/ollamaResearchRun.ts",
+    "copy": "docs/jufe-route-assessment/trusted-quotations/originals/src/main/agent/ollamaResearchRun.ts.snapshot",
+    "sha256": "a6f2a8c342c9702c79d13e8f9b9d26dea5319cdc8ab3980ba5d1ad060e26c78b"
+  },
+  {
+    "original": "src/main/agent/researchScope.test.ts",
+    "copy": "docs/jufe-route-assessment/trusted-quotations/originals/src/main/agent/researchScope.test.ts.snapshot",
+    "sha256": "7fec39f0141d1bed1fe7716f7b02773073408cc063e4eaf2da3faab08cf60a68"
+  },
+  {
+    "original": "src/main/agent/researchContract.test.ts",
+    "copy": "docs/jufe-route-assessment/trusted-quotations/originals/src/main/agent/researchContract.test.ts.snapshot",
+    "sha256": "a0eb4598ee175a49818a20dc4d606a614ea10a8c0c06937d0a259b6016a0ed5d"
+  },
+  {
+    "original": "src/main/agent/ollamaResearchRun.test.ts",
+    "copy": "docs/jufe-route-assessment/trusted-quotations/originals/src/main/agent/ollamaResearchRun.test.ts.snapshot",
+    "sha256": "512e4dd74b1af82000ace67272a95e6f57be560111d3889d397c064c678a4c0a"
+  },
+  {
+    "original": "src/main/agent/restrictedResearch.test.ts",
+    "copy": "docs/jufe-route-assessment/trusted-quotations/originals/src/main/agent/restrictedResearch.test.ts.snapshot",
+    "sha256": "e5b400d64c2f77caf29b096d03c63a55705c8b783d77ec16b1df5ba1c518f6cc"
+  },
+  {
+    "original": "docs/local-team/implementation-log.md",
+    "copy": "docs/jufe-route-assessment/trusted-quotations/originals/docs/local-team/implementation-log.md.snapshot",
+    "sha256": "83f385d29cef0961a5e9ebc5bab3e12d24cf4a71a92d4e7396c2ae1c6501231b"
+  },
+  {
+    "original": "docs/jufe-route-assessment/claude-pair/handover.md",
+    "copy": "docs/jufe-route-assessment/trusted-quotations/originals/docs/jufe-route-assessment/claude-pair/handover.md.snapshot",
+    "sha256": "8eed5e41cb488905e88f45d312ac89bfc4a84e294b1dbdafbaa1e23200220a46"
+  },
+  {
+    "original": "src/main/agent/researchEvaluation.test.ts",
+    "copy": "docs/jufe-route-assessment/trusted-quotations/originals/src/main/agent/researchEvaluation.test.ts.snapshot",
+    "sha256": "a289423acd947ed091200172daa2cd30805573811a732ea5ff83cabcf167abdb"
+  }
+]
