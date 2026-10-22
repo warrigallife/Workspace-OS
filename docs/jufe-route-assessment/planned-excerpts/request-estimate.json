@@ -1,0 +1,94 @@
+{
+  "baselineTokens": 32045,
+  "removedMeasuredLookupResponseTokens": 8257,
+  "questionUnchanged": true,
+  "sourceRanges": [
+    {
+      "record_id": "jufe-coverage-2026-10-11",
+      "start_line": 47,
+      "end_line": 59
+    },
+    {
+      "record_id": "jufe-schedule-2026-10-11",
+      "start_line": 58,
+      "end_line": 73
+    }
+  ],
+  "oldRequestBytes": [
+    3154,
+    23643,
+    4903,
+    24063
+  ],
+  "newRequestBytes": [
+    11215,
+    13045
+  ],
+  "totalBytesRemoved": 31503,
+  "forecast": [
+    {
+      "charsPerToken": 3,
+      "stages": [
+        8153,
+        8148
+      ],
+      "combined": 16301,
+      "headroom": 7699,
+      "with2048Contingency": 18349,
+      "headroomAfterContingency": 5651,
+      "danaFitsPlanned12000Allocation": true
+    },
+    {
+      "charsPerToken": 4,
+      "stages": [
+        9107,
+        9066
+      ],
+      "combined": 18173,
+      "headroom": 5827,
+      "with2048Contingency": 20221,
+      "headroomAfterContingency": 3779,
+      "danaFitsPlanned12000Allocation": true
+    },
+    {
+      "charsPerToken": 5,
+      "stages": [
+        9679,
+        9617
+      ],
+      "combined": 19296,
+      "headroom": 4704,
+      "with2048Contingency": 21344,
+      "headroomAfterContingency": 2656,
+      "danaFitsPlanned12000Allocation": true
+    }
+  ],
+  "firstCallPlans": [
+    {
+      "requestBytes": 11215,
+      "inputEstimate": 3739,
+      "estimatedRequestTokens": 10000,
+      "reviewerReserve": 12000,
+      "remaining": 24000,
+      "requiredCapacity": 10000,
+      "allowed": true,
+      "basis": "saved input floors plus full-context bytes/3 and previous input; 2048 output allowance; estimate, not guaranteed cap"
+    },
+    {
+      "requestBytes": 13045,
+      "inputEstimate": 4521,
+      "estimatedRequestTokens": 10000,
+      "reviewerReserve": 0,
+      "remaining": 24000,
+      "requiredCapacity": 12000,
+      "allowed": true,
+      "basis": "saved input floors plus full-context bytes/3 and previous input; 2048 output allowance; estimate, not guaranteed cap"
+    }
+  ],
+  "assumptions": [
+    "Two generation/review responses only; no corrections, wider retrieval, retries or model changes.",
+    "Final input reductions estimated at 3–5 UTF-8 bytes/token; historical host/cache/auxiliary overhead and outputs otherwise held fixed.",
+    "Dana full-line draft output increase included; reviewer receives complete trusted draft. Host overhead can change, so this is not an upper bound.",
+    "2048 contingency is illustrative, not enough to guarantee a full extra context-bearing call. Hash-bound plan reserves 12000 for Nora and forecasts at least 10000 per call; other routes keep reserve 16518."
+  ]
+}

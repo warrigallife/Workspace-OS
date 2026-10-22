@@ -1,6 +1,7 @@
 import { createClaudeResearchDriver } from './providers/claudeResearch'
 import { selectedResearchRoutes, hasCloudRoute, RESEARCH_BUDGET, assertRestrictedLiveApproved, withResearchAbort, validateRestriction, type ResearchDriver, type ResearchSession } from './researchProvider'
 import { researchLedger, type ResearchLedger } from './researchLedger'
+import { plannedResearchExcerpts } from './researchExcerpts'
 import { researchCostPlan } from './researchCost'
 import { researchSystem, researchFinalisation } from './researchContext'
 import { researchTools, providerOutputSchema } from './researchContract'
@@ -78,6 +79,21 @@ export async function launchResearchWithDriver(o:LaunchRunOptions, driver:Resear
       validateRestriction(role,session.receipt,routes)
       record('provider-restrictions',{role,receipt:session.receipt})
       if(ledger)await ledger('task_update',{taskId:tasks[role],status:'in_progress'})
+      // The fixed existing question has saved, hash-bound evidence locations.
+      // Each role independently reads through the same grant-controlled handler.
+      const planned=task===RESEARCH_TASK?plannedResearchExcerpts(scope.sources,scope.draft):[]
+      if(planned.length){
+        messages.push({role:'user',content:'The coordinator retrieves selected passages below for the unchanged question. These are dated report observations, not exhaustive or current coverage. Assess all findings against the full supplied passages, not quotation matches alone. If context is insufficient, do not invent support or approve; state that limitation/reject.'})
+        for(const args of planned){
+          controller.signal.throwIfAborted();if(getWorkspaceRoot()!==RESEARCH_ROOT)throw new Error('Workspace changed')
+          if(++calls>RESEARCH_BUDGET.actionsPerStage)throw new Error('Tool-call budget exceeded')
+          const result=await invokeGrantedAction({cmd:'run',actionId:'researchRecords.lookup',args,token})
+          record('tool',{role,action:'researchRecords.lookup',args,result,origin:'saved-evidence-plan'})
+          if(!result.ok)throw new Error('Planned retrieval denied: '+result.error)
+          messages.push({role:'tool',tool_name:'lookup',content:JSON.stringify(result)})
+        }
+      }
+
       let draftAttempts=0,finalisationPrompted=false
       for(let step=0;step<RESEARCH_BUDGET.responsesPerStage;step++) {
         controller.signal.throwIfAborted();if(getWorkspaceRoot()!==RESEARCH_ROOT)throw new Error('Workspace changed')
@@ -90,7 +106,7 @@ export async function launchResearchWithDriver(o:LaunchRunOptions, driver:Resear
         if(ready&&!finalisationPrompted){messages.push({role:'user',content:researchFinalisation(role)});finalisationPrompted=true}
         const requestMessages=[...messages]
         if(Buffer.byteLength(JSON.stringify(requestMessages))>RESEARCH_BUDGET.contextBytes)throw new Error('Context limit')
-        const costPlan=researchCostPlan(role,totalTokens,{messages:requestMessages,...(ready?{format}:{tools:offeredTools})},lastInputTokens,step===0)
+        const costPlan=researchCostPlan(role,totalTokens,{messages:requestMessages,...(ready?{format}:{tools:offeredTools})},lastInputTokens,step===0,planned.length>0)
         record('cost-preflight',{role,step,...costPlan})
         if(!costPlan.allowed)throw new Error('Research cost preflight: insufficient capacity for request'+(role==='dana'?' and reserved reviewer':'') )
         record('request',{role,step,messages:requestMessages,...(ready?{format}:{tools:offeredTools})})

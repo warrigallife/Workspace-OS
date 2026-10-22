@@ -306,3 +306,21 @@ it('cost controls preserve a validated draft when Nora lacks capacity, without c
  expect(fs.existsSync(path.join(mock.directory,'report.md'))).toBe(false)
  expect(outcome().status).toBe('failed')
 })
+it('saved excerpt plan independently retrieves hashed passages for both roles and uses only two model calls',async()=>{
+ const actual=await vi.importActual<any>('./researchScope')
+ for(const id of ids)fs.writeFileSync(mock.sources[id],fs.readFileSync(actual.RECORDS[id]))
+ const s=setup(),d=driver((role,req,p)=>{
+  expect(req.format).toBeDefined()
+  if(role==='dana'){
+   const draft=JSON.parse(p.message.content)
+   draft.findings.forEach((f:any,i:number)=>{f.citation.start_line=f.citation.end_line=[51,60,53][i]})
+   p.message.content=JSON.stringify(draft)
+  }
+  return p
+ })
+ await launchResearchWithDriver(s.options,d.host,s.factory);expect(await s.result).toBe(0)
+ expect(d.requests.map(r=>r.role)).toEqual(['dana','nora'])
+ expect(state().reads.dana).toEqual(state().reads.nora)
+ expect(state().reads.nora.map((r:any)=>[r.start_line,r.end_line])).toEqual([[47,59],[58,73]])
+ expect(outcome().totalTokens).toBe(300)
+})
