@@ -1,0 +1,35 @@
+{
+  "comparison": "01541ff versus current prompts in identical saved request envelopes; historical evidence/schema held constant",
+  "rows": [
+    {
+      "role": "dana",
+      "event": 2,
+      "beforeBytes": 2267,
+      "afterBytes": 2147,
+      "reductionBytes": 120
+    },
+    {
+      "role": "dana",
+      "event": 7,
+      "beforeBytes": 21474,
+      "afterBytes": 21298,
+      "reductionBytes": 176
+    },
+    {
+      "role": "nora",
+      "event": 13,
+      "beforeBytes": 3653,
+      "afterBytes": 3533,
+      "reductionBytes": 120
+    },
+    {
+      "role": "nora",
+      "event": 18,
+      "beforeBytes": 22342,
+      "afterBytes": 22166,
+      "reductionBytes": 176
+    }
+  ],
+  "totalFullContextBytesRemoved": 592,
+  "liveTokenSavings": "unmeasured; bytes are not tokens; no inference"
+}

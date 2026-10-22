@@ -232,7 +232,7 @@ it.each(['corrected','persistent','unsupported','cancelled','tokens','actions','
    if(drafts===2&&scenario==='unsupported')v.findings[0].citation.record_id='unapproved-source'
    reply.message.content=JSON.stringify(v)
   }
-  if(scenario==='tokens'){reply.inputTokens=11950;reply.outputTokens=50}
+  if(scenario==='tokens'){reply.inputTokens=req.format?23900:100;reply.outputTokens=0}
   return reply
  })
  await launchResearchWithDriver(s.options,d.host,s.factory);expect(await s.result).toBe(scenario==='corrected'?0:1)
@@ -266,7 +266,7 @@ it('original deadline cancels a pending correction without opening a reviewer',a
 it.each([23999,24000,24001])('retains the shared Dana plus Nora token boundary at %i',async total=>{
  const s=setup();let turn=0
  const d=driver((_role,_req,reply)=>{
-  turn++;return {...reply,inputTokens:turn===4?total-18000:6000,outputTokens:0}
+  turn++;return {...reply,inputTokens:turn===4?total:0,outputTokens:0}
  })
  await launchResearchWithDriver(s.options,d.host,s.factory)
  expect(await s.result).toBe(total<=24000?0:1)
@@ -291,4 +291,18 @@ it('compact instructions keep complete profiles local, preserve full lookup evid
  expect(nora[1].content).toContain(JSON.stringify(JSON.parse(fs.readFileSync(path.join(mock.directory,'draft.json'),'utf8'))))
  const profiles=state().events.map((n:string)=>JSON.parse(fs.readFileSync(path.join(mock.directory,n),'utf8'))).filter((e:any)=>e.kind==='profile')
  expect(profiles).toHaveLength(2);expect(profiles.every((e:any)=>typeof e.data.persona==='string')).toBe(true)
+})
+it('cost controls stop Dana before a second costly call and save the rejection evidence',async()=>{
+ const s=setup(),d=driver((_r,_q,p)=>({...p,inputTokens:6000,outputTokens:0}))
+ await launchResearchWithDriver(s.options,d.host,s.factory);expect(await s.result).toBe(1)
+ expect(d.requests).toHaveLength(1);expect(d.opened).toEqual(['dana'])
+ expect(outcome().error).toContain('reserved reviewer');expect(fs.existsSync(path.join(mock.directory,'handover.md'))).toBe(true)
+})
+it('cost controls preserve a validated draft when Nora lacks capacity, without completion',async()=>{
+ const s=setup(),d=driver((role,req,p)=>role==='nora'&&!req.format?{...p,inputTokens:23000,outputTokens:0}:p)
+ await launchResearchWithDriver(s.options,d.host,s.factory);expect(await s.result).toBe(1)
+ expect(fs.existsSync(path.join(mock.directory,'draft.json'))).toBe(true)
+ expect(readResearchResult(mock.directory,'error')).toContain('Partial draft')
+ expect(fs.existsSync(path.join(mock.directory,'report.md'))).toBe(false)
+ expect(outcome().status).toBe('failed')
 })

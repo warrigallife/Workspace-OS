@@ -1,6 +1,7 @@
 import { createClaudeResearchDriver } from './providers/claudeResearch'
 import { selectedResearchRoutes, hasCloudRoute, RESEARCH_BUDGET, assertRestrictedLiveApproved, withResearchAbort, validateRestriction, type ResearchDriver, type ResearchSession } from './researchProvider'
 import { researchLedger, type ResearchLedger } from './researchLedger'
+import { researchCostPlan } from './researchCost'
 import { researchSystem, researchFinalisation } from './researchContext'
 import { researchTools, providerOutputSchema } from './researchContract'
 /** Bounded local provider adapter; existing queue, profiles, bridge and checkpoints own the run. */
@@ -67,7 +68,7 @@ export async function launchResearchWithDriver(o:LaunchRunOptions, driver:Resear
     const catalog=Object.entries(scope.sources).map(([record_id,s])=>({record_id,total_lines:s.lines.length}))
     const system=researchSystem(role,catalog)
     const messages:any[]=[{role:'system',content:system},{role:'user',content:task+(role==='nora'?'\nDraft to independently review: '+JSON.stringify(scope.draft):'')}]
-    let calls=0
+    let calls=0,lastInputTokens=0
     try {
       controller.signal.throwIfAborted()
       const opening=driver.open(role,controller.signal)
@@ -89,6 +90,9 @@ export async function launchResearchWithDriver(o:LaunchRunOptions, driver:Resear
         if(ready&&!finalisationPrompted){messages.push({role:'user',content:researchFinalisation(role)});finalisationPrompted=true}
         const requestMessages=[...messages]
         if(Buffer.byteLength(JSON.stringify(requestMessages))>RESEARCH_BUDGET.contextBytes)throw new Error('Context limit')
+        const costPlan=researchCostPlan(role,totalTokens,{messages:requestMessages,...(ready?{format}:{tools:offeredTools})},lastInputTokens,step===0)
+        record('cost-preflight',{role,step,...costPlan})
+        if(!costPlan.allowed)throw new Error('Research cost preflight: insufficient capacity for request'+(role==='dana'?' and reserved reviewer':'') )
         record('request',{role,step,messages:requestMessages,...(ready?{format}:{tools:offeredTools})})
         const response=await withResearchAbort(session.request({messages:requestMessages,...(ready?{format}:{tools:offeredTools as any[]})},controller.signal),controller.signal)
         controller.signal.throwIfAborted()
@@ -98,6 +102,7 @@ export async function launchResearchWithDriver(o:LaunchRunOptions, driver:Resear
           const expected=routes[role]
           if(response.provider!==expected.provider||response.model!==expected.model)throw new Error('Provider/model substitution denied')
           if(!Number.isSafeInteger(response.inputTokens)||response.inputTokens!<0||!Number.isSafeInteger(response.outputTokens)||response.outputTokens!<0)throw new Error('Missing provider token usage; stop')
+          lastInputTokens=response.inputTokens!
           totalTokens+=response.inputTokens!+response.outputTokens!
           state.usage[role]=response.aggregateUsage??{model:expected.model,provider:expected.provider,inputTokens:(state.usage[role]?.inputTokens??0)+response.inputTokens!,outputTokens:(state.usage[role]?.outputTokens??0)+response.outputTokens!}
           if(response.aggregateUsage)record('aggregate-usage',{role,...response.aggregateUsage})
