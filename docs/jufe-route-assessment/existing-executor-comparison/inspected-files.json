@@ -1,0 +1,82 @@
+[
+  {
+    "path": "/Users/liammcilmurray/Desktop/Workspace-OS/src/main/agent/launchRun.ts",
+    "sha256": "4d625079009492f1b92faa32503c9270f2765e926c885e997848e1a33b86dfee"
+  },
+  {
+    "path": "/Users/liammcilmurray/Desktop/Workspace-OS/src/main/agent-permissions.ts",
+    "sha256": "7eba8e2195250b6f93b21d2b54ed1a9531e8f960f51d909a20a0e976fb647d9d"
+  },
+  {
+    "path": "/Users/liammcilmurray/Desktop/Workspace-OS/src/main/handlers/runs.ts",
+    "sha256": "b740b2264eb93ae4b7ebe5544b6e2acf663f0acfd4a971571a80106f9125b31c"
+  },
+  {
+    "path": "/Users/liammcilmurray/Desktop/Workspace-OS/src/main/agent/ollamaResearchRun.ts",
+    "sha256": "c7bc16b6b143ac5c91e2d55ae0908454642f650526aac1f3d7fb781dc258441e"
+  },
+  {
+    "path": "/Users/liammcilmurray/Desktop/Workspace-OS/src/main/agent/researchScope.ts",
+    "sha256": "f7134cb1cb7e35be944a8ac78b8a019cef50bdbeee2332beca682719312dc072"
+  },
+  {
+    "path": "/Users/liammcilmurray/Desktop/Workspace-OS/src/main/agent/researchLedger.ts",
+    "sha256": "ed4bca8b7a8593b9109ed5503ab1bf3aecf2589a6be678c2782b94419eb0c0d2"
+  },
+  {
+    "path": "/Users/liammcilmurray/Desktop/Workspace-OS/src/main/agent/researchResult.ts",
+    "sha256": "dd2ad77d086a4f86b9bed044ff52bcaf24a79b1158565a87c31cb4621d1355d7"
+  },
+  {
+    "path": "/opt/homebrew/lib/node_modules/@pacphi/agentic-kit/LICENSE",
+    "sha256": "fdde2f1197998d968f7957d224a384ee26e91eee87369069ee8b620512d6df20"
+  },
+  {
+    "path": "/opt/homebrew/lib/node_modules/@pacphi/agentic-kit/src/lib/execution/claude.mjs",
+    "sha256": "85a5605b8cdfedb692666f2313acd75e51c31eeee0af70b08c591acf47ca9e75"
+  },
+  {
+    "path": "/opt/homebrew/lib/node_modules/@pacphi/agentic-kit/src/lib/execution/subprocess.mjs",
+    "sha256": "36ab1e8098707e64cc8a0dbe4712e3efbac055aa6f7a11383f8762103be8b127"
+  },
+  {
+    "path": "/opt/homebrew/lib/node_modules/@pacphi/agentic-kit/src/lib/execution/runner.mjs",
+    "sha256": "225dc6d8cbc3ca3d6c26d3b3b0731050af57717121640413cc3190add2b31d4a"
+  },
+  {
+    "path": "/opt/homebrew/lib/node_modules/@pacphi/agentic-kit/src/lib/execution/handoff.mjs",
+    "sha256": "bc3a524081b6e74abd91aef563b9ce26da8fb28f6562bae2f4be096d75c04532"
+  },
+  {
+    "path": "/Users/liammcilmurray/Desktop/AI-Agent-Research/CoWork-OS/LICENSE",
+    "sha256": "290c98c86b364392eacd6847097892c8bb07abd023da57fee5aadc2a6bd77ae8"
+  },
+  {
+    "path": "/Users/liammcilmurray/Desktop/AI-Agent-Research/CoWork-OS/src/electron/agent/executor.ts",
+    "sha256": "2797a991640fc94353f0a83651d61b606d30511a63ff86b840455d1d104906ab"
+  },
+  {
+    "path": "/Users/liammcilmurray/Desktop/AI-Agent-Research/CoWork-OS/src/electron/agent/tools/registry.ts",
+    "sha256": "0a53beb58dda2cac626afcf9293df20bb9c6b6e46018be4df08953b1ad325388"
+  },
+  {
+    "path": "/Users/liammcilmurray/Desktop/AI-Agent-Research/CoWork-OS/src/electron/security/access-profile-paths.ts",
+    "sha256": "605a26644f0a89ada56aaad40e3d68d33c4b9da399a4b7ba1c754f94447878f4"
+  },
+  {
+    "path": "/Users/liammcilmurray/Desktop/AI-Agent-Research/CoWork-OS/src/electron/agents/bot-team.ts",
+    "sha256": "c21e0b919ec0ff26dff8990d7a3e902d24b52a77b1dd3fcf38e9fa3e0a36f00e"
+  },
+  {
+    "path": "/Users/liammcilmurray/Desktop/AI-Agent-Research/CoWork-OS/src/electron/agent/model-handoff-note.ts",
+    "sha256": "9f775e56f16ae1e92720363dd302823c1c2e310e20cc757eef3ea46854615747"
+  },
+  {
+    "path": "/Users/liammcilmurray/Desktop/AI-Agent-Research/CoWork-OS/src/electron/agent/executor-verification-repair-utils.ts",
+    "sha256": "6c03a6116ed41ce4ea4a44720300eebf717e0a351d481f22fe8246e72c119f0e"
+  },
+  {
+    "path": "/Users/liammcilmurray/Desktop/AI-Agent-Research/CoWork-OS/src/electron/agent/llm/ollama-provider.ts",
+    "sha256": "2f2a304744a17fb05e48d454ceb49d8fe9ff1f173391f8a547a65dda6f02e461"
+  }
+]

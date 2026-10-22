@@ -1,0 +1,12 @@
+[
+  {
+    "original": "docs/jufe-route-assessment/claude-pair/handover.md",
+    "copy": "docs/jufe-route-assessment/existing-executor-comparison/originals/docs/jufe-route-assessment/claude-pair/handover.md.snapshot",
+    "sha256": "ef7ccbf1bd4cc4ce831a87a01d0ee15934de726dc7ce01b6c93c116d09731eda"
+  },
+  {
+    "original": "docs/local-team/implementation-log.md",
+    "copy": "docs/jufe-route-assessment/existing-executor-comparison/originals/docs/local-team/implementation-log.md.snapshot",
+    "sha256": "8b8b32755c9583436f2b487ec734f063e7518ad6d447801a4e23e091de438613"
+  }
+]
