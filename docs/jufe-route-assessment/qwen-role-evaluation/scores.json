@@ -1,0 +1,155 @@
+{
+  "model": {
+    "model": "qwen2.5:7b-instruct-q4_K_M",
+    "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e"
+  },
+  "inferenceRequests": 4,
+  "sourcesMatchFixture": true,
+  "expectedAnswerIsolationVerified": true,
+  "dana": {
+    "tokens": 688,
+    "completeJSON": true,
+    "findingCount": 3,
+    "exactlyThree": true,
+    "bothRecords": true,
+    "quotations": [
+      {
+        "matchesDisk": false,
+        "characters": 139
+      },
+      {
+        "matchesDisk": false,
+        "characters": 509
+      },
+      {
+        "matchesDisk": false,
+        "characters": 618
+      }
+    ],
+    "semanticScoring": "See assessment.md; not inferred from quotation matching."
+  },
+  "nora": [
+    {
+      "id": "nora-1",
+      "tokens": 159,
+      "candidates": [
+        {
+          "candidate_id": "candidate-1",
+          "expected": {
+            "candidate_id": "candidate-1",
+            "claim_supported": false,
+            "quotation_matches": true
+          },
+          "actual": {
+            "candidate_id": "candidate-1",
+            "quotation_matches": false,
+            "claim_supported": false,
+            "reason": "The statement is a broad claim about the scientific validity of the theory, which is not supported by the specific passage cited. The passage only discusses the absence of stochastic language in a specific chapter and does not address the broader claim of scientific disproof."
+          },
+          "quotationDecisionCorrect": false,
+          "supportDecisionCorrect": true
+        },
+        {
+          "candidate_id": "candidate-2",
+          "expected": {
+            "candidate_id": "candidate-2",
+            "claim_supported": true,
+            "quotation_matches": true
+          },
+          "actual": {
+            "candidate_id": "candidate-2",
+            "quotation_matches": true,
+            "claim_supported": true,
+            "reason": "The statement accurately reflects the content of the cited passage, which explicitly states that the stochastic-emergence claim in the abstract is not supported by the dedicated chapter."
+          },
+          "quotationDecisionCorrect": true,
+          "supportDecisionCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "nora-2",
+      "tokens": 156,
+      "candidates": [
+        {
+          "candidate_id": "candidate-1",
+          "expected": {
+            "candidate_id": "candidate-1",
+            "claim_supported": true,
+            "quotation_matches": true
+          },
+          "actual": {
+            "candidate_id": "candidate-1",
+            "quotation_matches": true,
+            "claim_supported": false,
+            "reason": "The candidate statement correctly identifies the unresolved nature of the term 'sympathetic weights' but incorrectly suggests that the term is an 'unstated connection' to other operators, whereas the report does not explicitly state this."
+          },
+          "quotationDecisionCorrect": true,
+          "supportDecisionCorrect": false
+        },
+        {
+          "candidate_id": "candidate-2",
+          "expected": {
+            "candidate_id": "candidate-2",
+            "claim_supported": false,
+            "quotation_matches": true
+          },
+          "actual": {
+            "candidate_id": "candidate-2",
+            "quotation_matches": true,
+            "claim_supported": false,
+            "reason": "The candidate statement incorrectly equates 'sympathetic weights' with 'sympathetic gear shifts,' which the report explicitly states are different terms and concepts."
+          },
+          "quotationDecisionCorrect": true,
+          "supportDecisionCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "nora-3",
+      "tokens": 142,
+      "candidates": [
+        {
+          "candidate_id": "candidate-1",
+          "expected": {
+            "candidate_id": "candidate-1",
+            "claim_supported": false,
+            "quotation_matches": true
+          },
+          "actual": {
+            "candidate_id": "candidate-1",
+            "quotation_matches": false,
+            "claim_supported": false,
+            "reason": "The report explicitly states that the claims have not been checked against any other source or against the claimed experimental basis, contradicting the candidate's statement."
+          },
+          "quotationDecisionCorrect": false,
+          "supportDecisionCorrect": true
+        },
+        {
+          "candidate_id": "candidate-2",
+          "expected": {
+            "candidate_id": "candidate-2",
+            "claim_supported": true,
+            "quotation_matches": true
+          },
+          "actual": {
+            "candidate_id": "candidate-2",
+            "quotation_matches": true,
+            "claim_supported": false,
+            "reason": "The report confirms that the laboratory-verification claim was unassessed, but also states that the claims have not been checked against any other source or against the claimed experimental basis."
+          },
+          "quotationDecisionCorrect": true,
+          "supportDecisionCorrect": false
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "quotationDecisionsCorrect": 4,
+    "supportDecisionsCorrect": 4,
+    "totalCandidates": 6,
+    "supportedAccepted": 1,
+    "unsupportedRejected": 3,
+    "falseAcceptances": 0
+  }
+}

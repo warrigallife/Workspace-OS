@@ -1,0 +1,32 @@
+{
+  "dana": {
+    "tokens": 688,
+    "completeJSON": true,
+    "findingCount": 3,
+    "exactlyThree": true,
+    "bothRecords": true,
+    "quotations": [
+      {
+        "matchesDisk": false,
+        "characters": 139
+      },
+      {
+        "matchesDisk": false,
+        "characters": 509
+      },
+      {
+        "matchesDisk": false,
+        "characters": 618
+      }
+    ],
+    "semanticScoring": "See assessment.md; not inferred from quotation matching."
+  },
+  "summary": {
+    "quotationDecisionsCorrect": 4,
+    "supportDecisionsCorrect": 4,
+    "totalCandidates": 6,
+    "supportedAccepted": 1,
+    "unsupportedRejected": 3,
+    "falseAcceptances": 0
+  }
+}

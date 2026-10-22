@@ -1,0 +1,32 @@
+[
+  {
+    "original": "docs/jufe-route-assessment/claude-pair/handover.md",
+    "copy": "originals/docs/jufe-route-assessment/claude-pair/handover.md.snapshot",
+    "sha256": "916d79284060f6217188896d0224fb8a507c2ef6bde4b521967c3070d0a24282"
+  },
+  {
+    "original": "docs/local-team/implementation-log.md",
+    "copy": "originals/docs/local-team/implementation-log.md.snapshot",
+    "sha256": "107b52ff9e2035cca168451309c16e0842dee06aac4309fbbf03306cca635d6c"
+  },
+  {
+    "original": "scripts/research/evaluate-roles.mjs",
+    "copy": "frozen-inputs/evaluate-roles.mjs",
+    "sha256": "5317a6039e50fb24c5ed66e70c893131e5673ba21af8c15dfcb310f903a38be1"
+  },
+  {
+    "original": "scripts/research/score-role-evaluation.mjs",
+    "copy": "frozen-inputs/score-role-evaluation.mjs",
+    "sha256": "12ca7dd61f59364c3e7c622cc09118d077b9fe6550bd8b1b8008573432d7d195"
+  },
+  {
+    "original": "docs/jufe-route-assessment/role-evaluation/criteria.md",
+    "copy": "frozen-inputs/criteria.md",
+    "sha256": "5490e6957fa045d741cb924077343a06e5d86fb93c43d2bdf7483aaa4653f54e"
+  },
+  {
+    "original": "docs/jufe-route-assessment/evaluation-fixture/fixture.json",
+    "copy": "frozen-inputs/fixture.json",
+    "sha256": "2a9f8a86210e09c4afa746ca60363e84e00b90e10034625ea64cd490fe5e7500"
+  }
+]

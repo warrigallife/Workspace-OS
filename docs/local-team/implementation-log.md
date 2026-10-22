@@ -342,3 +342,17 @@ Per-stage accounting and diagnostics saved. Six originals verified; four runtime
 Saved recovered-report.md and recovered-handover.md in the approved staging directory for bg-mviqvk8b-utpn8m, labelled “Recovered from an over-budget run; draft and review passed validation.” Rendered from the preserved validated draft/review, with dated limitations and no scientific-proof or workflow-success claim. Original failed status, handover, raw responses and usage remain byte-identical; recovered copies hash-verified.
 
 Existing result interface displays the fixed recovery filenames without changing failure/completion rules. Actual UI verified both artifacts and unchanged queue error, zero new jobs/inference. 49 tests passed; no new typecheck errors. Live block unchanged. [Recovery evidence and instructions](../jufe-route-assessment/recovered-overbudget-output/handover.md).
+
+
+## 2026-10-22 — Recovered output and installed Qwen; benchmark pending
+
+Checkpoint 46823db preserves recovered-report.md and recovered-handover.md for bg-mviqvk8b-utpn8m and verifies their display through Workspace OS. Original over-budget failure remains unchanged; offline draft/review validation does not mark automatic completion or independently prove scientific claims. Working capabilities include restricted retrieval, selected Claude routes, incremental requests, draft validation, separate reviewer execution, saved usage/evidence and recovery display. End-to-end automatic completion under the unchanged token budget remains unresolved (32,045 accounted versus 24,000); no completion claim.
+
+Confirmed installed local model: `qwen2.5:7b-instruct-q4_K_M`, ID `845dbda0ea48`, 4.7 GB (4,683,087,332 bytes), GGUF Q4_K_M. Installation is not model-capability or coordination proof. Memory checked first: 18 GiB RAM, 40% memory-pressure free, approximately 5.6 GB swap used; no Ollama model loaded, 237 GiB disk available. The frozen four-call component benchmark is prepared separately, no retries/cloud/downloads; expected generation answers and review verdicts withheld. Results will be appended without altering earlier entries.
+
+
+## 2026-10-22 — Qwen frozen benchmark complete: not suitable for unattended workflow
+
+`qwen2.5:7b-instruct-q4_K_M` (845dbda0ea48, 4.7 GB) completed exactly four local calls, no retries/cloud/downloads. Frozen requests matched baseline apart from model; expected generation answers and review verdicts withheld, source hashes unchanged. Dana: three findings/both records, but 0/3 verbatim quotes; two quotes exceed the concise-excerpt instruction. Nora: quotation decisions 4/6, semantic verdicts 4/6, supported accepted 1/3, unsupported rejected 3/3, false acceptances 0. Both roles fail the frozen all-criteria standard. Raw outputs, scoring and manual semantic assessment preserved separately.
+
+Installation/local execution confirmed, research qualification and end-to-end coordination not established. Recovered report at 46823db remains useful with its failure label; automatic completion/token-budget issue remains unresolved. One next action: evaluate a different locally runnable model against the same frozen benchmark before further local-team integration, separately approving any acquisition. Four-call budget exhausted; no prompt experiments continued. [Qwen assessment and evidence](../jufe-route-assessment/qwen-role-evaluation/assessment.md).

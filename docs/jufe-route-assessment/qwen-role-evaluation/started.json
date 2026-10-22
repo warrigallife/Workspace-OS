@@ -1,0 +1,9 @@
+{
+  "time": "2026-10-22T04:17:14.473Z",
+  "maximumInferenceRequests": 4,
+  "sourceHashes": {
+    "jufe-schedule-2026-10-11": "e281c7def2fc5461202f84422771adc6a32300260ee1d2a0928416830fee4772",
+    "jufe-coverage-2026-10-11": "eaa5a95fc910bf016c03f899e2ec7d283d9eb56b9c35ad88aa3a5ba569f4b96d"
+  },
+  "criteriaHash": "5490e6957fa045d741cb924077343a06e5d86fb93c43d2bdf7483aaa4653f54e"
+}

@@ -1,0 +1,12 @@
+{
+  "originalCopiesVerified": 6,
+  "allRequestsEqualFrozenBaselineExceptModel": true,
+  "criteriaByteIdenticalToFrozenBaseline": true,
+  "responseModelIdentityVerified": true,
+  "sourceHashesAndExcerptChecks": "passed before calls; source hashes unchanged after calls",
+  "expectedAnswerIsolation": "verified by existing offline scorer",
+  "calls": 4,
+  "retries": 0,
+  "cloudCalls": 0,
+  "runtimeChanges": false
+}

@@ -1,0 +1,84 @@
+{
+  "purpose": "Offline evaluation fixture, not a model-produced or independently approved research report. No runtime registration or source expansion.",
+  "question": "Identify outstanding research work recorded in the two approved JUFE coverage reports dated 2026-10-11.",
+  "sources": {
+    "jufe-schedule-2026-10-11": {
+      "path_relative_to_JUFE": "docs/reports/JUFE_Schedule_and_Source31_Coverage_Review_2026-10-11.md",
+      "sha256": "e281c7def2fc5461202f84422771adc6a32300260ee1d2a0928416830fee4772"
+    },
+    "jufe-coverage-2026-10-11": {
+      "path_relative_to_JUFE": "docs/reports/JUFE_Full_Collection_Coverage_Audit_2026-10-11.md",
+      "sha256": "eaa5a95fc910bf016c03f899e2ec7d283d9eb56b9c35ad88aa3a5ba569f4b96d"
+    }
+  },
+  "limitations": "Dated report observations only. Source assertions and manuscript or experimental truth have not been independently re-investigated; present-day status is unresolved.",
+  "cases": [
+    {
+      "id": "stochastic-claim",
+      "classification": "dated report observation",
+      "observation_date": "2026-10-11",
+      "context": {
+        "record_id": "jufe-schedule-2026-10-11",
+        "start_line": 60,
+        "end_line": 73,
+        "exact_excerpt": "1. **\"Evolution within the manifold is stochastically emergent\"** (line\n   13). **Checked directly, repository-wide**: the word \"stochastic\"\n   (in any form) appears **nowhere else in the entire 26-file retained\n   collection**, and in **no prior report in `docs/reports/`** —\n   confirmed by direct search. The dedicated chapter that actually\n   analyses this mechanism (source-30 report, covering Path-Dependency,\n   the Hysteresis Operator, and the Emergence Operator) describes it in\n   explicitly deterministic, history-dependent terms — \"is\n   non-Markovian,\" \"a direct result of its previous path\" (source 30,\n   line 11) — with no probability distribution, random variable, or\n   stochastic-process formalism anywhere in that file or its analysis.\n   **This is a concrete claim made only in the abstract, not stated,\n   defined, or supported by the dedicated chapter covering the same\n   mechanism.** Not previously flagged by any report."
+      },
+      "supported_finding": {
+        "statement": "The 11 October 2026 review reports that the abstract’s stochastic-emergence claim lacks support in the dedicated chapter; reconciling that claim was outstanding in this dated record.",
+        "citation": {
+          "record_id": "jufe-schedule-2026-10-11",
+          "start_line": 60,
+          "end_line": 73,
+          "quote": "   **This is a concrete claim made only in the abstract, not stated,\n   defined, or supported by the dedicated chapter covering the same\n   mechanism.** Not previously flagged by any report."
+        }
+      },
+      "unsupported_claim": "The theory has been scientifically disproved because stochastic evolution is impossible.",
+      "unsupported_reason": "The report identifies missing support and a mismatch with a deterministic treatment, not a scientific disproof or impossibility result."
+    },
+    {
+      "id": "sympathetic-weights",
+      "classification": "dated report observation",
+      "observation_date": "2026-10-11",
+      "context": {
+        "record_id": "jufe-schedule-2026-10-11",
+        "start_line": 74,
+        "end_line": 85,
+        "exact_excerpt": "2. **\"Sympathetic weights (`\\omega_\\alpha`)\"** (line 11). The symbol\n   `\\omega_\\alpha` is covered (above), but **the adjective \"sympathetic\"\n   applied to it here is not used by either source 8 or source 11/12**\n   (both call it \"the dynamic weight\"/\"weighting,\" never \"sympathetic\").\n   \"Sympathetic\" is already an established, *different* vocabulary\n   thread elsewhere in the collection — \"sympathetic gear shifts\"\n   (`\\hat{\\mathcal{S}}_y`, sources 11/12 and 32's Proof 2) and\n   \"sympathetic modulation\" of `\\delta G_k` (source 26) — neither of\n   which is `\\omega_\\alpha`. **Whether the abstract's \"sympathetic\n   weights\" is simply an informal gloss for `\\omega_\\alpha`, or implies\n   an unstated connection to the `\\hat{\\mathcal{S}}_y}`/`G_k`\n   \"sympathetic\" operators, is not addressed by any existing report.**"
+      },
+      "supported_finding": {
+        "statement": "The 11 October 2026 review leaves unresolved whether “sympathetic weights” is an informal gloss or an unstated connection to other operators; terminology reconciliation was outstanding.",
+        "citation": {
+          "record_id": "jufe-schedule-2026-10-11",
+          "start_line": 74,
+          "end_line": 85,
+          "quote": "   which is `\\omega_\\alpha`. **Whether the abstract's \"sympathetic\n   weights\" is simply an informal gloss for `\\omega_\\alpha`, or implies\n   an unstated connection to the `\\hat{\\mathcal{S}}_y}`/`G_k`\n   \"sympathetic\" operators, is not addressed by any existing report.**"
+        }
+      },
+      "unsupported_claim": "The existing reports establish that sympathetic weights and sympathetic gear shifts are the same operator.",
+      "unsupported_reason": "The cited passage explicitly leaves the connection unresolved; it does not establish equivalence."
+    },
+    {
+      "id": "source35-experiment",
+      "classification": "dated report observation",
+      "observation_date": "2026-10-11",
+      "context": {
+        "record_id": "jufe-coverage-2026-10-11",
+        "start_line": 50,
+        "end_line": 50,
+        "exact_excerpt": "| 17 | `35.md` | `.../CANONICAL/TFJ-Shunt-Radiation-Equivalence-in-Magnon-Systems.md` | **None** | Reading plan §3 names it as a scheduled \"application,\" no content-level check performed by any report | **Verified directly for this audit**: introduces a previously-uncatalogued operator, the \"Shunt-Radiation Equivalence\" (`\\hat{\\mathcal{S}}_R`, line 7), and a strong, unassessed claim of \"laboratory-verified physics\"/empirical proof-of-principle (line 19) tied to a named external experiment (UCCS/RPTU magnon data) — none of this has been checked against any other source or against the claimed experimental basis |"
+      },
+      "supported_finding": {
+        "statement": "The 11 October 2026 audit records source 35’s laboratory-verification claim as unassessed; checking its claimed experimental basis was outstanding in that audit.",
+        "citation": {
+          "record_id": "jufe-coverage-2026-10-11",
+          "start_line": 50,
+          "end_line": 50,
+          "quote": "none of this has been checked against any other source or against the claimed experimental basis"
+        }
+      },
+      "unsupported_claim": "Independent experiments have verified source 35’s theory, and all its research is complete.",
+      "unsupported_reason": "The audit calls this an unassessed claim and says its experimental basis was unchecked; it does not independently verify the experiment or assert completion."
+    }
+  ],
+  "saved_failure": "../concise-findings-verification/event-007.json"
+}

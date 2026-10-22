@@ -1,0 +1,20 @@
+{
+  "memoryBytes": 19327352832,
+  "memoryGiB": 18,
+  "memoryPressureFreePercent": 40,
+  "swapUsedMiB": 5587.81,
+  "swapFreeMiB": 1580.19,
+  "diskAvailableGiB": 237,
+  "ollamaLoadedModels": [],
+  "model": {
+    "name": "qwen2.5:7b-instruct-q4_K_M",
+    "id": "845dbda0ea48",
+    "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+    "sizeBytes": 4683087332,
+    "format": "gguf",
+    "quantization": "Q4_K_M"
+  },
+  "protocol": "Frozen prompts, candidate order, schemas and parameters; only model/digest and separate output directory changed. Historical criteria text mentions Llama; same criteria apply to Qwen. No expected verdicts or generation answers transmitted.",
+  "maxCalls": 4,
+  "retries": 0
+}
