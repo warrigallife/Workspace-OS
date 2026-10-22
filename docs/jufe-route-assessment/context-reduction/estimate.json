@@ -1,0 +1,57 @@
+{
+  "baselineTokens": 32045,
+  "limit": 24000,
+  "requiredSaving": 8045,
+  "reductions": {
+    "dana": {
+      "systemCharactersRemoved": 905,
+      "finalisationCharactersRemoved": 1162,
+      "weightedCharactersRemoved": 2972
+    },
+    "nora": {
+      "systemCharactersRemoved": 1272,
+      "finalisationCharactersRemoved": 419,
+      "weightedCharactersRemoved": 2963
+    }
+  },
+  "mandatoryWeightedCharacters": 5935,
+  "conditionalNoraRetrievalCharacters": 13578,
+  "illustrativeNoraRanges": [
+    {
+      "record_id": "jufe-coverage-2026-10-11",
+      "start_line": 48,
+      "end_line": 54,
+      "excerptCharacters": 2889
+    },
+    {
+      "record_id": "jufe-schedule-2026-10-11",
+      "start_line": 56,
+      "end_line": 65,
+      "excerptCharacters": 509
+    }
+  ],
+  "forecasts": [
+    {
+      "charsPerToken": 3,
+      "instructionsOnlyTokens": 30067,
+      "withIllustrativeNarrowNoraTokens": 25541
+    },
+    {
+      "charsPerToken": 4,
+      "instructionsOnlyTokens": 30561,
+      "withIllustrativeNarrowNoraTokens": 27167
+    },
+    {
+      "charsPerToken": 5,
+      "instructionsOnlyTokens": 30858,
+      "withIllustrativeNarrowNoraTokens": 28142
+    }
+  ],
+  "assumptions": [
+    "Exactly two requests per stage, no correction or extra retrieval. Initial instruction reduction counted twice because persistent host context is charged on both responses.",
+    "Same host overhead, auxiliary activity and response tokens as the saved run; none are measured anew. JSON escaping and model tokenisation are not simulated.",
+    "Conditional Nora savings require sufficient narrower retrieval; prompt guidance cannot guarantee model choices or context sufficiency.",
+    "The current trusted-quotation contract copies complete lines. Increased draft/reviewer context relative to historical substring quotes is excluded; estimates are optimistic.",
+    "No hard reservation or budget increase introduced; existing shared 24000-token fail-closed boundary remains authoritative."
+  ]
+}

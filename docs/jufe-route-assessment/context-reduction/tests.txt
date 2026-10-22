@@ -1,0 +1,13 @@
+[1022/145128.891143:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+
+ RUN  v4.1.9 /Users/liammcilmurray/Desktop/Workspace-OS
+
+[1022/145129.189423:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1022/145129.189471:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+[1022/145129.189522:ERROR:electron/shell/common/mac/codesign_util.cc:79] task_name_for_pid: (os/kern) failure (5)
+
+ Test Files  3 passed (3)
+      Tests  61 passed (61)
+   Start at  14:51:29
+   Duration  458ms (transform 181ms, setup 0ms, import 228ms, tests 304ms, environment 0ms)
+

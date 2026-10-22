@@ -262,3 +262,33 @@ it('original deadline cancels a pending correction without opening a reviewer',a
   expect(await s.result).toBe(1);expect(outcome().status).toBe('cancelled');expect(d.opened).toEqual(['dana']);expect(drafts).toBe(2)
  }finally{vi.useRealTimers()}
 })
+
+it.each([23999,24000,24001])('retains the shared Dana plus Nora token boundary at %i',async total=>{
+ const s=setup();let turn=0
+ const d=driver((_role,_req,reply)=>{
+  turn++;return {...reply,inputTokens:turn===4?total-18000:6000,outputTokens:0}
+ })
+ await launchResearchWithDriver(s.options,d.host,s.factory)
+ expect(await s.result).toBe(total<=24000?0:1)
+ expect(d.opened).toEqual(['dana','nora']);expect(turn).toBe(4)
+ expect(outcome().totalTokens).toBe(total)
+ expect(fs.existsSync(path.join(mock.directory,'report.md'))).toBe(total<=24000)
+ if(total>24000){expect(outcome().error).toContain('token budget');expect(fs.existsSync(path.join(mock.directory,'review.json'))).toBe(false)}
+})
+it('compact instructions keep complete profiles local, preserve full lookup evidence and send Nora the trusted draft',async()=>{
+ const s=setup(),d=driver();await launchResearchWithDriver(s.options,d.host,s.factory);expect(await s.result).toBe(0)
+ const initial=d.requests[0].req.messages[0].content
+ expect(initial).toContain('No shell, Git, edits');expect(initial).toContain('BOTH approved records')
+ for(const role of ['dana','nora']){
+  const request=d.requests.find(r=>r.role===role&&r.req.format).req
+  const tools=request.messages.filter((m:any)=>m.role==='tool')
+  expect(tools).toHaveLength(2)
+  for(const tool of tools){const result=JSON.parse(tool.content).result;expect(result.excerpt).toBe(quote);expect(result.sha256).toHaveLength(64)}
+  expect(request.messages.at(-1).content).not.toContain('"properties"')
+ }
+ const nora=d.requests.find(r=>r.role==='nora').req.messages
+ expect(nora[0].content).toContain('Retrieve wider context wherever needed')
+ expect(nora[1].content).toContain(JSON.stringify(JSON.parse(fs.readFileSync(path.join(mock.directory,'draft.json'),'utf8'))))
+ const profiles=state().events.map((n:string)=>JSON.parse(fs.readFileSync(path.join(mock.directory,n),'utf8'))).filter((e:any)=>e.kind==='profile')
+ expect(profiles).toHaveLength(2);expect(profiles.every((e:any)=>typeof e.data.persona==='string')).toBe(true)
+})
