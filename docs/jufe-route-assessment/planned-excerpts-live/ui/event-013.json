@@ -1,0 +1,15 @@
+{
+  "kind": "cost-preflight",
+  "data": {
+    "role": "nora",
+    "step": 0,
+    "requestBytes": 13958,
+    "inputEstimate": 4653,
+    "estimatedRequestTokens": 10000,
+    "reviewerReserve": 0,
+    "remaining": 12337,
+    "requiredCapacity": 12000,
+    "allowed": true,
+    "basis": "saved input floors plus full-context bytes/3 and previous input; 2048 output allowance; estimate, not guaranteed cap"
+  }
+}

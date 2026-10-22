@@ -1,0 +1,24 @@
+{
+  "kind": "tool",
+  "data": {
+    "role": "nora",
+    "action": "researchRecords.lookup",
+    "args": {
+      "record_id": "jufe-schedule-2026-10-11",
+      "start_line": 58,
+      "end_line": 73
+    },
+    "result": {
+      "ok": true,
+      "result": {
+        "record_id": "jufe-schedule-2026-10-11",
+        "start_line": 58,
+        "end_line": 73,
+        "total_lines": 212,
+        "sha256": "e281c7def2fc5461202f84422771adc6a32300260ee1d2a0928416830fee4772",
+        "excerpt": "**Not yet assessed — two concrete, previously-unexamined claims:**\n\n1. **\"Evolution within the manifold is stochastically emergent\"** (line\n   13). **Checked directly, repository-wide**: the word \"stochastic\"\n   (in any form) appears **nowhere else in the entire 26-file retained\n   collection**, and in **no prior report in `docs/reports/`** —\n   confirmed by direct search. The dedicated chapter that actually\n   analyses this mechanism (source-30 report, covering Path-Dependency,\n   the Hysteresis Operator, and the Emergence Operator) describes it in\n   explicitly deterministic, history-dependent terms — \"is\n   non-Markovian,\" \"a direct result of its previous path\" (source 30,\n   line 11) — with no probability distribution, random variable, or\n   stochastic-process formalism anywhere in that file or its analysis.\n   **This is a concrete claim made only in the abstract, not stated,\n   defined, or supported by the dedicated chapter covering the same\n   mechanism.** Not previously flagged by any report."
+      }
+    },
+    "origin": "saved-evidence-plan"
+  }
+}

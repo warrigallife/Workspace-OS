@@ -1,0 +1,9 @@
+{
+  "decision": "approve",
+  "reason": "Retrieved spans (coverage lines 47-59, schedule lines 58-73) directly substantiate all three findings: 35.md and 36.md both show 'None' content-level coverage with the exact uncatalogued-operator/empirical-claim and ontology/crosswalk-never-examined details quoted, and the schedule excerpt confirms the stochastic-emergence claim is unsupported by the deterministic source-30 treatment and was not previously flagged.",
+  "checked_citations": [
+    0,
+    1,
+    2
+  ]
+}

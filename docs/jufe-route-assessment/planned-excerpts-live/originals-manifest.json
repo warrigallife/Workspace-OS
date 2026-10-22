@@ -1,0 +1,32 @@
+[
+  {
+    "original": "src/main/agent/ollamaResearchRun.ts",
+    "copy": "docs/jufe-route-assessment/planned-excerpts-live/originals/src/main/agent/ollamaResearchRun.ts.snapshot",
+    "sha256": "50a3c75fa7e97107885c684097ea86fa7e51655c547a158823a40fd3db20bb1d"
+  },
+  {
+    "original": "src/main/agent/providers/claudeResearch.ts",
+    "copy": "docs/jufe-route-assessment/planned-excerpts-live/originals/src/main/agent/providers/claudeResearch.ts.snapshot",
+    "sha256": "7f4d4197613c2d412c978c839a0575ce5244fb95f23402ff3bfa99a8a5b21ac5"
+  },
+  {
+    "original": "src/main/handlers/runs.ts",
+    "copy": "docs/jufe-route-assessment/planned-excerpts-live/originals/src/main/handlers/runs.ts.snapshot",
+    "sha256": "b740b2264eb93ae4b7ebe5544b6e2acf663f0acfd4a971571a80106f9125b31c"
+  },
+  {
+    "original": "src/renderer/src/components/Agents/LocalResearch.tsx",
+    "copy": "docs/jufe-route-assessment/planned-excerpts-live/originals/src/renderer/src/components/Agents/LocalResearch.tsx.snapshot",
+    "sha256": "93537228d4a6213d99ef125d16c0cd4f38795beab6c33fa508687cb455ae2cfe"
+  },
+  {
+    "original": "docs/jufe-route-assessment/claude-pair/handover.md",
+    "copy": "docs/jufe-route-assessment/planned-excerpts-live/originals/docs/jufe-route-assessment/claude-pair/handover.md.snapshot",
+    "sha256": "92026b05406c8bfe0903d0b1aa5ad9fcf73cd7959057188eefd3b49505a9add1"
+  },
+  {
+    "original": "docs/local-team/implementation-log.md",
+    "copy": "docs/jufe-route-assessment/planned-excerpts-live/originals/docs/local-team/implementation-log.md.snapshot",
+    "sha256": "796591087dcd5846a927bbdf4a50be50b8de4e532849db810b93cf295bf07fce"
+  }
+]

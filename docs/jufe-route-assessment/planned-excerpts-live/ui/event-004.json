@@ -1,0 +1,15 @@
+{
+  "kind": "cost-preflight",
+  "data": {
+    "role": "dana",
+    "step": 0,
+    "requestBytes": 11215,
+    "inputEstimate": 3739,
+    "estimatedRequestTokens": 10000,
+    "reviewerReserve": 12000,
+    "remaining": 24000,
+    "requiredCapacity": 10000,
+    "allowed": true,
+    "basis": "saved input floors plus full-context bytes/3 and previous input; 2048 output allowance; estimate, not guaranteed cap"
+  }
+}

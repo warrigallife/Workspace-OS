@@ -1,0 +1,28 @@
+{
+  "base": "99915f0",
+  "approval": "One real UI verification, previously approved two-report scope and selected routes; subscription only, credits off, no fallback or retries",
+  "authentication": {
+    "loggedIn": true,
+    "authMethod": "claude.ai",
+    "apiProvider": "firstParty",
+    "subscriptionType": "pro"
+  },
+  "billing": "Reused recorded user credits-off approval; metadata alone does not verify credits",
+  "limits": {
+    "tokens": 24000,
+    "reviewReserve": 12000,
+    "estimatedUsdPerRole": 0.5,
+    "deadlineMs": 360000,
+    "automaticRetries": 0
+  },
+  "routes": {
+    "dana": {
+      "provider": "claude",
+      "model": "claude-sonnet-5"
+    },
+    "nora": {
+      "provider": "claude",
+      "model": "claude-sonnet-5"
+    }
+  }
+}

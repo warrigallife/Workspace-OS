@@ -1,0 +1,16 @@
+/** Temporary one-use authorization for the explicitly approved UI test.
+ * Durable consumption survives app restarts; permit never crosses IPC. */
+import fs from 'fs'
+import path from 'path'
+import { RESEARCH_ROOT, safePath } from './researchScope'
+import { assertRestrictedLiveApproved } from './researchProvider'
+const permits=new WeakSet<object>()
+export function claimApprovedResearchOnce(runId:string):object {
+  if(!/^bg-[a-z0-9-]{3,40}$/.test(runId))throw new Error('Invalid approved run ID')
+  const file=path.join(RESEARCH_ROOT,'planned-excerpts-live-consumed.json');safePath(file)
+  fs.writeFileSync(file,JSON.stringify({runId,approval:'one subscription-only UI test',consumedAt:new Date().toISOString()}),{flag:'wx',mode:0o600})
+  const permit={};permits.add(permit);return permit
+}
+export function assertResearchOncePermit(permit:object|undefined):void {
+  if(!permit||!permits.has(permit))assertRestrictedLiveApproved()
+}

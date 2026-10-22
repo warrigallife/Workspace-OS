@@ -1,0 +1,32 @@
+{
+  "findings": [
+    {
+      "statement": "Source 35.md shows no content-level coverage; it introduces an uncatalogued Shunt-Radiation operator and an unassessed empirical claim tied to named external experimental data.",
+      "citation": {
+        "record_id": "jufe-coverage-2026-10-11",
+        "start_line": 50,
+        "end_line": 50,
+        "quote": "| 17 | `35.md` | `.../CANONICAL/TFJ-Shunt-Radiation-Equivalence-in-Magnon-Systems.md` | **None** | Reading plan §3 names it as a scheduled \"application,\" no content-level check performed by any report | **Verified directly for this audit**: introduces a previously-uncatalogued operator, the \"Shunt-Radiation Equivalence\" (`\\hat{\\mathcal{S}}_R`, line 7), and a strong, unassessed claim of \"laboratory-verified physics\"/empirical proof-of-principle (line 19) tied to a named external experiment (UCCS/RPTU magnon data) — none of this has been checked against any other source or against the claimed experimental basis |"
+      }
+    },
+    {
+      "statement": "Source 36.md remains uncovered at primary-content level; its ontology, terminology crosswalk, and operator hierarchy have never been examined as primary material by any report.",
+      "citation": {
+        "record_id": "jufe-coverage-2026-10-11",
+        "start_line": 51,
+        "end_line": 51,
+        "quote": "| 18 | `36.md` | `.../CANONICAL/TFJ-Canonical-Self-Bootstrapping-Monograph-Architecture-V4.md` | **None** | Reading plan §2–§3 characterizes it (ontology, terminology crosswalk, operator hierarchy, \"many sections are stubs\"); five reports (27, 28, 29, 30, 32) each explicitly state \"source 36 was not consulted\" | **Verified directly for this audit**: re-read lines 1–60 of this 406-line Python/LaTeX-fragment file; confirms the plan's characterization, but no report has examined its actual ontology/crosswalk/hierarchy content as primary material |"
+      }
+    },
+    {
+      "statement": "The abstract's claim that manifold evolution is 'stochastically emergent' is unsupported by the deterministic source-30 chapter and had not been previously flagged by any report.",
+      "citation": {
+        "record_id": "jufe-schedule-2026-10-11",
+        "start_line": 58,
+        "end_line": 68,
+        "quote": "**Not yet assessed — two concrete, previously-unexamined claims:**\n\n1. **\"Evolution within the manifold is stochastically emergent\"** (line\n   13). **Checked directly, repository-wide**: the word \"stochastic\"\n   (in any form) appears **nowhere else in the entire 26-file retained\n   collection**, and in **no prior report in `docs/reports/`** —\n   confirmed by direct search. The dedicated chapter that actually\n   analyses this mechanism (source-30 report, covering Path-Dependency,\n   the Hysteresis Operator, and the Emergence Operator) describes it in\n   explicitly deterministic, history-dependent terms — \"is\n   non-Markovian,\" \"a direct result of its previous path\" (source 30,"
+      }
+    }
+  ],
+  "limitations": "Findings reflect dated 2026-10-11 report observations and the specific retrieved excerpts only; present-day manuscript status is unknown and unverified beyond these spans."
+}

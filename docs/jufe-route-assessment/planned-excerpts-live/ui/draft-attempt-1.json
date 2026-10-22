@@ -1,0 +1,29 @@
+{
+  "findings": [
+    {
+      "statement": "Source 35.md shows no content-level coverage; it introduces an uncatalogued Shunt-Radiation operator and an unassessed empirical claim tied to named external experimental data.",
+      "citation": {
+        "record_id": "jufe-coverage-2026-10-11",
+        "start_line": 50,
+        "end_line": 50
+      }
+    },
+    {
+      "statement": "Source 36.md remains uncovered at primary-content level; its ontology, terminology crosswalk, and operator hierarchy have never been examined as primary material by any report.",
+      "citation": {
+        "record_id": "jufe-coverage-2026-10-11",
+        "start_line": 51,
+        "end_line": 51
+      }
+    },
+    {
+      "statement": "The abstract's claim that manifold evolution is 'stochastically emergent' is unsupported by the deterministic source-30 chapter and had not been previously flagged by any report.",
+      "citation": {
+        "record_id": "jufe-schedule-2026-10-11",
+        "start_line": 58,
+        "end_line": 68
+      }
+    }
+  ],
+  "limitations": "Findings reflect dated 2026-10-11 report observations and the specific retrieved excerpts only; present-day manuscript status is unknown and unverified beyond these spans."
+}

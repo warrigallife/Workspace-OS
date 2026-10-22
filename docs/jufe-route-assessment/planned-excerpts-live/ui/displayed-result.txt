@@ -1,0 +1,349 @@
+Authoritative outcome: completed
+
+Intermediate artifacts below do not override this outcome.
+
+outcome.json
+{
+  "status": "completed",
+  "error": null,
+  "checkpointId": "3d84c9646a80a5b1927f0b2b95e50a081cc0082d",
+  "turns": 2,
+  "totalTokens": 23831,
+  "routes": {
+    "dana": {
+      "provider": "claude",
+      "model": "claude-sonnet-5"
+    },
+    "nora": {
+      "provider": "claude",
+      "model": "claude-sonnet-5"
+    }
+  },
+  "usage": {
+    "dana": {
+      "basis": "cumulative per session",
+      "models": [
+        {
+          "model": "claude-haiku-4-5-20251001",
+          "attribution": "additional aggregate usage; purpose unattributed",
+          "inputTokens": 4214,
+          "outputTokens": 14,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "costUSD": 0.004284
+        },
+        {
+          "model": "claude-sonnet-5",
+          "attribution": "selected answer model",
+          "inputTokens": 2,
+          "outputTokens": 1907,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 5526,
+          "costUSD": 0.041178
+        }
+      ],
+      "inputTokens": 9742,
+      "outputTokens": 1921,
+      "costUSD": 0.045462
+    },
+    "nora": {
+      "basis": "cumulative per session",
+      "models": [
+        {
+          "model": "claude-haiku-4-5-20251001",
+          "attribution": "additional aggregate usage; purpose unattributed",
+          "inputTokens": 4975,
+          "outputTokens": 14,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "costUSD": 0.005045
+        },
+        {
+          "model": "claude-sonnet-5",
+          "attribution": "selected answer model",
+          "inputTokens": 2,
+          "outputTokens": 545,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 6632,
+          "costUSD": 0.031982
+        }
+      ],
+      "inputTokens": 11609,
+      "outputTokens": 559,
+      "costUSD": 0.037027
+    }
+  }
+}
+
+usage.json
+{
+  "dana": {
+    "basis": "cumulative per session",
+    "models": [
+      {
+        "model": "claude-haiku-4-5-20251001",
+        "attribution": "additional aggregate usage; purpose unattributed",
+        "inputTokens": 4214,
+        "outputTokens": 14,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "costUSD": 0.004284
+      },
+      {
+        "model": "claude-sonnet-5",
+        "attribution": "selected answer model",
+        "inputTokens": 2,
+        "outputTokens": 1907,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 5526,
+        "costUSD": 0.041178
+      }
+    ],
+    "inputTokens": 9742,
+    "outputTokens": 1921,
+    "costUSD": 0.045462
+  },
+  "nora": {
+    "basis": "cumulative per session",
+    "models": [
+      {
+        "model": "claude-haiku-4-5-20251001",
+        "attribution": "additional aggregate usage; purpose unattributed",
+        "inputTokens": 4975,
+        "outputTokens": 14,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "costUSD": 0.005045
+      },
+      {
+        "model": "claude-sonnet-5",
+        "attribution": "selected answer model",
+        "inputTokens": 2,
+        "outputTokens": 545,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 6632,
+        "costUSD": 0.031982
+      }
+    ],
+    "inputTokens": 11609,
+    "outputTokens": 559,
+    "costUSD": 0.037027
+  }
+}
+
+report.md
+# JUFE outstanding research — review of records dated 2026-10-11
+
+Reported coverage gaps, not an assertion of current status.
+
+## 1. Finding
+
+Source 35.md shows no content-level coverage; it introduces an uncatalogued Shunt-Radiation operator and an unassessed empirical claim tied to named external experimental data.
+
+Source: /Users/liammcilmurray/Desktop/JUFE/docs/reports/JUFE_Full_Collection_Coverage_Audit_2026-10-11.md, lines 50–50 (jufe-coverage-2026-10-11).
+
+Exact source excerpt:
+
+> | 17 | `35.md` | `.../CANONICAL/TFJ-Shunt-Radiation-Equivalence-in-Magnon-Systems.md` | **None** | Reading plan §3 names it as a scheduled "application," no content-level check performed by any report | **Verified directly for this audit**: introduces a previously-uncatalogued operator, the "Shunt-Radiation Equivalence" (`\hat{\mathcal{S}}_R`, line 7), and a strong, unassessed claim of "laboratory-verified physics"/empirical proof-of-principle (line 19) tied to a named external experiment (UCCS/RPTU magnon data) — none of this has been checked against any other source or against the claimed experimental basis |
+
+## 2. Finding
+
+Source 36.md remains uncovered at primary-content level; its ontology, terminology crosswalk, and operator hierarchy have never been examined as primary material by any report.
+
+Source: /Users/liammcilmurray/Desktop/JUFE/docs/reports/JUFE_Full_Collection_Coverage_Audit_2026-10-11.md, lines 51–51 (jufe-coverage-2026-10-11).
+
+Exact source excerpt:
+
+> | 18 | `36.md` | `.../CANONICAL/TFJ-Canonical-Self-Bootstrapping-Monograph-Architecture-V4.md` | **None** | Reading plan §2–§3 characterizes it (ontology, terminology crosswalk, operator hierarchy, "many sections are stubs"); five reports (27, 28, 29, 30, 32) each explicitly state "source 36 was not consulted" | **Verified directly for this audit**: re-read lines 1–60 of this 406-line Python/LaTeX-fragment file; confirms the plan's characterization, but no report has examined its actual ontology/crosswalk/hierarchy content as primary material |
+
+## 3. Finding
+
+The abstract's claim that manifold evolution is 'stochastically emergent' is unsupported by the deterministic source-30 chapter and had not been previously flagged by any report.
+
+Source: /Users/liammcilmurray/Desktop/JUFE/docs/reports/JUFE_Schedule_and_Source31_Coverage_Review_2026-10-11.md, lines 58–68 (jufe-schedule-2026-10-11).
+
+Exact source excerpt:
+
+> **Not yet assessed — two concrete, previously-unexamined claims:**
+> 
+> 1. **"Evolution within the manifold is stochastically emergent"** (line
+>    13). **Checked directly, repository-wide**: the word "stochastic"
+>    (in any form) appears **nowhere else in the entire 26-file retained
+>    collection**, and in **no prior report in `docs/reports/`** —
+>    confirmed by direct search. The dedicated chapter that actually
+>    analyses this mechanism (source-30 report, covering Path-Dependency,
+>    the Hysteresis Operator, and the Emergence Operator) describes it in
+>    explicitly deterministic, history-dependent terms — "is
+>    non-Markovian," "a direct result of its previous path" (source 30,
+
+## Limitations
+
+Findings reflect dated 2026-10-11 report observations and the specific retrieved excerpts only; present-day manuscript status is unknown and unverified beyond these spans.
+
+Independent review: Retrieved spans (coverage lines 47-59, schedule lines 58-73) directly substantiate all three findings: 35.md and 36.md both show 'None' content-level coverage with the exact uncatalogued-operator/empirical-claim and ontology/crosswalk-never-examined details quoted, and the schedule excerpt confirms the stochastic-emergence claim is unsupported by the deterministic source-30 treatment and was not previously flagged.
+
+
+review.json
+{
+  "decision": "approve",
+  "reason": "Retrieved spans (coverage lines 47-59, schedule lines 58-73) directly substantiate all three findings: 35.md and 36.md both show 'None' content-level coverage with the exact uncatalogued-operator/empirical-claim and ontology/crosswalk-never-examined details quoted, and the schedule excerpt confirms the stochastic-emergence claim is unsupported by the deterministic source-30 treatment and was not previously flagged.",
+  "checked_citations": [
+    0,
+    1,
+    2
+  ]
+}
+
+handover.md
+# JUFE research handover
+
+Status: completed
+
+Dana produced a cited draft; Nora independently retrieved all citations and approved. Quote fidelity and source hashes checked by trusted code. Semantic review uses a separate stage; see the saved provider identities and receipts.
+
+Selected routes: {"dana":{"provider":"claude","model":"claude-sonnet-5"},"nora":{"provider":"claude","model":"claude-sonnet-5"}}
+
+Usage (additional aggregate models have unattributed purpose; cost is an estimate, not a bill): {"dana":{"basis":"cumulative per session","models":[{"model":"claude-haiku-4-5-20251001","attribution":"additional aggregate usage; purpose unattributed","inputTokens":4214,"outputTokens":14,"cacheReadInputTokens":0,"cacheCreationInputTokens":0,"costUSD":0.004284},{"model":"claude-sonnet-5","attribution":"selected answer model","inputTokens":2,"outputTokens":1907,"cacheReadInputTokens":0,"cacheCreationInputTokens":5526,"costUSD":0.041178}],"inputTokens":9742,"outputTokens":1921,"costUSD":0.045462},"nora":{"basis":"cumulative per session","models":[{"model":"claude-haiku-4-5-20251001","attribution":"additional aggregate usage; purpose unattributed","inputTokens":4975,"outputTokens":14,"cacheReadInputTokens":0,"cacheCreationInputTokens":0,"costUSD":0.005045},{"model":"claude-sonnet-5","attribution":"selected answer model","inputTokens":2,"outputTokens":545,"cacheReadInputTokens":0,"cacheCreationInputTokens":6632,"costUSD":0.031982}],"inputTokens":11609,"outputTokens":559,"costUSD":0.037027}}
+
+Originals unchanged; no canonical writes. Evidence: /Users/liammcilmurray/Desktop/Workspace-OS/.workspace-os/liam-workspace/JUFE-staging/bg-mvjgjpy9-2rgs1f
+
+
+state.json
+{
+  "id": "bg-mvjgjpy9-2rgs1f",
+  "status": "completed",
+  "stage": "nora",
+  "provider": "restricted-hosts",
+  "routes": {
+    "dana": {
+      "provider": "claude",
+      "model": "claude-sonnet-5"
+    },
+    "nora": {
+      "provider": "claude",
+      "model": "claude-sonnet-5"
+    }
+  },
+  "usage": {
+    "dana": {
+      "basis": "cumulative per session",
+      "models": [
+        {
+          "model": "claude-haiku-4-5-20251001",
+          "attribution": "additional aggregate usage; purpose unattributed",
+          "inputTokens": 4214,
+          "outputTokens": 14,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "costUSD": 0.004284
+        },
+        {
+          "model": "claude-sonnet-5",
+          "attribution": "selected answer model",
+          "inputTokens": 2,
+          "outputTokens": 1907,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 5526,
+          "costUSD": 0.041178
+        }
+      ],
+      "inputTokens": 9742,
+      "outputTokens": 1921,
+      "costUSD": 0.045462
+    },
+    "nora": {
+      "basis": "cumulative per session",
+      "models": [
+        {
+          "model": "claude-haiku-4-5-20251001",
+          "attribution": "additional aggregate usage; purpose unattributed",
+          "inputTokens": 4975,
+          "outputTokens": 14,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "costUSD": 0.005045
+        },
+        {
+          "model": "claude-sonnet-5",
+          "attribution": "selected answer model",
+          "inputTokens": 2,
+          "outputTokens": 545,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 6632,
+          "costUSD": 0.031982
+        }
+      ],
+      "inputTokens": 11609,
+      "outputTokens": 559,
+      "costUSD": 0.037027
+    }
+  },
+  "task": "Identify outstanding research work recorded in the two approved JUFE coverage reports dated 2026-10-11. Produce exactly three distinct, concise findings with short exact source excerpts and line citations. Cover both approved records. Distinguish reported coverage gaps from inference and unresolved present-day status. Do not inspect or change manuscripts.",
+  "recoveredFrom": null,
+  "sourceHashes": {
+    "jufe-coverage-2026-10-11": "eaa5a95fc910bf016c03f899e2ec7d283d9eb56b9c35ad88aa3a5ba569f4b96d",
+    "jufe-schedule-2026-10-11": "e281c7def2fc5461202f84422771adc6a32300260ee1d2a0928416830fee4772"
+  },
+  "events": [
+    "event-000.json",
+    "event-001.json",
+    "event-002.json",
+    "event-003.json",
+    "event-004.json",
+    "event-005.json",
+    "event-006.json",
+    "event-007.json",
+    "event-008.json",
+    "event-009.json",
+    "event-010.json",
+    "event-011.json",
+    "event-012.json",
+    "event-013.json",
+    "event-014.json",
+    "event-015.json",
+    "event-016.json",
+    "event-017.json"
+  ],
+  "tasks": {
+    "dana": "task-1792668514021-a8gglr",
+    "nora": "task-1792668514083-y7qgev",
+    "handover": "task-1792668514143-olxidb"
+  },
+  "dependencies": {
+    "task-1792668514083-y7qgev": [
+      "task-1792668514021-a8gglr"
+    ],
+    "task-1792668514143-olxidb": [
+      "task-1792668514083-y7qgev"
+    ]
+  },
+  "reportHash": "87053d4cd310a92ca4bb3d7404d55f5e46f17ab836301db27064d5c05402d002",
+  "turns": 2,
+  "totalTokens": 23831,
+  "reads": {
+    "dana": [
+      {
+        "record_id": "jufe-coverage-2026-10-11",
+        "start_line": 47,
+        "end_line": 59
+      },
+      {
+        "record_id": "jufe-schedule-2026-10-11",
+        "start_line": 58,
+        "end_line": 73
+      }
+    ],
+    "nora": [
+      {
+        "record_id": "jufe-coverage-2026-10-11",
+        "start_line": 47,
+        "end_line": 59
+      },
+      {
+        "record_id": "jufe-schedule-2026-10-11",
+        "start_line": 58,
+        "end_line": 73
+      }
+    ]
+  }
+}
