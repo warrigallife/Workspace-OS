@@ -98,10 +98,57 @@ export interface LaunchRunOptions {
    * or 'all' for the legacy full grant of a plain dock run. See ./grants.ts.
    */
   capabilities: readonly string[] | 'all'
+  /** Per-task spending cap in USD, passed to the CLI's own --max-budget-usd.
+   *  Unset = DEFAULT_MAX_BUDGET_USD. See budgetArgs() below. */
+  maxBudgetUsd?: number
+  /**
+   * Additive, per-call overrides merged into childEnv last — after the
+   * `{...process.env}` spread and after MCP secret injection — so these are
+   * authoritative for this one spawned child only. A value of `undefined`
+   * means "ensure this key is absent from the child's environment", without
+   * ever reading or mutating this process's own `process.env`. Each call
+   * builds and discards its own override object; nothing here is shared
+   * mutable state, so concurrent `launchRun()` calls cannot see or clobber
+   * each other's overrides.
+   */
+  env?: Record<string, string | undefined>
   sink: RunSink
 }
 
 export { isValidModelAlias, modelArgs } from './modelPick'
+
+/**
+ * A run gets the auto-recalled memory block only if it could plausibly act on
+ * it: the legacy full ('all') grant, a persona that declares no capabilities
+ * list at all (the common default/no-persona run — unaffected, exactly as
+ * before), or a persona that explicitly lists 'knowledge' among its declared
+ * capabilities. A persona that declares capabilities WITHOUT 'knowledge' (e.g.
+ * a reviewer deliberately scoped away from memory.search/.remember) cannot act
+ * on a recalled fact either way, so skipping the recall avoids paying for
+ * context that run can never use.
+ */
+export function shouldRecallMemory(
+  capabilities: readonly string[] | 'all',
+  agentCapabilities?: readonly string[],
+): boolean {
+  if (capabilities === 'all') return true
+  if (!agentCapabilities || agentCapabilities.length === 0) return true
+  return agentCapabilities.includes('knowledge')
+}
+
+/** The shared per-task spending ceiling applied when a caller doesn't set its
+ *  own. This is a backstop against a runaway/looping run, not a budgeting
+ *  tool — a legitimate long task should pass its own, larger maxBudgetUsd. */
+export const DEFAULT_MAX_BUDGET_USD = 10
+
+/** --max-budget-usd is already used, with test coverage, by the separate
+ *  restricted-research driver (./providers/claudeResearch.ts); this applies
+ *  the same CLI-enforced cap to the ordinary dock/queue launch path, which
+ *  previously had none at all. */
+export function budgetArgs(maxBudgetUsd?: number): string[] {
+  const amount = typeof maxBudgetUsd === 'number' && maxBudgetUsd > 0 ? maxBudgetUsd : DEFAULT_MAX_BUDGET_USD
+  return ['--max-budget-usd', String(amount)]
+}
 
 let cachedBinary: string | null = null
 
@@ -140,14 +187,23 @@ export async function launchRun(o: LaunchRunOptions): Promise<{ child: ChildProc
     // A store nothing reads is a diary nobody opens — this is the point of the
     // whole subsystem. Failure here must never block a run: an agent that works
     // without memory is strictly better than one that refuses to start.
+    //
+    // Only worth the tokens for a run that can actually ACT on a recalled fact —
+    // a persona that declares capabilities without 'knowledge' (e.g. a reviewer
+    // deliberately not a memory-writer) cannot call memory.search/.remember via
+    // wos-action either, so the recalled block is unused context it still gets
+    // billed for. A legacy full ('all') grant, or no declared capabilities list
+    // at all (the common default/no-persona run), keeps memory exactly as before.
     let memoryBlock = ''
-    try {
-      const memCtx = { root: getWorkspaceRoot(), userDataDir: app.getPath('userData') }
-      const recalled = searchMemory(memCtx, retrievalQueryFor(String(prompt)), 12)
-      memoryBlock = buildMemoryBlock(recalled)
-      if (recalled.length) markUsed(memCtx, recalled.map((m) => m.id))
-    } catch {
-      /* memory unavailable — run without it */
+    if (shouldRecallMemory(o.capabilities, agent?.capabilities)) {
+      try {
+        const memCtx = { root: getWorkspaceRoot(), userDataDir: app.getPath('userData') }
+        const recalled = searchMemory(memCtx, retrievalQueryFor(String(prompt)), 12)
+        memoryBlock = buildMemoryBlock(recalled)
+        if (recalled.length) markUsed(memCtx, recalled.map((m) => m.id))
+      } catch {
+        /* memory unavailable — run without it */
+      }
     }
     // Paths get interpolated into prompt text — reject anything that isn't a
     // clean absolute path (control chars in a "path" could forge prompt lines).
@@ -225,6 +281,16 @@ export async function launchRun(o: LaunchRunOptions): Promise<{ child: ChildProc
       mcpAllowTools = []
     }
 
+    // Caller's per-call env override, applied last so it is authoritative
+    // over both process.env and any MCP secret injection above — see
+    // LaunchRunOptions.env's doc comment.
+    if (o.env) {
+      for (const [k, v] of Object.entries(o.env)) {
+        if (v === undefined) delete childEnv[k]
+        else childEnv[k] = v
+      }
+    }
+
     if (provider === 'codex') {
       let skills: { name: string; path: string }[] = []
       const wanted = [...(agent?.skills ?? [])]
@@ -294,6 +360,7 @@ export async function launchRun(o: LaunchRunOptions): Promise<{ child: ChildProc
       ...mcpArgs,
       ...continuityArgs,
       ...modelArgs(o.model),
+      ...budgetArgs(o.maxBudgetUsd), // shared per-task spending guard — see DEFAULT_MAX_BUDGET_USD above
       '-p', // prompt arrives on stdin — see the security note at the top
     ]
     const providerArgs = claudeArgs
@@ -509,9 +576,9 @@ function buildSystemPrompt(
   const actionGuide = agentActionGuide()
   if (actionGuide) lines.push(actionGuide)
   lines.push(
-    'To read or update LIVE METRICS (named numbers that stay in sync across every linked Excel/Word/PowerPoint file), use `wos-metric` (on your PATH). Key commands: `wos-metric list`; `wos-metric get "<name>"`; `wos-metric set "<name>" <value>` (updates the value and propagates it to every linked file on disk); `wos-metric create "<name>" --value <v>` or `--source <file.xlsx!Sheet!A1>`; `wos-metric link "<name>" --file <deck.pptx|doc.docx|book.xlsx> --target <tag|Sheet!A1>` (bind a metric to an EXISTING anchor on disk); `wos-metric refresh "<name>"` / `wos-metric refresh-all` (re-read sourced metrics from their source cell and propagate); `wos-metric sync-all` (push every metric into every linked file). Add `--json` for machine-readable output. It writes files safely — a locked/formula/missing file is skipped and reported, never corrupted.',
-    'To build a LIVE Excel→PowerPoint deck whose numbers stay bound to the spreadsheet, run this ORDERED recipe: (1) `wos-gen xlsx` the model; (2) `wos-metric create "<Name>" --source "<file.xlsx>!Sheet1!B2"` per figure; (3) `wos-gen pptx` with each figure as an anchored shape — put `"metrics":[{"tag":"revenue","text":"1200","label":"Revenue"}]` on a slide (`tag` → shape name `wos-metric-<tag>`); (4) `wos-metric link "<Name>" --file "<deck.pptx>" --target "<tag>"` per figure; (5) `wos-metric sync-all`. Later, `wos-metric refresh-all && wos-metric sync-all` re-flows changed cells into the deck. To only MIRROR values once (no live link), skip steps 2/4/5 and put the numbers straight in the spec.',
-    'To work with LIVE COLLECTIONS (typed record sets — e.g. rows of deals/products — that stay in sync as filtered/sorted tables across every linked Excel/Word/PowerPoint file), use `wos-collection` (on your PATH). Key commands: `wos-collection list`; `wos-collection get "<name>"`; `wos-collection records "<name>"`; `wos-collection create "<name>" --source <file.xlsx!Sheet!A1:C20>` (row 0 = field names); `wos-collection view "<name>" [--filter "revenue > 1000"]... [--sort "revenue:desc"]... [--limit N]` (preview a live query); `wos-collection link "<name>" --file <doc> --target <anchorTag|xlsx:Sheet!A1> --columns "field:Header,field2:Header2" [--filter ...] [--sort ...] [--limit N]` (bind a viewed projection to a target block); `wos-collection links [<name>] [--file <doc>]`; `wos-collection refresh "<name>"` / `refresh-all` (re-read sourced collections); `wos-collection sync "<name>"` / `sync-all` (push viewed records into every linked file). Add `--json` for machine-readable output. It UPDATES an existing anchored table/range (a docx/pptx target needs a `wos-collection-<tag>` anchor the app inserted first; an xlsx target can be any range ref) — it cannot insert a NEW table into a closed docx/pptx. Writes are fail-safe: a locked/formula/missing file is skipped and reported, never corrupted.',
+    'LIVE METRICS (`wos-metric`, on PATH): list; get "<name>"; set "<name>" <value> (propagates to linked files); create "<name>" --value <v> or --source <file.xlsx!Sheet!A1>; link "<name>" --file <deck.pptx|doc.docx|book.xlsx> --target <tag|Sheet!A1> (existing anchor); refresh "<name>" / refresh-all (re-read source and propagate); sync-all (push values). Add --json for machine-readable output. Locked/formula/missing files are skipped and reported.',
+    'LIVE Excel→PowerPoint order: (1) wos-gen xlsx model; (2) wos-metric create "<Name>" --source "<file.xlsx>!Sheet1!B2"; (3) wos-gen pptx with slide metrics:[{tag:"revenue",text:"1200",label:"Revenue"}] (shape name wos-metric-<tag>); (4) wos-metric link "<Name>" --file "<deck.pptx>" --target "<tag>"; (5) wos-metric sync-all. For changed cells run refresh-all then sync-all. For a one-time mirror, put numbers in the spec and omit 2/4/5.',
+    'LIVE COLLECTIONS (`wos-collection`, on PATH): list; get "<name>"; records "<name>"; create "<name>" --source <file.xlsx!Sheet!A1:C20> (first row: fields); view "<name>" [--filter "revenue > 1000"]... [--sort "revenue:desc"]... [--limit N]; link "<name>" --file <doc> --target <anchorTag|xlsx:Sheet!A1> --columns "field:Header,field2:Header2" [--filter ...] [--sort ...] [--limit N]; links [<name>] [--file <doc>]; refresh "<name>" / refresh-all (re-read source); sync "<name>" / sync-all (update linked views). Add --json. Updates EXISTING targets only: docx/pptx require a previously inserted wos-collection-<tag> anchor; xlsx accepts a range. Cannot insert a new table into closed docx/pptx. Locked/formula/missing files are skipped and reported.',
   )
   // Recollections go near the END, after the capability guidance: they are
   // context for the task, not instructions that should outrank how the agent

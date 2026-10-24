@@ -288,7 +288,17 @@ it('compact instructions keep complete profiles local, preserve full lookup evid
  }
  const nora=d.requests.find(r=>r.role==='nora').req.messages
  expect(nora[0].content).toContain('Retrieve wider context wherever needed')
- expect(nora[1].content).toContain(JSON.stringify(JSON.parse(fs.readFileSync(path.join(mock.directory,'draft.json'),'utf8'))))
+ const savedDraft=JSON.parse(fs.readFileSync(path.join(mock.directory,'draft.json'),'utf8'))
+ const marker='Draft to independently review (quotation text comes from your independent lookups): '
+ expect(nora[1].content).toContain(marker)
+ const sentDraft=JSON.parse(nora[1].content.split(marker)[1])
+ expect(sentDraft.limitations).toBe(savedDraft.limitations)
+ expect(sentDraft.findings).toEqual(savedDraft.findings.map((f:any)=>({
+   statement:f.statement,
+   citation:{record_id:f.citation.record_id,start_line:f.citation.start_line,end_line:f.citation.end_line}
+ })))
+ expect(sentDraft.findings.every((f:any)=>!Object.hasOwn(f.citation,'quote'))).toBe(true)
+ expect(savedDraft.findings.every((f:any)=>f.citation.quote===quote)).toBe(true)
  const profiles=state().events.map((n:string)=>JSON.parse(fs.readFileSync(path.join(mock.directory,n),'utf8'))).filter((e:any)=>e.kind==='profile')
  expect(profiles).toHaveLength(2);expect(profiles.every((e:any)=>typeof e.data.persona==='string')).toBe(true)
 })

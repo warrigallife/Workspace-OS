@@ -5,6 +5,13 @@ import path from 'path'
 import os from 'os'
 import { createHash } from 'crypto'
 export const RESEARCH_ROOT = path.join(os.homedir(), 'Desktop/Workspace-OS/.workspace-os/liam-workspace')
+export const WARRIGAL_RESEARCH_ROOT = path.join(os.homedir(), 'Desktop/WARRIGAL RESEARCH SUITE')
+/** Only these owner-designated workspaces may host the fixed two-report workflow. */
+export function requireResearchWorkspace(root: string | null): string {
+  if (root !== RESEARCH_ROOT && root !== WARRIGAL_RESEARCH_ROOT) throw new Error('Open the pilot or WARRIGAL RESEARCH SUITE workspace')
+  safePath(root)
+  return root
+}
 export const RECORDS: Record<string,string> = {
   'jufe-coverage-2026-10-11': path.join(os.homedir(),'Desktop/JUFE/docs/reports/JUFE_Full_Collection_Coverage_Audit_2026-10-11.md'),
   'jufe-schedule-2026-10-11': path.join(os.homedir(),'Desktop/JUFE/docs/reports/JUFE_Schedule_and_Source31_Coverage_Review_2026-10-11.md'),
@@ -19,9 +26,9 @@ export function safePath(file: string): void {
     catch (e) { if ((e as NodeJS.ErrnoException).code!=='ENOENT') throw e }
   }
 }
-export function runDirectory(id: string): string {
+export function runDirectory(id: string, workspace: string = RESEARCH_ROOT): string {
   if (!/^bg-[a-z0-9-]{3,40}$/.test(id)) throw new Error('Invalid research run ID')
-  const dir=path.join(RESEARCH_ROOT,'JUFE-staging',id);safePath(dir);return dir
+  const dir=path.join(requireResearchWorkspace(workspace),'JUFE-staging',id);safePath(dir);return dir
 }
 export interface Citation { record_id: string; start_line: number; end_line: number; quote: string }
 export interface Finding { statement: string; citation: Citation }

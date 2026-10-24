@@ -1,3 +1,4 @@
+import type {Draft} from './researchScope'
 import {LIMITS} from './researchContract'
 type Role='dana'|'nora'
 /** Run-local instructions only; complete existing profiles remain in local evidence.
@@ -9,4 +10,11 @@ export function researchFinalisation(role:Role):string {
  const bounds=(key:keyof typeof LIMITS)=>LIMITS[key].join('–')
  // Structure is already supplied in format; retain bounds omitted by provider grammar.
  return 'Return ONLY JSON in the supplied format; no tools/fences. Trusted code validates and saves. '+(role==='dana'?`Produce exactly three findings (validator allows ${bounds('findings')}). Statements: ${bounds('statement')} characters, one sentence at most 35 words. Cite both records using record_id/start_line/end_line only, inside prior lookups. Do not supply quote text. Trusted code copies ALL selected lines from the hashed snapshot: ${bounds('quote')} characters. Choose the smallest sufficient span. Limitations: ${bounds('limitations')} characters; aim for one sentence of 20–180. Do not invent support.`:`Check each finding independently. Return decision, reason (${bounds('reason')} characters; at most two sentences), checked_citations. Approval requires exactly all finding indices once and independent retrieval of every cited span. Reject unsupported claims.`)
+}
+
+/** Review receives every claim, limitation and citation location unchanged.
+ * Quotation text is supplied by Nora's independent grant-backed lookups, not
+ * duplicated from Dana's resolved draft. The saved draft is never mutated. */
+export function researchReviewDraft(draft:Draft):Omit<Draft,'findings'>&{findings:{statement:string;citation:{record_id:string;start_line:number;end_line:number}}[]} {
+ return {findings:draft.findings.map(({statement,citation})=>({statement,citation:{record_id:citation.record_id,start_line:citation.start_line,end_line:citation.end_line}})),limitations:draft.limitations}
 }

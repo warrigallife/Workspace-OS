@@ -55,3 +55,6 @@ build/demo/
 docs/pitch/_print.html
 docs/pitch/*.pdf
 .playwright-mcp/
+
+# Local, session-only pre-edit safety copies — never part of the project.
+_WOS_AUTOFIX_BACKUP_*/

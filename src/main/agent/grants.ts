@@ -32,6 +32,7 @@ import { getCapability } from './capabilityCatalog'
 /** Action-id prefixes each capability may run. */
 const SURFACE_PREFIXES: Record<string, readonly string[]> = {
   evidence: ['evidence.'],
+  'beads-tasks': ['beads.'],
   research: ['browser.'],
   documents: ['files.', 'document.'],
   webpage: ['files.', 'document.'],

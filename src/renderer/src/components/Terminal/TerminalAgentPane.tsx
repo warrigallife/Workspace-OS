@@ -43,6 +43,20 @@ function contextPreamble(c: HarnessContext): string {
 }
 
 /**
+ * Only the FIRST turn of a tab's conversation needs the harness preamble. A
+ * resumed turn already has it: the backend skips re-appending its own system
+ * prompt on --resume specifically to avoid this kind of bloat (launchRun.ts),
+ * and separately re-sends just the current open file if that changed. Gluing
+ * the whole root/surface/action-catalog block onto every turn regardless was
+ * pure duplicated context — this is the one place that decision is made, so
+ * it stays easy to find and to unit-test without rendering the component.
+ */
+export function groundedPrompt(contextBlock: string, prompt: string, isFirstTurn: boolean): string {
+  const body = prompt || 'Look at the attached files.'
+  return isFirstTurn ? `${contextBlock}\n\n${body}` : body
+}
+
+/**
  * A minimal agent chat tab. It reuses the EXISTING agent backend
  * (window.workspace.agent.run + onOutput/onDone) — one prompt → streamed
  * response — and injects the live harness so the agent knows the user's
@@ -140,6 +154,7 @@ export function TerminalAgentPane({ sessionId, context, agentName, onOpenFile }:
       prompt = `Use the "${slash[1]}" skill.${slash[2] ? ' ' + slash[2] : ''}`
     }
     const shown = raw.trim() || mentions.map((m) => m.split('/').pop()).join(', ')
+    const isFirstTurn = messages.length === 0
     append('user', shown)
     const runId = newRunId()
     runRef.current = runId
@@ -161,7 +176,7 @@ export function TerminalAgentPane({ sessionId, context, agentName, onOpenFile }:
     // Blank agent bubble to stream into.
     setMessages((prev) => [...prev, { role: 'agent', text: '' }])
     const c = ctxRef.current
-    const grounded = `${contextPreamble(c)}\n\n${prompt || 'Look at the attached files.'}`
+    const grounded = groundedPrompt(contextPreamble(c), prompt, isFirstTurn)
     window.workspace.agent
       // @-mentions ride the REAL context-files slot, not pasted-in prose.
       .run(runId, grounded, mentions, c.openFile ?? null, settings.agentMode, agentName ?? null, convoRef.current)
@@ -172,7 +187,7 @@ export function TerminalAgentPane({ sessionId, context, agentName, onOpenFile }:
         runRef.current = null
         setBusy(false)
       })
-  }, [busy, append, settings.agentMode, agentName, sessionId, skills])
+  }, [busy, append, settings.agentMode, agentName, sessionId, skills, messages])
 
   return (
     <div className={styles.agent}>

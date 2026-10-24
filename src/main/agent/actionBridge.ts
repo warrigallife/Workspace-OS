@@ -1,3 +1,5 @@
+import { beadsAction, BEADS_ACTIONS } from './beadsAction'
+import { gibsonAction, GIBSON_ACTIONS } from './gibsonAction'
 import { researchAction } from './researchScope'
 import { evidenceAction, evidenceLookupAction } from './evidenceAction'
 import net from 'net'
@@ -100,6 +102,8 @@ export async function handleRequest(
     calendar?: (actionId: string, args: unknown) => Promise<ActionReply>
     documents?: (actionId: string, args: unknown) => Promise<ActionReply>
     data?: (args: unknown) => Promise<ActionReply>
+    beads?: (root: string, action: string, args: unknown, actor: string) => Promise<ActionReply>
+    gibson?: (root: string, args: unknown) => Promise<ActionReply>
     /**
      * Per-run authorization. Resolves the request's token to a grant; a run
      * outside its grant is refused BEFORE anything is touched. When absent
@@ -113,7 +117,7 @@ export async function handleRequest(
     return { ok: true, result: { surface: ctx.surface, root: ctx.root, folder: ctx.folder, openFile: ctx.openFile } }
   }
   if (req.cmd === 'list') {
-    return { ok: true, result: { available: ctx.actions, all: ctx.allActionIds } }
+    return { ok: true, result: { available: ctx.actions, all: [...new Set([...ctx.allActionIds,...BEADS_ACTIONS,...GIBSON_ACTIONS])] } }
   }
   if (req.cmd === 'run') {
     const id = req.actionId
@@ -128,6 +132,22 @@ export async function handleRequest(
         console.warn(`[action-bridge] refused ${id} for run ${grant.label}: outside its grant`)
         return { ok: false, error: `not granted: ${id} is outside what this agent was given` }
       }
+    }
+    if (id.startsWith('beads.')) {
+      const grant=deps.grants?.(req.token)
+      if(!grant || !ctx.root || grant.root!==ctx.root)return {ok:false,error:'Beads requires a matching workspace-bound grant'}
+      if(!(BEADS_ACTIONS as readonly string[]).includes(id))return {ok:false,error:'Unknown Beads action'}
+      return (deps.beads ?? beadsAction)(ctx.root,id,req.args,grant.runId)
+    }
+    if (id === 'gibson.run') {
+      // Full-grant only: no SURFACE_PREFIXES entry exists for this id, so a
+      // scoped/forged persona or routine can never reach it regardless of
+      // its capability list — only the legacy 'all' grant (a human's own
+      // plain dock run) can. Deliberately not added to grants.ts's
+      // capability table for this pass; see the handover entry.
+      const grant=deps.grants?.(req.token)
+      if(!grant || grant.scope!=='all' || !ctx.root || grant.root!==ctx.root)return {ok:false,error:'Gibson requires a full-grant run bound to this workspace'}
+      return (deps.gibson ?? gibsonAction)(ctx.root,req.args)
     }
     if (id.startsWith('researchRecords.') || id.startsWith('researchReport.')) {
       const grant=deps.grants?.(req.token)

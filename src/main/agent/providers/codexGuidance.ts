@@ -1,4 +1,3 @@
-import fs from 'fs'
 import path from 'path'
 import { docgenResourceDir } from '../../docgen'
 import { agentActionGuide } from '../../context/workspaceContext'
@@ -6,11 +5,10 @@ import { capabilityGuidanceBlock } from '../capabilityCatalog'
 import type { AgentFile } from '../../handlers/agents'
 
 export function codexGuidance(root: string, activeFile: string | null, agent: AgentFile | null, safe: boolean, memory: string): string {
-  let schemas = ''
-  try {
-    const skill = fs.readFileSync(path.join(docgenResourceDir(), 'SKILL.md'), 'utf8')
-    schemas = skill.slice(skill.indexOf('## Spec schemas'))
-  } catch { /* CLI help remains available */ }
+  const schemaPath=path.join(docgenResourceDir(), 'SKILL.md')
+  // Keep the installed reference on disk rather than injecting every schema
+  // into unrelated runs. Read it before office generation; never guess schemas.
+  const schemaGuide=`Office JSON schemas are in ${JSON.stringify(schemaPath)}, section "## Spec schemas". Before generating pptx/xlsx/docx, read that section and the relevant format schema using your permitted read tools. If unavailable, report the missing reference rather than inventing a spec. Do not load unrelated format sections. HTML/Markdown use content as described above.`
   return [
     agent?.persona ?? '',
     'You are the Codex agent inside Workspace OS. Work on the user’s real artifacts and leave results for review.',
@@ -24,7 +22,7 @@ export function codexGuidance(root: string, activeFile: string | null, agent: Ag
     'For live data use `wos-action run document.data \'{"operation":"metric:list","args":[]}\'`; `document.data` exposes the validated metric/range/collection operations, not arbitrary IPC. Ask `document.data` with operation "help" for its exact operations.',
     'To remember or recall facts use `wos-action run memory.remember \'{"text":"...","kind":"fact","source":"..."}\'` or `wos-action run memory.search \'{"query":"..."}\'`. Respect a refused capability.',
     'Use the installed Codex skills when applicable. A skill’s file-writing recipe must respect the Safe/Full transport rules above. Subagents must use Codex’s supported subagent tools and inherit only the parent’s grant.',
-    schemas,
+    schemaGuide,
     memory,
   ].filter(Boolean).join('\n\n')
 }

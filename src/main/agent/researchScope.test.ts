@@ -79,3 +79,11 @@ it('fails closed on altered or missing saved snapshots, and changed originals af
   expect(()=>scope.save('dana',draft)).toThrow();expect(scope.draft).toBeUndefined()
  }
 })
+
+it('limits staging to the two designated workspace roots and keeps legacy pilot paths',async()=>{
+ const {RESEARCH_ROOT,WARRIGAL_RESEARCH_ROOT,requireResearchWorkspace,runDirectory}=await import('./researchScope')
+ expect(runDirectory('bg-workspace-test')).toBe(path.join(RESEARCH_ROOT,'JUFE-staging','bg-workspace-test'))
+ expect(runDirectory('bg-workspace-test',WARRIGAL_RESEARCH_ROOT)).toBe(path.join(WARRIGAL_RESEARCH_ROOT,'JUFE-staging','bg-workspace-test'))
+ for(const root of [null,'/tmp/other',WARRIGAL_RESEARCH_ROOT+'/../other'])expect(()=>requireResearchWorkspace(root)).toThrow()
+ expect(()=>runDirectory('../escape',WARRIGAL_RESEARCH_ROOT)).toThrow()
+})

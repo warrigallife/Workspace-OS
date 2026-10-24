@@ -4,7 +4,7 @@ import { selectedResearchRoutes, hasCloudRoute, RESEARCH_BUDGET, withResearchAbo
 import { researchLedger, type ResearchLedger } from './researchLedger'
 import { plannedResearchExcerpts } from './researchExcerpts'
 import { researchCostPlan } from './researchCost'
-import { researchSystem, researchFinalisation } from './researchContext'
+import { researchSystem, researchFinalisation, researchReviewDraft } from './researchContext'
 import { researchTools, providerOutputSchema } from './researchContract'
 /** Bounded local provider adapter; existing queue, profiles, bridge and checkpoints own the run. */
 import fs from 'fs'
@@ -17,14 +17,15 @@ import { getWorkspaceRoot } from '../workspace-root'
 import { CheckpointStore } from '../checkpoint'
 import { grants } from './grants'
 import { invokeGrantedAction } from './actionBridge'
-import { RESEARCH_ROOT, ResearchScope, runDirectory, registerResearchStage, closeResearchStage, hash } from './researchScope'
+import { requireResearchWorkspace, ResearchScope, runDirectory, registerResearchStage, closeResearchStage, hash } from './researchScope'
 export const RESEARCH_TASK='Identify outstanding research work recorded in the two approved JUFE coverage reports dated 2026-10-11. Produce exactly three distinct, concise findings with short exact source excerpts and line citations. Cover both approved records. Distinguish reported coverage gaps from inference and unresolved present-day status. Do not inspect or change manuscripts.'
 export async function launchOllamaResearch(o:LaunchRunOptions):Promise<{child:ChildProcess;checkpointId:string|null}> {
+  const workspace=requireResearchWorkspace(getWorkspaceRoot())
   const routes=selectedResearchRoutes(o.research)
   // A mixed run is also a cloud run: approval must precede even its local stage.
-  const livePermit=claimResearchApproval(o.research?.approvalId,o.runId,{routes,workspace:RESEARCH_ROOT,task:o.research?.task??RESEARCH_TASK})
+  const livePermit=claimResearchApproval(o.research?.approvalId,o.runId,{routes,workspace,task:o.research?.task??RESEARCH_TASK})
   const local=createOllamaResearchDriver(routes)
-  const cloud=createClaudeResearchDriver({directory:runDirectory(o.runId),routes,maxBudgetUsd:1,livePermit})
+  const cloud=createClaudeResearchDriver({directory:runDirectory(o.runId,workspace),routes,maxBudgetUsd:1,livePermit})
   const driver:ResearchDriver={kind:hasCloudRoute(routes)?'restricted-hosts':'ollama-local',routes,
     async preflight(signal){
       if(hasCloudRoute(routes))await cloud.preflight(signal)
@@ -43,8 +44,8 @@ export async function launchResearchWithDriver(o:LaunchRunOptions, driver:Resear
   if (o.research?.providerMode && o.research.providerMode!==driver.kind)throw new Error('Research provider mode mismatch')
   const task=restricted?(o.research?.task??RESEARCH_TASK):RESEARCH_TASK
   if(typeof task!=='string'||!task.trim()||task.length>4000)throw new Error('Research task must contain 1–4000 characters')
-  if (getWorkspaceRoot()!==RESEARCH_ROOT) throw new Error('Open the approved local workspace before running research')
-  const dir=runDirectory(o.runId);fs.mkdirSync(path.dirname(dir),{recursive:true});fs.mkdirSync(dir,{mode:0o700})
+  const workspace=requireResearchWorkspace(getWorkspaceRoot())
+  const dir=runDirectory(o.runId,workspace);fs.mkdirSync(path.dirname(dir),{recursive:true});fs.mkdirSync(dir,{mode:0o700})
   const scope=new ResearchScope(dir),controller=new AbortController()
   const approval=researchApprovalReceipt(o.runId);if(approval)scope.write('approval.json',approval)
   // Existing callers only need a cancellable ChildProcess handle; no executable is spawned.
@@ -66,11 +67,11 @@ export async function launchResearchWithDriver(o:LaunchRunOptions, driver:Resear
     const name=role==='dana'?'Dana — JUFE Runtime Keeper':'Nora — Workspace Auditor'
     const profile=readAgentForRun(name);if(!profile)throw new Error('Missing existing profile: '+name)
     record('profile',{role,name,persona:profile.persona})
-    const id=o.runId+':'+role,token=grants.issueExact(id,['researchRecords.lookup','researchReport.save'],name,RESEARCH_ROOT)
+    const id=o.runId+':'+role,token=grants.issueExact(id,['researchRecords.lookup','researchReport.save'],name,workspace)
     registerResearchStage(id,scope,role)
     const catalog=Object.entries(scope.sources).map(([record_id,s])=>({record_id,total_lines:s.lines.length}))
     const system=researchSystem(role,catalog)
-    const messages:any[]=[{role:'system',content:system},{role:'user',content:task+(role==='nora'?'\nDraft to independently review: '+JSON.stringify(scope.draft):'')}]
+    const messages:any[]=[{role:'system',content:system},{role:'user',content:task+(role==='nora'?'\nDraft to independently review (quotation text comes from your independent lookups): '+JSON.stringify(researchReviewDraft(scope.draft!)):'')}]
     let calls=0,lastInputTokens=0
     try {
       controller.signal.throwIfAborted()
@@ -87,7 +88,7 @@ export async function launchResearchWithDriver(o:LaunchRunOptions, driver:Resear
       if(planned.length){
         messages.push({role:'user',content:'The coordinator retrieves selected passages below for the unchanged question. These are dated report observations, not exhaustive or current coverage. Assess all findings against the full supplied passages, not quotation matches alone. If context is insufficient, do not invent support or approve; state that limitation/reject.'})
         for(const args of planned){
-          controller.signal.throwIfAborted();if(getWorkspaceRoot()!==RESEARCH_ROOT)throw new Error('Workspace changed')
+          controller.signal.throwIfAborted();if(getWorkspaceRoot()!==workspace)throw new Error('Workspace changed')
           if(++calls>RESEARCH_BUDGET.actionsPerStage)throw new Error('Tool-call budget exceeded')
           const result=await invokeGrantedAction({cmd:'run',actionId:'researchRecords.lookup',args,token})
           record('tool',{role,action:'researchRecords.lookup',args,result,origin:'saved-evidence-plan'})
@@ -98,7 +99,7 @@ export async function launchResearchWithDriver(o:LaunchRunOptions, driver:Resear
 
       let draftAttempts=0,finalisationPrompted=false
       for(let step=0;step<RESEARCH_BUDGET.responsesPerStage;step++) {
-        controller.signal.throwIfAborted();if(getWorkspaceRoot()!==RESEARCH_ROOT)throw new Error('Workspace changed')
+        controller.signal.throwIfAborted();if(getWorkspaceRoot()!==workspace)throw new Error('Workspace changed')
         if(Buffer.byteLength(JSON.stringify(messages))>RESEARCH_BUDGET.contextBytes)throw new Error('Context limit')
         o.sink.output(`${name}: ${driver.kind} step ${step+1}/12\n`)
         const ready=scope.missingRecords(role).length===0 && (role==='dana'||scope.draft!.findings.every(f=>scope.reads.nora.some(r=>r.record_id===f.citation.record_id&&r.start_line<=f.citation.start_line&&r.end_line>=f.citation.end_line)))
@@ -188,7 +189,7 @@ export async function launchResearchWithDriver(o:LaunchRunOptions, driver:Resear
         state.tasks=tasks;state.dependencies={[tasks.nora]:[tasks.dana],[tasks.handover]:[tasks.nora]}
       }
       await stage('dana');await stage('nora');controller.signal.throwIfAborted()
-      if(getWorkspaceRoot()!==RESEARCH_ROOT)throw new Error('Workspace changed before completion')
+      if(getWorkspaceRoot()!==workspace)throw new Error('Workspace changed before completion')
       if(scope.review?.decision!=='approve')throw new Error('Independent reviewer rejected the draft')
       scope.assertSources();for(const f of scope.draft!.findings){scope.checkCitation(f.citation,'dana');scope.checkCitation(f.citation,'nora')}
       const report='# JUFE outstanding research — review of records dated 2026-10-11\n\nReported coverage gaps, not an assertion of current status.\n\n'+scope.draft!.findings.map((f,i)=>`## ${i+1}. Finding\n\n${f.statement}\n\nSource: ${scope.sources[f.citation.record_id].path}, lines ${f.citation.start_line}–${f.citation.end_line} (${f.citation.record_id}).\n\nExact source excerpt:\n\n> ${f.citation.quote.replace(/\n/g,'\n> ')}\n`).join('\n')+'\n## Limitations\n\n'+scope.draft!.limitations+'\n\nIndependent review: '+scope.review.reason+'\n'

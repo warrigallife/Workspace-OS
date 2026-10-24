@@ -15,6 +15,7 @@ export function LocalResearch():JSX.Element {
   const start=async(id?:string):Promise<void>=>{if(starting)return;setStarting(true);try{setError('');await window.workspace.research.enqueue(id,id?undefined:routes)}catch(e){setError(String(e))}finally{setStarting(false)}}
   return <details className={styles.panel} data-testid="local-research">
     <summary>JUFE research — Dana → Nora</summary>
+    <p>Runs in the currently open approved workspace (pilot or WARRIGAL RESEARCH SUITE); the confirmation identifies its output location.</p>
     <p>Report outstanding work recorded in the two approved JUFE coverage reports dated 11 October 2026. Select each role’s provider and exact model for this run. Cited findings require a separate review and saved handover. Original records remain read-only.</p>
     <p>Ollama uses installed local models only; the existing Llama 3.2 is not research-qualified. Claude requires separate live approval, Pro authentication and credits off; a fresh confirmation is required for each run. Selection does not establish model availability or research suitability.</p>
     {(['dana','nora'] as const).map(role=><fieldset key={role}><legend>{role==='dana'?'Dana — specialist':'Nora — reviewer'}</legend>
