@@ -4,8 +4,14 @@ import os from 'os'
 import path from 'path'
 import {
   gibsonLoopArgs, gibsonAction, readNextHat, handleHermesConnection,
+  parseReviewVerdict, buildOwnerAttestedReviewComment, CROSS_VENDOR_REVIEWER_PROVIDER,
   type GibsonExec, type GibsonExecute,
 } from './gibsonAction'
+
+const GIBSON_DIR = path.join(os.homedir(), 'Desktop', 'AI-Agent-Resources', 'the-gibson')
+const PR_REVIEW_EVIDENCE = path.join(GIBSON_DIR, 'scripts', 'pr-review-evidence.mjs')
+const haveGibson = fs.existsSync(PR_REVIEW_EVIDENCE)
+const REAL_SHA = 'a'.repeat(40)
 
 // os.tmpdir() is itself a symlink on macOS (/var -> /private/var); gibsonAction
 // requires an already-resolved path (same convention as beadsAction), so the
@@ -276,5 +282,132 @@ describe('gibsonAction — loop mode argument validation (DI-injected fakes; no 
     const m = /"([^"]+\.sock)"/.exec(capturedEnv?.HERMES_CMD ?? '')
     expect(m).not.toBeNull()
     if (m) expect(fs.existsSync(m[1])).toBe(false)
+  })
+})
+
+describe('parseReviewVerdict — pure, never guesses', () => {
+  it('reads a trailing VERDICT: APPROVE line as pass', () => {
+    expect(parseReviewVerdict('Some review prose.\n\nVERDICT: APPROVE')).toBe('pass')
+  })
+  it('reads VERDICT: REQUEST_CHANGES as fail', () => {
+    expect(parseReviewVerdict('Findings here.\nVERDICT: REQUEST_CHANGES\n')).toBe('fail')
+  })
+  it('is case-insensitive on the keyword but not the enum typo-tolerant', () => {
+    expect(parseReviewVerdict('verdict: approve')).toBe('pass')
+  })
+  it('returns null when no VERDICT line is present — never defaults', () => {
+    expect(parseReviewVerdict('A review with no formal verdict at all.')).toBeNull()
+  })
+  it('returns null on conflicting verdicts in the same output — never picks a winner', () => {
+    expect(parseReviewVerdict('VERDICT: APPROVE\n...\nVERDICT: REQUEST_CHANGES')).toBeNull()
+  })
+  it('accepts a repeated IDENTICAL verdict (not a conflict)', () => {
+    expect(parseReviewVerdict('VERDICT: APPROVE\n...\nVERDICT: APPROVE')).toBe('pass')
+  })
+})
+
+describe('buildOwnerAttestedReviewComment — exact format, validated against Gibson\'s own real parser', () => {
+  it('builds the exact marker block Gibson documents', () => {
+    const comment = buildOwnerAttestedReviewComment(REAL_SHA, 'codex', 'pass')
+    expect(comment).toBe(`<!-- owner-attested-review:v1\nhead-sha: ${REAL_SHA}\nreviewer-vendor: codex\nresult: pass\n-->`)
+  })
+
+  it('rejects a non-SHA head reference — never a branch name or placeholder', () => {
+    expect(() => buildOwnerAttestedReviewComment('HEAD', 'codex', 'pass')).toThrow(/resolved 40-char commit SHA/)
+    expect(() => buildOwnerAttestedReviewComment('main', 'codex', 'pass')).toThrow(/resolved 40-char commit SHA/)
+  })
+
+  it('rejects "independent" as the attested vendor — Gibson\'s own fixture (og13) refuses it', () => {
+    expect(() => buildOwnerAttestedReviewComment(REAL_SHA, 'independent', 'pass')).toThrow(/cannot attest "independent"/)
+  })
+
+  describe.skipIf(!haveGibson)('against the real scripts/pr-review-evidence.mjs parser', () => {
+    it('a pass comment parses exactly as Gibson\'s own parseBlock expects', async () => {
+      const { parseBlock, MARKER_FIELDS } = await import(PR_REVIEW_EVIDENCE)
+      const comment = buildOwnerAttestedReviewComment(REAL_SHA, 'codex', 'pass')
+      const parsed = parseBlock(comment, 'owner-attested-review:v1', MARKER_FIELDS['owner-attested-review:v1'])
+      expect(parsed).toEqual({ 'head-sha': REAL_SHA, 'reviewer-vendor': 'codex', result: 'pass' })
+    })
+
+    it('a fail comment parses exactly as Gibson\'s own parseBlock expects', async () => {
+      const { parseBlock, MARKER_FIELDS } = await import(PR_REVIEW_EVIDENCE)
+      const comment = buildOwnerAttestedReviewComment(REAL_SHA, 'codex', 'fail')
+      const parsed = parseBlock(comment, 'owner-attested-review:v1', MARKER_FIELDS['owner-attested-review:v1'])
+      expect(parsed).toEqual({ 'head-sha': REAL_SHA, 'reviewer-vendor': 'codex', result: 'fail' })
+    })
+  })
+})
+
+describe('handleHermesConnection — owner-attested-review:v1 evidence, only when genuinely earned', () => {
+  function repoWithNextHat(hat: string): string {
+    const dir = fs.mkdtempSync(path.join(REPO, 'hermes-oar-'))
+    fs.mkdirSync(path.join(dir, 'gibson'))
+    fs.writeFileSync(path.join(dir, 'gibson', 'loop-state.md'), `hat: builder\nnext_hat: ${hat}\nround: 0\n`)
+    return dir
+  }
+  const gitHeadSha = vi.fn(async () => REAL_SHA)
+
+  it('cross-vendor reviewer + APPROVE verdict -> evidence constructed but NOT posted by default', async () => {
+    const execute: GibsonExecute = vi.fn(async () => ({ exitCode: 0, output: 'Looks good.\nVERDICT: APPROVE', checkpointId: null }))
+    const postComment = vi.fn()
+    const { outcome } = await handleHermesConnection('p', repoWithNextHat('reviewer'), execute, {
+      maxBudgetUsd: 1, idleTimeoutMs: 1000, safeMode: true,
+      reviewerProvider: CROSS_VENDOR_REVIEWER_PROVIDER, gitHeadSha, postComment,
+    })
+    expect(postComment).not.toHaveBeenCalled()
+    expect(outcome.ownerAttestedReview).toEqual({
+      headSha: REAL_SHA, reviewerVendor: 'codex', result: 'pass',
+      comment: buildOwnerAttestedReviewComment(REAL_SHA, 'codex', 'pass'),
+      posted: false,
+    })
+  })
+
+  it('cross-vendor reviewer + REQUEST_CHANGES verdict -> real negative evidence, never suppressed', async () => {
+    const execute: GibsonExecute = vi.fn(async () => ({ exitCode: 0, output: 'Needs work.\nVERDICT: REQUEST_CHANGES', checkpointId: null }))
+    const { outcome } = await handleHermesConnection('p', repoWithNextHat('reviewer'), execute, {
+      maxBudgetUsd: 1, idleTimeoutMs: 1000, safeMode: true,
+      reviewerProvider: CROSS_VENDOR_REVIEWER_PROVIDER, gitHeadSha,
+    })
+    expect(outcome.ownerAttestedReview).toMatchObject({ result: 'fail', reviewerVendor: 'codex', posted: false })
+  })
+
+  it('cross-vendor reviewer + a real PR supplied -> postComment IS called, posted:true', async () => {
+    const execute: GibsonExecute = vi.fn(async () => ({ exitCode: 0, output: 'VERDICT: APPROVE', checkpointId: null }))
+    const postComment = vi.fn(async () => {})
+    const { outcome } = await handleHermesConnection('p', repoWithNextHat('reviewer'), execute, {
+      maxBudgetUsd: 1, idleTimeoutMs: 1000, safeMode: true,
+      reviewerProvider: CROSS_VENDOR_REVIEWER_PROVIDER, gitHeadSha, postComment,
+      reviewPr: { repoSlug: 'warrigallife/Workspace-OS', prNumber: 7 },
+    })
+    expect(postComment).toHaveBeenCalledWith('warrigallife/Workspace-OS', 7, buildOwnerAttestedReviewComment(REAL_SHA, 'codex', 'pass'))
+    expect(outcome.ownerAttestedReview?.posted).toBe(true)
+  })
+
+  it('no VERDICT line -> no evidence, even cross-vendor -- never guessed', async () => {
+    const execute: GibsonExecute = vi.fn(async () => ({ exitCode: 0, output: 'I reviewed it. Seems fine I guess.', checkpointId: null }))
+    const { outcome } = await handleHermesConnection('p', repoWithNextHat('reviewer'), execute, {
+      maxBudgetUsd: 1, idleTimeoutMs: 1000, safeMode: true,
+      reviewerProvider: CROSS_VENDOR_REVIEWER_PROVIDER, gitHeadSha,
+    })
+    expect(outcome.ownerAttestedReview).toBeUndefined()
+  })
+
+  it('same-vendor review (reviewerModel only, no reviewerProvider) -> never fabricated, even with a clean verdict', async () => {
+    const execute: GibsonExecute = vi.fn(async () => ({ exitCode: 0, output: 'VERDICT: APPROVE', checkpointId: null }))
+    const { outcome } = await handleHermesConnection('p', repoWithNextHat('reviewer'), execute, {
+      maxBudgetUsd: 1, idleTimeoutMs: 1000, safeMode: true,
+      reviewerModel: 'opus', gitHeadSha,
+    })
+    expect(outcome.reviewUsedDistinctModel).toBe(true) // model-level signal still fires
+    expect(outcome.ownerAttestedReview).toBeUndefined() // but never conflated with real evidence
+  })
+
+  it('a non-reviewer hat never produces owner-attested-review evidence, regardless of provider/output', async () => {
+    const execute: GibsonExecute = vi.fn(async () => ({ exitCode: 0, output: 'VERDICT: APPROVE', checkpointId: null }))
+    const { outcome } = await handleHermesConnection('p', repoWithNextHat('test-engineer'), execute, {
+      maxBudgetUsd: 1, idleTimeoutMs: 1000, safeMode: true,
+      reviewerProvider: CROSS_VENDOR_REVIEWER_PROVIDER, gitHeadSha,
+    })
+    expect(outcome.ownerAttestedReview).toBeUndefined()
   })
 })

@@ -100,6 +100,18 @@ function makeFakeClaudeBin(): string {
       'next_action: stub run advanced state (gibsonHermesLoop.temp-repo-check.test.ts)',
       'notes: stub decision, not a real model',
       'EOF',
+      // Real stream-json text delta, exactly the shape launchRun.ts's
+      // extractDelta() looks for (content_block_delta/text_delta) — the
+      // ONLY way real text reaches sink.output()/the real execute()
+      // result's `output` field, as opposed to just the final result
+      // line's metadata. Only meaningful (and only emitted) for the
+      // reviewer hat, carrying Gibson's own required VERDICT line so
+      // parseReviewVerdict() has something genuine to parse downstream —
+      // never fabricated by the test itself, just relayed faithfully.
+      'if [ "$cur" = "reviewer" ]; then',
+      '  if [ "$next" = "release" ]; then verdict="VERDICT: APPROVE"; else verdict="VERDICT: REQUEST_CHANGES"; fi',
+      '  printf \'{"type":"stream_event","event":{"type":"content_block_delta","delta":{"type":"text_delta","text":"%s"}}}\\n\' "$verdict"',
+      'fi',
       'echo \'{"type":"result","subtype":"success","is_error":false,"num_turns":1,"duration_ms":10,"total_cost_usd":0.0002,"session_id":"00000000-0000-4000-8000-000000000001"}\'',
       'exit 0',
       '',
@@ -112,6 +124,38 @@ function makeFakeClaudeBin(): string {
 function writePlan(repo: string, hats: string[]): void {
   fs.mkdirSync(path.join(repo, 'gibson'), { recursive: true })
   fs.writeFileSync(path.join(repo, 'gibson', 'next-hat-plan.txt'), hats.join('\n') + '\n')
+}
+
+/**
+ * A DI-injected `execute`, used ONLY for scenarios that pass `reviewerModel`/
+ * `reviewerProvider: 'codex'`: that routes launchRun() through its SEPARATE
+ * codex dispatch (a JSON-RPC protocol over stdio, nothing like the claude
+ * stream-json `CLAUDE_BIN` intercepts elsewhere in this file), and codex is
+ * genuinely authenticated on this machine — there is no safe stub for that
+ * path here, so these scenarios never go near `realExecute`/`launchRun()`/
+ * any real provider at all. Deterministic, same decisions the bash
+ * CLAUDE_BIN stub makes (plan-file-driven next hat, round only advances on
+ * the reviewer step, a real VERDICT line on review), just in JS instead of
+ * a spawned process — zero risk of ever reaching a real vendor.
+ */
+function makeFakeExecute(readNextHat: (repo: string) => string | null) {
+  return async (_prompt: string, opts: { root: string }) => {
+    const statePath = path.join(opts.root, 'gibson', 'loop-state.md')
+    const cur = readNextHat(opts.root) ?? 'builder'
+    const round = Number((/^round:\s*(\d+)/m.exec(fs.readFileSync(statePath, 'utf8')) ?? [, '0'])[1])
+    const planPath = path.join(opts.root, 'gibson', 'next-hat-plan.txt')
+    const planLines = fs.existsSync(planPath) ? fs.readFileSync(planPath, 'utf8').split('\n').filter(Boolean) : []
+    const next = planLines.shift() ?? 'builder'
+    fs.writeFileSync(planPath, planLines.join('\n') + (planLines.length ? '\n' : ''))
+    const newRound = cur === 'reviewer' ? round + 1 : round
+    fs.writeFileSync(statePath, [
+      '# Gibson loop state', `updated: ${new Date().toISOString().replace(/\.\d+Z$/, 'Z')}`, 'issue:', 'pr:',
+      `hat: ${cur}`, `next_hat: ${next}`, `round: ${newRound}`, 'parked: false', 'handoff:', 'handoff_sha:',
+      'next_action: DI fake execute — no real model, no real provider', 'notes: deterministic test decision',
+    ].join('\n') + '\n')
+    const output = cur === 'reviewer' ? (next === 'release' ? 'VERDICT: APPROVE' : 'VERDICT: REQUEST_CHANGES') : ''
+    return { exitCode: 0, output, checkpointId: null, meta: { costUsd: 0.0002, turns: 1, durationMs: 10 } }
+  }
 }
 
 function readEnvChecks(repo: string): string[] {
@@ -198,7 +242,7 @@ describe.skipIf(!haveGibson)('temp-repo check: production gibsonAction() loop mo
       expect(result.iterations.every((it) => it.action === 'executed')).toBe(true)
       // The review genuinely ran — required, not skipped — before sending
       // the loop back for correction.
-      expect(result.reviews).toEqual([{ usedDistinctModel: false }])
+      expect(result.reviews).toEqual([{ usedDistinctModel: false, ownerAttestedReview: null }])
       expect(result.releaseRefused).toEqual([]) // release was never reached
 
       const state = fs.readFileSync(path.join(repo, 'gibson', 'loop-state.md'), 'utf8')
@@ -248,7 +292,7 @@ describe.skipIf(!haveGibson)('temp-repo check: production gibsonAction() loop mo
       expect(result.iterations.slice(0, 3).every((it) => it.exitCode === 0)).toBe(true)
       // The approved review is the saved outcome: it genuinely executed,
       // separate from — and before — the release attempt.
-      expect(result.reviews).toEqual([{ usedDistinctModel: false }])
+      expect(result.reviews).toEqual([{ usedDistinctModel: false, ownerAttestedReview: null }])
       expect(result.releaseRefused).toEqual([{ hat: 'release', reason: expect.stringContaining('real merge') }])
 
       const envChecks = readEnvChecks(repo)
@@ -297,7 +341,7 @@ describe.skipIf(!haveGibson)('temp-repo check: production gibsonAction() loop mo
       expect(reply.ok).toBe(true)
       if (!reply.ok) return
       const result = reply.result as { reviews: Array<{ usedDistinctModel: boolean }> }
-      expect(result.reviews).toEqual([{ usedDistinctModel: true }])
+      expect(result.reviews).toEqual([{ usedDistinctModel: true, ownerAttestedReview: null }])
 
       const envChecks = readEnvChecks(repo)
       expect(envChecks).toHaveLength(3)
@@ -367,4 +411,108 @@ describe.skipIf(!haveGibson)('temp-repo check: production gibsonAction() loop mo
       fs.rmSync(repo, { recursive: true, force: true })
     }
   }, 30_000)
+
+  /**
+   * `reviewerProvider: 'codex'` routes through launchRun's SEPARATE codex
+   * dispatch (launchCodexSession, a JSON-RPC protocol over stdio — nothing
+   * like the claude stream-json CLAUDE_BIN intercepts elsewhere in this
+   * file), and codex is genuinely authenticated on this machine ("Logged in
+   * using ChatGPT"). There is no safe stub for that path here, so these two
+   * scenarios use `makeFakeExecute()` — a DI'd, deterministic JS function —
+   * instead of going anywhere near `realExecute`/`launchRun()`/any real
+   * provider. `exec` (loop.sh itself) stays real, so the sequencing proof —
+   * real loop.sh, real state file, real review-round cap, real journal — is
+   * still genuine. Each starts from a fresh round:0, so Gibson's own
+   * tier-A review-round cap (round < 1) is never tripped — a SECOND
+   * reviewer round for the same unresolved issue is correctly refused by
+   * Gibson's own loop.sh, confirmed directly while building this (round=1
+   * refuses round=2 outright, before any runner call) — not something this
+   * bridge works around; these two scenarios each stay within that limit.
+   */
+  it('rejection produces real, parser-valid NEGATIVE owner-attested-review evidence, bound to the exact head SHA', async () => {
+    const repo = makeTempRepo()
+    const realHeadSha = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repo }).toString('utf8').trim()
+    writePlan(repo, ['test-engineer', 'reviewer', 'builder'])
+    try {
+      vi.resetModules()
+      const { setWorkspaceRoot } = await import('../workspace-root')
+      setWorkspaceRoot(repo)
+      const { gibsonAction, readNextHat } = await import('./gibsonAction')
+
+      const reply = await gibsonAction(repo, {
+        loop: true, repoSlug: 'local/temp-hermes-check',
+        runnerTimeoutSec: 30, maxBudgetUsd: 1, maxIterations: 4, errorBudget: 2,
+        reviewerProvider: 'codex',
+      }, { execute: makeFakeExecute(readNextHat) })
+
+      expect(reply.ok).toBe(true)
+      if (!reply.ok) return
+      const result = reply.result as {
+        loopExitCode: number
+        iterations: Array<{ hat: string | null }>
+        reviews: Array<{ usedDistinctModel: boolean; ownerAttestedReview: { headSha: string; reviewerVendor: string; result: 'pass' | 'fail'; comment: string; posted: boolean } | null }>
+      }
+      expect(result.loopExitCode).toBe(0) // a rejection is a normal correction cycle, not a failure
+      expect(result.iterations.map((it) => it.hat)).toEqual(['builder', 'test-engineer', 'reviewer', 'builder'])
+      expect(result.reviews).toEqual([{
+        usedDistinctModel: true,
+        ownerAttestedReview: { headSha: realHeadSha, reviewerVendor: 'codex', result: 'fail', posted: false, comment: expect.any(String) },
+      }])
+
+      // The real, structural check: parses exactly as Gibson's OWN
+      // scripts/pr-review-evidence.mjs expects — not a reimplementation.
+      const { parseBlock, MARKER_FIELDS } = await import(path.join(GIBSON_DIR, 'scripts', 'pr-review-evidence.mjs'))
+      const parsed = parseBlock(result.reviews[0].ownerAttestedReview!.comment, 'owner-attested-review:v1', MARKER_FIELDS['owner-attested-review:v1'])
+      expect(parsed).toEqual({ 'head-sha': realHeadSha, 'reviewer-vendor': 'codex', result: 'fail' })
+
+      expect(realCommitCount(repo)).toBe(1)
+    } finally {
+      fs.rmSync(repo, { recursive: true, force: true })
+    }
+  }, 60_000)
+
+  it('acceptance produces real, parser-valid POSITIVE owner-attested-review evidence; release still stays refused', async () => {
+    const repo = makeTempRepo()
+    const realHeadSha = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repo }).toString('utf8').trim()
+    writePlan(repo, ['test-engineer', 'reviewer', 'release'])
+    try {
+      vi.resetModules()
+      const { setWorkspaceRoot } = await import('../workspace-root')
+      setWorkspaceRoot(repo)
+      const { gibsonAction, readNextHat } = await import('./gibsonAction')
+
+      const reply = await gibsonAction(repo, {
+        loop: true, repoSlug: 'local/temp-hermes-check',
+        runnerTimeoutSec: 30, maxBudgetUsd: 1, maxIterations: 5, errorBudget: 1,
+        reviewerProvider: 'codex',
+      }, { execute: makeFakeExecute(readNextHat) })
+
+      expect(reply.ok).toBe(true)
+      if (!reply.ok) return
+      const result = reply.result as {
+        loopExitCode: number
+        iterations: Array<{ hat: string | null; action: string }>
+        releaseRefused: Array<{ hat: string | null; reason?: string }>
+        reviews: Array<{ usedDistinctModel: boolean; ownerAttestedReview: { headSha: string; reviewerVendor: string; result: 'pass' | 'fail'; comment: string; posted: boolean } | null }>
+      }
+      expect(result.loopExitCode).not.toBe(0) // the release refusal still stops the loop, by policy
+      expect(result.iterations.map((it) => it.hat)).toEqual(['builder', 'test-engineer', 'reviewer', 'release'])
+      expect(result.releaseRefused).toEqual([{ hat: 'release', reason: expect.stringContaining('real merge') }])
+      expect(result.reviews).toEqual([{
+        usedDistinctModel: true,
+        ownerAttestedReview: { headSha: realHeadSha, reviewerVendor: 'codex', result: 'pass', posted: false, comment: expect.any(String) },
+      }])
+
+      const { parseBlock, MARKER_FIELDS } = await import(path.join(GIBSON_DIR, 'scripts', 'pr-review-evidence.mjs'))
+      const parsed = parseBlock(result.reviews[0].ownerAttestedReview!.comment, 'owner-attested-review:v1', MARKER_FIELDS['owner-attested-review:v1'])
+      expect(parsed).toEqual({ 'head-sha': realHeadSha, 'reviewer-vendor': 'codex', result: 'pass' })
+
+      // No GitHub write ever happened — no reviewPr was supplied, the safe
+      // default. Confirmed directly, not just inferred.
+      expect(result.reviews[0].ownerAttestedReview?.posted).toBe(false)
+      expect(realCommitCount(repo)).toBe(1) // no merge, no push, nothing committed by this run
+    } finally {
+      fs.rmSync(repo, { recursive: true, force: true })
+    }
+  }, 60_000)
 })

@@ -345,6 +345,90 @@ export function readNextHat(repo: string): string | null {
   }
 }
 
+/**
+ * Connects a genuinely cross-vendor reviewer's real verdict to Gibson's own
+ * documented `owner-attested-review:v1` evidence format — never a rebuild of
+ * Gibson's evaluator, never a guess at its shape. The exact format below
+ * (marker name, field order, HTML-comment wrapper) is read directly from
+ * `scripts/pr-review-evidence.mjs`'s `MARKER_FIELDS`/`parseBlock` and
+ * confirmed against its own test fixture (`scripts/tests/pr-review-
+ * evidence.test.sh:551`) — every unit test for this bridge imports and runs
+ * Gibson's real `parseBlock` against the string this builds, rather than
+ * re-implementing the parser's regex and trusting it matches.
+ *
+ * Every vendor this bridge's default run is reachable through is implicitly
+ * `claude` (no code path here ever sets a non-default `provider` for a
+ * non-reviewer hat) — so the ONLY way a reviewer session is genuinely
+ * cross-vendor, as opposed to merely a different model tier of the SAME
+ * vendor, is `reviewerProvider === 'codex'`. `reviewUsedDistinctModel`
+ * (above) is true for a same-vendor different-MODEL review too; this
+ * constant is deliberately stricter and is the only gate that may ever
+ * produce `owner-attested-review:v1` evidence.
+ */
+export const CROSS_VENDOR_REVIEWER_PROVIDER = 'codex' as const
+
+/**
+ * Gibson's own required reviewer verdict line (`playbooks/loop-step.md`'s
+ * reviewer section: "Exactly one of: VERDICT: APPROVE / VERDICT:
+ * REQUEST_CHANGES"), parsed from the REAL review session's own output.
+ * Returns null — never a guessed default — when the line is absent, or when
+ * conflicting verdicts appear in the same output (ambiguous is refused, not
+ * resolved by picking one). A rejected review (`fail`) is real evidence too
+ * and is never suppressed — only an unparseable one is withheld.
+ */
+export function parseReviewVerdict(output: string): 'pass' | 'fail' | null {
+  const matches = [...output.matchAll(/^VERDICT:\s*(APPROVE|REQUEST_CHANGES)\s*$/gim)]
+  if (matches.length === 0) return null
+  const distinct = new Set(matches.map((m) => m[1].toUpperCase()))
+  if (distinct.size > 1) return null // conflicting verdicts in one output — refuse, never pick a winner
+  return distinct.has('APPROVE') ? 'pass' : 'fail'
+}
+
+/**
+ * Builds Gibson's exact `owner-attested-review:v1` HTML-comment block.
+ * `headSha` must be a real, resolved 40-hex-char commit SHA — never a
+ * branch name, a placeholder, or "HEAD" — matching the exact-head-SHA
+ * binding Gibson's evaluator enforces. `reviewerVendor` must never be the
+ * literal string `"independent"` — Gibson's own fixture (`og13`) proves the
+ * owner cannot countersign as that vendor; it is refused as evidence, not
+ * silently accepted.
+ */
+export function buildOwnerAttestedReviewComment(headSha: string, reviewerVendor: string, result: 'pass' | 'fail'): string {
+  if (!/^[0-9a-f]{40}$/i.test(headSha)) {
+    throw new Error(`owner-attested-review:v1 requires a resolved 40-char commit SHA, got: ${JSON.stringify(headSha)}`)
+  }
+  if (reviewerVendor === 'independent') {
+    throw new Error('owner-attested-review:v1 cannot attest "independent" as the reviewer vendor — Gibson refuses this as evidence (fixture og13)')
+  }
+  return `<!-- owner-attested-review:v1\nhead-sha: ${headSha}\nreviewer-vendor: ${reviewerVendor}\nresult: ${result}\n-->`
+}
+
+/** Swappable for tests — never actually spawns `git`. */
+export type GibsonGitHeadSha = (repo: string) => Promise<string>
+
+const realGitHeadSha: GibsonGitHeadSha = (repo) =>
+  new Promise((resolve, reject) => {
+    execFile('git', ['rev-parse', 'HEAD'], { cwd: repo, encoding: 'utf8' }, (err, stdout) => {
+      if (err) reject(err)
+      else resolve(stdout.trim())
+    })
+  })
+
+/** Swappable for tests — never actually calls `gh` / posts anything. Real
+ *  implementation is the ONLY GitHub write action this bridge ever performs,
+ *  and only when the caller explicitly supplies a PR to post to (see
+ *  `HermesConnectionOpts.reviewPr` below) — never auto-discovered, never
+ *  automatic. */
+export type GibsonPostComment = (repoSlug: string, prNumber: number, body: string) => Promise<void>
+
+const realPostComment: GibsonPostComment = (repoSlug, prNumber, body) =>
+  new Promise((resolve, reject) => {
+    execFile('gh', ['pr', 'comment', String(prNumber), '--repo', repoSlug, '--body', body], (err) => {
+      if (err) reject(err)
+      else resolve()
+    })
+  })
+
 export interface GibsonLoopIterationOutcome {
   hat: string | null
   action: 'executed' | 'blocked' | 'error'
@@ -364,6 +448,18 @@ export interface GibsonLoopIterationOutcome {
   reviewUsedDistinctModel?: boolean
   /** Set only when action is 'blocked' (always the `release` hat today). */
   reason?: string
+  /**
+   * Set only for a `reviewer` iteration that was both genuinely cross-vendor
+   * (`reviewerProvider === CROSS_VENDOR_REVIEWER_PROVIDER`) AND produced a
+   * parseable `VERDICT:` line — i.e. exactly the evidence Gibson's own
+   * `owner-attested-review:v1` format recognizes, never fabricated for a
+   * same-vendor fallback or an ambiguous/missing verdict. `posted: false`
+   * means the comment text was constructed and is ready, but no GitHub
+   * write happened — the default, safe state unless the caller explicitly
+   * supplies `reviewPr` (a real, already-open PR), which this bridge never
+   * discovers or creates on its own.
+   */
+  ownerAttestedReview?: { headSha: string; reviewerVendor: string; result: 'pass' | 'fail'; comment: string; posted: boolean }
 }
 
 const REVIEWER_HAT = 'reviewer'
@@ -383,6 +479,19 @@ export interface HermesConnectionOpts {
    *  every other hat. */
   reviewerModel?: string
   reviewerProvider?: ProviderId
+  /**
+   * An already-open, real PR to post `owner-attested-review:v1` evidence
+   * to, once a genuinely cross-vendor reviewer iteration produces a
+   * parseable verdict. Omitted (the default) means the evidence comment is
+   * still constructed and returned on the outcome (`posted: false`) but
+   * never sent — this bridge never creates or discovers a PR on its own;
+   * the caller must already have one open and explicitly name it here.
+   */
+  reviewPr?: { repoSlug: string; prNumber: number }
+  /** DI seams for tests — default to the real `git rev-parse HEAD` / `gh pr
+   *  comment` implementations below when omitted. */
+  gitHeadSha?: GibsonGitHeadSha
+  postComment?: GibsonPostComment
 }
 
 /**
@@ -421,10 +530,46 @@ export async function handleHermesConnection(
   const reviewUsedDistinctModel = isReviewer ? { reviewUsedDistinctModel: Boolean(opts.reviewerModel || opts.reviewerProvider) } : {}
   try {
     const r = await execute(prompt, { root: repo, maxBudgetUsd: opts.maxBudgetUsd, idleTimeoutMs: opts.idleTimeoutMs, safeMode: opts.safeMode, env: WITHHOLD_CROSS_VENDOR_ENV, ...reviewerFields })
-    return { outcome: { hat, action: 'executed', exitCode: r.exitCode, meta: r.meta, checkpointId: r.checkpointId, ...reviewUsedDistinctModel }, exitCode: r.exitCode }
+    const ownerAttestedReview = isReviewer
+      ? await buildOwnerAttestedReviewOutcome(repo, r.output, opts)
+      : {}
+    return { outcome: { hat, action: 'executed', exitCode: r.exitCode, meta: r.meta, checkpointId: r.checkpointId, ...reviewUsedDistinctModel, ...ownerAttestedReview }, exitCode: r.exitCode }
   } catch (e) {
     return { outcome: { hat, action: 'error', error: e instanceof Error ? e.message : String(e), ...reviewUsedDistinctModel }, exitCode: 1 }
   }
+}
+
+/**
+ * The connection itself: only ever produces `owner-attested-review:v1`
+ * evidence when the review was genuinely cross-vendor AND produced a real,
+ * unambiguous verdict — both checked here, not assumed by the caller.
+ * Never throws: a git/post failure is folded into the returned shape rather
+ * than taking down the whole iteration, since the review itself already
+ * genuinely happened by this point.
+ */
+async function buildOwnerAttestedReviewOutcome(
+  repo: string,
+  output: string,
+  opts: HermesConnectionOpts,
+): Promise<{ ownerAttestedReview?: GibsonLoopIterationOutcome['ownerAttestedReview'] }> {
+  if (opts.reviewerProvider !== CROSS_VENDOR_REVIEWER_PROVIDER) return {} // same-vendor fallback — never attested
+  const result = parseReviewVerdict(output)
+  if (result === null) return {} // no unambiguous VERDICT line — never guessed
+  const gitHeadSha = opts.gitHeadSha ?? realGitHeadSha
+  let headSha: string
+  try {
+    headSha = await gitHeadSha(repo)
+  } catch {
+    return {} // can't bind to a head SHA — withhold, don't fabricate one
+  }
+  const comment = buildOwnerAttestedReviewComment(headSha, CROSS_VENDOR_REVIEWER_PROVIDER, result)
+  let posted = false
+  if (opts.reviewPr) {
+    const postComment = opts.postComment ?? realPostComment
+    await postComment(opts.reviewPr.repoSlug, opts.reviewPr.prNumber, comment)
+    posted = true
+  }
+  return { ownerAttestedReview: { headSha, reviewerVendor: CROSS_VENDOR_REVIEWER_PROVIDER, result, comment, posted } }
 }
 
 /**
@@ -496,6 +641,9 @@ export interface GibsonLoopOpts {
   /** Smallest supported controlled reviewer connection — see HermesConnectionOpts. */
   reviewerModel?: string
   reviewerProvider?: ProviderId
+  /** See HermesConnectionOpts.reviewPr — an already-open, real PR to post
+   *  owner-attested-review:v1 evidence to. Omitted = constructed, never sent. */
+  reviewPr?: { repoSlug: string; prNumber: number }
 }
 
 /**
@@ -520,6 +668,7 @@ async function runGibsonLoop(root: string, opts: GibsonLoopOpts, exec: GibsonExe
       safeMode: opts.safeMode,
       reviewerModel: opts.reviewerModel,
       reviewerProvider: opts.reviewerProvider,
+      reviewPr: opts.reviewPr,
     })
   } catch (e) {
     return { ok: false, error: 'Gibson loop could not start its local socket bridge: ' + (e instanceof Error ? e.message : String(e)) }
@@ -540,8 +689,12 @@ async function runGibsonLoop(root: string, opts: GibsonLoopOpts, exec: GibsonExe
   const releaseRefused = server.iterations.filter((it) => it.action === 'blocked').map((it) => ({ hat: it.hat, reason: it.reason }))
   // usedDistinctModel is NOT Gibson's own E3 independence — see the
   // top-of-file doc comment — only "a different model/provider was
-  // configured for this call."
-  const reviews = server.iterations.filter((it) => it.hat === REVIEWER_HAT).map((it) => ({ usedDistinctModel: it.reviewUsedDistinctModel ?? false }))
+  // configured for this call." ownerAttestedReview, when present, IS real,
+  // Gibson-recognized evidence (see buildOwnerAttestedReviewOutcome) —
+  // never fabricated for a same-vendor or unparseable-verdict review.
+  const reviews = server.iterations
+    .filter((it) => it.hat === REVIEWER_HAT)
+    .map((it) => ({ usedDistinctModel: it.reviewUsedDistinctModel ?? false, ownerAttestedReview: it.ownerAttestedReview ?? null }))
   return {
     ok: true,
     result: {

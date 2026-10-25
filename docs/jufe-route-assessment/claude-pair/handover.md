@@ -540,3 +540,63 @@ Asked to resolve the repository destination from existing records rather than as
 - The `owner-attested-review:v1` comment-posting step itself is not built in this bridge. Deliberately not built now: it needs a real PR on a real repo to construct and verify the comment against (head-SHA binding, exact marker fields), and creating/pushing to any repo is out of scope here — building it blind would be the premature workaround this task ruled out. Once a destination exists, this is a narrow, well-specified addition (one `gh`-posted comment, not a merge) reusing the same `execute()`-routed reviewer session.
 
 **Not done:** no code, config, or credential changes; no repo created or forked; no commit, merge, push, or deployment.
+
+---
+
+## 2026-10-25 — Private destination repo created and pushed; the gap from the entry above is resolved
+
+Explicitly authorized this turn: create `warrigallife/Workspace-OS` (private) and push the real project history, with a secrets/archive audit first and nothing blindly staged.
+
+**Audit, before staging anything:**
+- **Outgoing history** (`origin/master..master`: 50 commits, 1048 files, ~94k insertions) — scanned diff content for secret patterns (cloud/API key formats, token prefixes, private-key headers) and added filenames for `.env`/`.pem`/`.key`/credential-style names: clean. Found **11 already-committed** `pre-*-recovery.tar.gz` archives (committed 2026-10-19, predating this session) — listed contents (`tar -tzv`, no extraction) then separately extracted and grepped for secrets/unexpected emails: confirmed benign pre-edit source/doc backups (`launchRun.ts`, `runs.ts`, persona `.md` files, a manifest). Left in history untouched — removing them would mean rewriting 50 commits, which preserving local history rules out; reported, not acted on.
+- **Pending files** (17 modified + 12 new) — same scan on the diff and new-file contents: clean. Found 5 `_WOS_AUTOFIX_BACKUP_*/` directories — this session's own local safety copies — excluded from staging and added to `.gitignore`, left on disk untouched.
+
+**Staged explicitly, file by file — never `git add -A`/`.`:** all 17 legitimate modified files and 12 legitimate new files (the Gibson/Beads bridge source and tests, research-approval/scope work, `launchRun.ts`'s per-call `env` field, the `.gitignore` addition). Committed as **`cfedf7a`**.
+
+**Remote reconfiguration:** `git remote rename origin upstream` (`Clemens865/Workspace-OS` preserved exactly, now correctly named `upstream`, consistent with the record from two entries ago establishing it as upstream — never the destination); `git remote add origin https://github.com/warrigallife/Workspace-OS.git` (created this turn via `gh repo create warrigallife/Workspace-OS --private`, no `--source`/`--push`, so repo creation itself never touched local git state).
+
+**Pushed:** `git push -u origin master` — no force, clean fast-forward into the new, empty repo.
+
+**Verified:**
+- `gh repo view warrigallife/Workspace-OS --json visibility` → `PRIVATE`.
+- Local `HEAD` and `git ls-remote origin refs/heads/master` both read `cfedf7a16ab572ec6ddbe723f180f119f8aa3b0f` — exact match.
+- Raw `tsc --noEmit` (the wrapper script crashed on an unrelated pre-existing bug, confirmed by running `tsc` directly): zero errors in any file this commit touched; the same ~70 pre-existing errors elsewhere, unchanged.
+- Fast suite (`gibsonAction`/`gibsonBridge`/`beadsAction`/`beadsBridge`): 47/47 pass.
+
+**Repository:** https://github.com/warrigallife/Workspace-OS (private). **Pushed commit:** `cfedf7a16ab572ec6ddbe723f180f119f8aa3b0f`. **Excluded:** 5 local-only `_WOS_AUTOFIX_BACKUP_*` directories (gitignored, not deleted); 11 pre-existing recovery archives in history were reviewed and left as-is. **Blocked:** nothing — the push succeeded as requested.
+
+**Not done:** no Gibson repairs, merges, deployment, installations, or credential changes; no history rewrite.
+
+---
+
+## 2026-10-25 — owner-attested-review:v1 connection built and verified; a safety near-miss caught and fixed mid-build
+
+Asked to finish `wrs-s8n` using `warrigallife/Workspace-OS`: connect the genuinely cross-vendor reviewer verdict to Gibson's documented `owner-attested-review:v1` PR-comment evidence, bound to the exact reviewed head SHA, never fabricating evidence or substituting builder self-review, keeping merging behind explicit owner approval. Reused the existing reviewer-hat/HERMES bridge and `pr-review-evidence.mjs` format findings from the two entries above — no rediscovery, no coordinator rebuild.
+
+**What was built, in `gibsonAction.ts`:**
+- `CROSS_VENDOR_REVIEWER_PROVIDER = 'codex' as const` (new, exported). Every non-reviewer hat in this bridge implicitly runs `provider:'claude'`; the only way a reviewer session is genuinely cross-vendor — not just a different model tier of the same vendor — is `reviewerProvider === 'codex'`. This is deliberately stricter than the pre-existing `reviewUsedDistinctModel` flag, which stays documented as scoped to "a different model/provider string was configured" and must never be read as satisfying Gibson's `E3` contract.
+- `parseReviewVerdict(output)` — pure parser for a real `VERDICT: APPROVE`/`REQUEST_CHANGES` line in the reviewer's actual output; returns `null` (no evidence produced) on absence or conflicting verdicts. Never guesses.
+- `buildOwnerAttestedReviewComment(headSha, reviewerVendor, result)` — builds Gibson's exact `<!-- owner-attested-review:v1 -->` block (fields `head-sha`, `reviewer-vendor`, `result`). Rejects a non-40-char SHA and rejects `reviewerVendor: 'independent'` — fixture `og13` proves the owner cannot self-attest as "independent." Validated byte-for-byte against Gibson's own real `parseBlock`/`MARKER_FIELDS` from `scripts/pr-review-evidence.mjs` via dynamic import — not a reimplementation guessing at the format.
+- `handleHermesConnection` now computes this evidence only when all are true: the hat is `reviewer`, `reviewerProvider === 'codex'`, a real parseable verdict exists, and a real git `HEAD` SHA resolves (`realGitHeadSha`, `git rev-parse HEAD`). A same-vendor/model-only review with an otherwise-clean verdict still produces `ownerAttestedReview: undefined` — the gate is on provider identity, not output shape.
+- The only GitHub write this bridge performs — `gh pr comment` via `realPostComment` — fires only when a real, already-open PR is explicitly supplied through a new `reviewPr: {repoSlug, prNumber}` option. That option is **not** in `PUBLIC_ARG_KEYS`/the public `gibson.run` arg surface — reachable only via direct internal calls (tests, or future explicit wiring), never through the live action bridge. Merging itself remains entirely unimplemented in this bridge; "keep merging behind explicit owner approval" is satisfied by never adding a merge path at all, not by a flag someone could flip.
+
+**Safety near-miss during test-writing — disclosed in full:** building a real temp-repo-check scenario with `reviewerProvider: 'codex'` routed through the actual `launchCodexSession()` JSON-RPC path with no stub (unlike `CLAUDE_BIN` for the claude path) — and `codex login status` on this machine returned "Logged in using ChatGPT," meaning it is genuinely authenticated. This risked a real, live, paid Codex API call during automated testing, directly against the no-paid-inference constraint that has applied throughout this entire task. Caught immediately. Verified via `~/.codex/sessions/2026/` and `~/.codex/log/codex-login.log` — checked both before and after the fix — that no new session or log activity occurred in the relevant window; the failure was fast (~3s) and consistent with a client-side pre-flight rejection, not a completed exchange. **Fix:** redesigned the affected test scenarios to inject a safe, deterministic, DI'd fake `execute` function (via `gibsonAction()`'s existing `{exec?, execute?}` deps) instead of ever touching `realExecute`/`launchRun()` for `reviewerProvider:'codex'` cases; `exec` (`loop.sh` itself) stays real so the sequencing proof remains genuine. This is the kind of incident this task's standing "no live inference" constraint exists to prevent, and it very nearly happened by accident rather than by request — worth remembering for any future reviewer-path test involving `provider:'codex'`.
+
+**Verified, via focused stub tests — not live inference:**
+- `gibsonAction.test.ts`: 44/44 pass, including unit tests for the parser and comment-builder, plus 6 `handleHermesConnection` scenarios (cross-vendor+APPROVE, cross-vendor+REQUEST_CHANGES, cross-vendor with a real `reviewPr` supplied → `postComment` actually called, no-VERDICT-line → no evidence, same-vendor/model-only → never fabricates despite a clean verdict, non-reviewer hat → never produces evidence regardless of provider).
+- `gibsonHermesLoop.temp-repo-check.test.ts` (real `loop.sh`, real sockets, real temp git repos): 7/7 pass, including two new scenarios replacing an earlier, structurally invalid combined test (two reviewer rounds in one run tripped Gibson's own tier-A review-round cap — `round >= cap` refuses — correct Gibson behavior, not a bug, so the test was split instead of routed around): rejection produces real, parser-valid **negative** evidence bound to the real head SHA (`posted:false`); acceptance produces real, parser-valid **positive** evidence, confirms `release` stays hard-refused, confirms `realCommitCount(repo) === 1` — no merge or push ever occurred.
+- Full `src/main/agent/` suite: 492 pass, same 11 pre-existing unrelated failures as every prior entry in this task — no new regressions.
+- No leaked sockets (`/tmp/gibson-hermes-*.sock` empty after the run). No real codex session was ever created (re-confirmed after the fix, a second time).
+- `node scripts/typecheck.mjs` reproduced its documented pre-existing wrapper-script flakiness once (crashes on an unrelated internal bug); direct `tsc --noEmit -p tsconfig.node.json` confirmed zero new errors from this turn's three changed files.
+
+**Native completion status, unchanged from the entry three above:** Gibson's own `delivery-receipt-v1.md` recognizes exactly one terminal-success disposition, `delivered`, requiring a real merge to the default branch **and** `E3` review evidence. This turn's work supplies the `E3` evidence mechanism end-to-end and verified it with stubs; it does not perform, and should not perform, a merge.
+
+**Concrete approval request for one small real end-to-end verification (not executed — presented for approval):**
+- **Repository:** `warrigallife/Workspace-OS` (private, push access confirmed, unlike the blocked `Clemens865/Workspace-OS` path from two entries above).
+- **Proposed real actions, in order, each a single call:** (1) push one throwaway branch with one trivial real commit; (2) `gh pr create` opening exactly one real PR from that branch; (3) one real reviewer call with `reviewerProvider: 'codex'` against that PR's real head SHA, under a tight explicit `maxBudgetUsd` cap (proposing **$0.50**, single turn, no tool loops) — this is the one live-inference call in the whole verification, and the only one requiring spend approval; (4) construct and post exactly one real `owner-attested-review:v1` PR comment via `gh pr comment`, bound to that exact head SHA; (5) leave the PR open, unmerged — no `gh pr merge` call, no merge of any kind.
+- **Usage limits:** one codex call, $0.50 cap, single turn; no other live inference. No merge under any circumstance in this verification, regardless of the review result.
+- **Explicitly not done without that approval:** no branch pushed, no PR opened, no reviewer call placed, no comment posted. None of this executes until the user says go.
+
+Leaving `wrs-s8n` **open** per explicit instruction — not closing until native completion (a real merge at `E3`) is verified, or until the user accepts evidence-only (no merge) as this bridge's intended stopping point. Recorded in Beads on the open issue (comment, not close).
+
+**Not done this turn:** no commit, push, merge, deployment, installation, or credential/account change; no live inference; no coordinator rebuild. `gibsonAction.ts`, `gibsonAction.test.ts`, and `gibsonHermesLoop.temp-repo-check.test.ts` are modified but uncommitted, pending explicit instruction to commit.
